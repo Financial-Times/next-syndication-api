@@ -65,3 +65,11 @@ unit-test:
 	export NODE_ENV="test" && \
 	node ./node_modules/.bin/mocha --full-trace --harmony --recursive --slow 15000 --sort --timeout 30000 test/
 	@$(DONE)
+
+sync:
+	psql --username=${DATABASE_USER_NAME} \
+			--password \
+			--host=${DATABASE_HOST} \
+			--port=${DATABASE_PORT} \
+			--dbname=${DATABASE_NAME} \
+			--command='select syndication.reload_all()'
