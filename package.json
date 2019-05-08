@@ -16,7 +16,7 @@
     "config": "^1.26.1",
     "cookie-parser": "^1.4.3",
     "dotenv": "^4.0.0",
-    "google-auth-library": "^0.11.0",
+    "google-auth-library": "^4.0.0",
     "google-spreadsheet": "^2.0.4",
     "googleapis": "^21.3.0",
     "hat": "^0.0.3",
