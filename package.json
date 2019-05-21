@@ -34,6 +34,7 @@
     "nodemailer": "^4.1.0",
     "s3-upload-stream": "^1.0.7",
     "shelljs": "^0.7.8",
+    "snyk": "^1.165.2",
     "xmldom": "^0.1.27"
   },
   "devDependencies": {
@@ -108,7 +109,8 @@
     "prepush": "make verify -j3",
     "commit": "commit-wizard",
     "commitmsg": "node_modules/.bin/secret-squirrel-commitmsg",
-    "heroku-postbuild": "make heroku-postbuild"
+    "heroku-postbuild": "make heroku-postbuild",
+    "prepare": "node_modules/.bin/snyk protect"
   },
   "config": {}
 }
