@@ -18,7 +18,7 @@
     "dotenv": "^4.0.0",
     "google-auth-library": "^0.11.0",
     "google-spreadsheet": "^2.0.4",
-    "googleapis": "^21.3.0",
+    "googleapis": "^42.0.0",
     "hat": "^0.0.3",
     "js-yaml": "^3.8.4",
     "jsonpath": "^1.0.0",
