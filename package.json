@@ -16,7 +16,7 @@
     "body-parser": "^1.17.1",
     "config": "^1.26.1",
     "cookie-parser": "^1.4.3",
-    "google-spreadsheet": "^2.0.4",
+    "google-spreadsheet": "^3.0.0",
     "hat": "^0.0.3",
     "js-yaml": "^3.8.4",
     "jsonpath": "^1.0.0",
