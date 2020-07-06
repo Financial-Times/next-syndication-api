@@ -9,8 +9,8 @@ describe('Handlebars with extended helper', function () {
 	});
 
 	it('should render a template using ifEquals helper', function () {
-		const template = Handlebars.compile('{{#ifEquals thing1 "thing1"}}first{{else}}not first{{/ifEquals}} {{#ifEquals thing1 "thing2"}}second{{else}}not second{{/ifEquals}}');
-		const rendered = template({thing1: 'thing1', thing2: 'thing2'});
-		expect(rendered).to.eql('first not second')
+		const template = Handlebars.compile('{{#ifEquals propA 1}}propA: render this;{{else}}propA: do not render this{{/ifEquals}}{{#ifEquals propB 5}} propB: do not render this{{else}} propB: render this{{/ifEquals}}');
+		const rendered = template({propA: 1, propB: 2});
+		expect(rendered).to.eql('propA: render this; propB: render this')
 	});
 });
