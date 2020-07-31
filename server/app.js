@@ -3,6 +3,7 @@
 process.env.TZ = 'UTC';
 
 const express = require('@financial-times/n-internal-tool');
+const authS3O = require('@financial-times/s3o-middleware');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
@@ -35,7 +36,6 @@ const app = module.exports = express({
 	].concat(
 		require('../health/middlewares')
 	),
-	s3o: false
 });
 
 const middleware = [
@@ -100,7 +100,7 @@ app.get('/syndication/reload', middleware, require('./controllers/reload'));
 
 // Page for handling erasure requests
 const erasureMiddleware = [
-	express.authS3O,
+	authS3O,
 	cookieParser(),
 	bodyParser.urlencoded({ extended: true }),
 	flagMaintenanceMode,
