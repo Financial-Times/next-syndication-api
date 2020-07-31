@@ -97,7 +97,7 @@
     ]
   },
   "engines": {
-    "node": "10.20.1"
+    "node": "12.x"
   },
   "scripts": {
     "precommit": "node_modules/.bin/secret-squirrel",
