@@ -221,6 +221,9 @@ describe(MODULE_ID, function () {
 
 		describe('#appendArticle', function() {
 			let dl;
+			let entrySpy = sinon.spy();
+
+			let article;
 
 			before(async function() {
 				dl = new underTest({
@@ -232,9 +235,13 @@ describe(MODULE_ID, function () {
 					user: USER
 				});
 
+				dl.on('entry', entrySpy);
+
 				await dl.appendArticle();
 
 				await sleep(100);
+
+				article = entrySpy.getCall(0).args[0];
 			});
 
 			it('#articleAppended', async function() {
@@ -242,24 +249,22 @@ describe(MODULE_ID, function () {
 			});
 
 			it('should have one entry', async function() {
-				expect(dl._entries.length).to.equal(1)
+				expect(entrySpy).to.have.been.calledOnce;
 			});
 
 			it(`article entry's name should be: ${content.fileName}.${content.transcriptExtension}`, async function() {
-				const [article] = dl._entries;
-
 				expect(article.name).to.equals(`${content.fileName}.${content.transcriptExtension}`);
 			});
 
 			it('article entry\'s source should be a buffer', async function() {
-				const [article] = dl._entries;
-
 				expect(article.sourceType).to.equal('buffer');
 			});
 		});
 
 		describe('#appendCaptions', function() {
 			let dl;
+
+			let entrySpy = sinon.spy();
 
 			before(async function() {
 				dl = new underTest({
@@ -270,6 +275,8 @@ describe(MODULE_ID, function () {
 					req,
 					user: USER
 				});
+
+				dl.on('entry', entrySpy);
 
 				await dl.appendCaptions();
 
@@ -281,12 +288,15 @@ describe(MODULE_ID, function () {
 			});
 
 			it('should have no entries', async function() {
-				expect(dl._entries.length).to.equal(0)
+				expect(entrySpy).to.not.have.been.called;
 			});
 		});
 
 		describe('#appendMedia', function() {
 			let dl;
+			let entrySpy = sinon.spy();
+
+			let media;
 
 			before(async function() {
 				dl = new underTest({
@@ -298,9 +308,13 @@ describe(MODULE_ID, function () {
 					user: USER
 				});
 
+				dl.on('entry', entrySpy);
+
 				await dl.appendMedia();
 
 				await sleep(100);
+
+				media = entrySpy.getCall(0).args[0];
 			});
 
 			it('#mediaAppended', async function() {
@@ -308,24 +322,24 @@ describe(MODULE_ID, function () {
 			});
 
 			it('should have one entry', async function() {
-				expect(dl._entries.length).to.equal(1)
+				expect(entrySpy).to.have.been.calledOnce;
 			});
 
 			it(`media entry's name should be: ${content.fileName}.${content.download.extension}`, async function() {
-				const [media] = dl._entries;
-
 				expect(media.name).to.equals(`${content.fileName}.${content.download.extension}`);
 			});
 
 			it('media entry\'s source should be a stream', async function() {
-				const [media] = dl._entries;
-
 				expect(media.sourceType).to.equal('stream');
 			});
 		});
 
 		describe('#appendAll', function() {
 			let dl;
+			let entrySpy = sinon.spy();
+
+			let article;
+			let media;
 
 			before(async function() {
 				dl = new underTest({
@@ -337,9 +351,23 @@ describe(MODULE_ID, function () {
 					user: USER
 				});
 
+				dl.on('entry', entrySpy);
+
 				await dl.appendAll();
 
 				await sleep(100);
+
+				[1, 0].map((callIndex) => {
+					const item = entrySpy.getCall(callIndex).args[0];
+
+					if (item.name.endsWith(content.transcriptExtension)) {
+						article = item;
+					}
+
+					if (item.name.endsWith(content.download.extension)) {
+						media = item;
+					}
+				});
 			});
 
 			it('#articleAppended', async function() {
@@ -359,30 +387,22 @@ describe(MODULE_ID, function () {
 			});
 
 			it('should have two entries', async function() {
-				expect(dl._entries.length).to.equal(2)
+				expect(entrySpy).to.have.been.calledTwice;
 			});
 
 			it(`article entry's name should be: ${content.fileName}.${content.transcriptExtension}`, async function() {
-				const article = dl._entries.find(item => item.name.endsWith(content.transcriptExtension));
-
 				expect(article.name).to.equals(`${content.fileName}.${content.transcriptExtension}`);
 			});
 
 			it('article entry\'s source should be a buffer', async function() {
-				const article = dl._entries.find(item => item.name.endsWith(content.transcriptExtension));
-
 				expect(article.sourceType).to.equal('buffer');
 			});
 
 			it(`media entry's name should be: ${content.fileName}.${content.download.extension}`, async function() {
-				const media = dl._entries.find(item => item.name.endsWith(content.download.extension));
-
 				expect(media.name).to.equals(`${content.fileName}.${content.download.extension}`);
 			});
 
 			it('media entry\'s source should be a stream', async function() {
-				const media = dl._entries.find(item => item.name.endsWith(content.download.extension));
-
 				expect(media.sourceType).to.equal('stream');
 			});
 		});
