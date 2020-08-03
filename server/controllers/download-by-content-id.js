@@ -6,6 +6,7 @@ const getContentById = require('../lib/get-content-by-id');
 const prepareDownloadResponse = require('../lib/prepare-download-response');
 
 const download = require('../lib/download');
+const isDownloadDisabled = require('../helpers/is-download-disabled');
 
 const {
 	DEFAULT_DOWNLOAD_FORMAT,
@@ -33,9 +34,12 @@ module.exports = exports = async (req, res, next) => {
 	const content = await getContentById(req.params.content_id, format, lang);
 
 	if (Object.prototype.toString.call(content) !== '[object Object]') {
-
 		res.sendStatus(404);
+		return;
+	}
 
+	if(isDownloadDisabled(content, user)){
+		res.sendStatus(403);
 		return;
 	}
 
