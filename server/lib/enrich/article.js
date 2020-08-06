@@ -25,6 +25,10 @@ module.exports = exports = function article(content, format) {
 		content.content_type = CONTENT_TYPE_ALIAS[content.type] || content.type;
 	}
 
+	if (content.contentStats && content.contentStats.graphics && content.contentStats.graphics > 0){
+		content.content_type = 'rich article'
+	}
+
 	content.extension = DOWNLOAD_ARTICLE_FORMATS[format] || 'docx';
 
 	if (content.body && !content.bodyHTML) {
