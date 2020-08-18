@@ -16,7 +16,10 @@ const { mkdir, rm } = require('shelljs');
 
 const {
 	DOWNLOAD_ARCHIVE_EXTENSION,
-	TEST: { FIXTURES_DIRECTORY, TEMP_FILES_DIRECTORY },
+	TEST: {
+		FIXTURES_DIRECTORY,
+		TEMP_FILES_DIRECTORY
+	}
 } = require('config');
 
 const MessageQueueEvent = require('../../../../queue/message-queue-event');
@@ -24,31 +27,23 @@ const enrich = require('../../../../server/lib/enrich');
 const sleep = require('../../../../server/helpers/sleep');
 const underTest = require('../../../../server/lib/download/video');
 
-const httpMocks = require(path.resolve(
-	`${FIXTURES_DIRECTORY}/node-mocks-http`
-));
+const httpMocks = require(path.resolve(`${FIXTURES_DIRECTORY}/node-mocks-http`));
 
-const MODULE_ID =
-	path.relative(`${process.cwd()}/test`, module.id) ||
-	require(path.resolve('./package.json')).name;
+const MODULE_ID = path.relative(`${process.cwd()}/test`, module.id) || require(path.resolve('./package.json')).name;
 
 mkdir('-p', path.resolve(TEMP_FILES_DIRECTORY));
 
 describe(MODULE_ID, function () {
 	const DEFAULT_FORMAT = 'docx';
-	const CONTRACT = require(path.resolve(
-		`${FIXTURES_DIRECTORY}/contractResponse.json`
-	));
+	const CONTRACT = require(path.resolve(`${FIXTURES_DIRECTORY}/contractResponse.json`));
 	const LICENCE = { id: 'xyz' };
-	const USER = require(path.resolve(
-		`${FIXTURES_DIRECTORY}/userResponse.json`
-	));
+	const USER = require(path.resolve(`${FIXTURES_DIRECTORY}/userResponse.json`));
 
-	before(function () {
+	before(function() {
 		sinon.stub(MessageQueueEvent.prototype, 'publish').resolves(true);
 	});
 
-	after(function () {
+	after(function() {
 		MessageQueueEvent.prototype.publish.restore();
 
 		rm('-rf', path.resolve(TEMP_FILES_DIRECTORY));
@@ -56,16 +51,9 @@ describe(MODULE_ID, function () {
 
 	const CONTENT_ID = 'b16fce7e-3c92-48a3-ace0-d1af3fce71af';
 
-	const content = enrich(
-		require(path.resolve(
-			`${FIXTURES_DIRECTORY}/content/${CONTENT_ID}.json`
-		)),
-		DEFAULT_FORMAT
-	);
+	const content = enrich(require(path.resolve(`${FIXTURES_DIRECTORY}/content/${CONTENT_ID}.json`)), DEFAULT_FORMAT);
 
-	const className = `${content.type
-		.charAt(0)
-		.toUpperCase()}${content.type.substring(1)}Download`;
+	const className = `${content.type.charAt(0).toUpperCase()}${content.type.substring(1)}Download`;
 
 	let event;
 	let extractDir;
@@ -75,64 +63,60 @@ describe(MODULE_ID, function () {
 	let req;
 	let res;
 
-	describe(`${className}`, function () {
+	describe(`${className}`, function() {
 		beforeEach(function () {
 			now = Date.now();
 
 			extractDir = path.resolve(`${TEMP_FILES_DIRECTORY}/temp_${now}`);
 
-			filename = path.resolve(
-				`${TEMP_FILES_DIRECTORY}/temp__${now}.${DOWNLOAD_ARCHIVE_EXTENSION}`
-			);
+			filename = path.resolve(`${TEMP_FILES_DIRECTORY}/temp__${now}.${DOWNLOAD_ARCHIVE_EXTENSION}`);
 
 			mkdir('-p', extractDir);
 
 			req = httpMocks.createRequest({
-				eventEmitter: EventEmitter,
-				connection: new EventEmitter(),
-				headers: {
+				'eventEmitter': EventEmitter,
+				'connection': new EventEmitter(),
+				'headers': {
 					'ft-real-url': `https://www.ft.com/syndication/download/${CONTENT_ID}?format=docx`,
 					'ft-real-path': `/syndication/download/${CONTENT_ID}?format=docx`,
 					'ft-vanity-url': `/syndication/download/${CONTENT_ID}?format=docx`,
 					'ft-flags-next-flags': '',
 					'ft-flags': '-',
-					cookie: 'FTSession;spoor-id',
+					'cookie': 'FTSession;spoor-id',
 					'accept-language': 'en-GB,en-US;q=0.8,en;q=0.6',
 					'accept-encoding': 'gzip, deflate, sdch, br',
-					accept:
-						'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-					'user-agent':
-						'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+					'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+					'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
 				},
-				cookies: {
-					FTSession: 'FTSession',
-					'spoor-id': 'spoor-id',
+				'cookies': {
+					'FTSession': 'FTSession',
+					'spoor-id': 'spoor-id'
 				},
-				hostname: 'localhost',
-				method: 'GET',
-				originalUrl: `/syndication/download/${CONTENT_ID}?format=docx`,
-				params: {},
-				path: '/syndication/download',
-				protocol: 'http',
-				query: {
-					format: 'docx',
+				'hostname': 'localhost',
+				'method': 'GET',
+				'originalUrl': `/syndication/download/${CONTENT_ID}?format=docx`,
+				'params': {},
+				'path': '/syndication/download',
+				'protocol': 'http',
+				'query': {
+					'format': 'docx'
 				},
-				url: `/syndication/download/${CONTENT_ID}?format=docx`,
+				'url': `/syndication/download/${CONTENT_ID}?format=docx`
 			});
 
 			res = httpMocks.createResponse({
 				req,
-				writableStream: WritableStream,
+				writableStream: WritableStream
 			});
 
 			res.locals = {
 				contract: CONTRACT,
 				licence: LICENCE,
 				syndication_contract: {
-					id: 'lmno',
+					id: 'lmno'
 				},
 				user: USER,
-				userUuid: 'abc',
+				userUuid: 'abc'
 			};
 
 			event = new MessageQueueEvent({
@@ -143,8 +127,7 @@ describe(MODULE_ID, function () {
 					contract_id: CONTRACT.contract_id,
 					download_format: content.extension,
 					licence_id: LICENCE.id,
-					published_date:
-						content.firstPublishedDate || content.publishedDate,
+					published_date: content.firstPublishedDate || content.publishedDate,
 					state: 'started',
 					syndication_state: String(content.canBeSyndicated),
 					time: moment().toDate(),
@@ -156,45 +139,29 @@ describe(MODULE_ID, function () {
 						session: req.cookies.FTSession,
 						spoor_id: req.cookies['spoor-id'],
 						url: req.originalUrl,
-						user_agent: req.get('user-agent'),
+						user_agent: req.get('user-agent')
 					},
 					user: {
 						email: USER.email,
 						first_name: USER.first_name,
 						id: USER.user_id,
-						surname: USER.surname,
-					},
-				},
+						surname: USER.surname
+					}
+				}
 			});
 
 			let uri = url.parse(content.download.url);
 
 			nock(`${uri.protocol}//${uri.host}`)
 				.head(uri.pathname)
-				.reply(
-					200,
-					{},
-					{
-						'content-length': fs.readFileSync(
-							path.resolve(
-								`${FIXTURES_DIRECTORY}/video-small.mp4`
-							)
-						).length,
-					}
-				);
+				.reply(200, {}, {
+					'content-length': fs.readFileSync(path.resolve(`${FIXTURES_DIRECTORY}/video-small.mp4`)).length
+				});
 
 			nock(`${uri.protocol}//${uri.host}`)
 				.get(uri.pathname)
-				.reply(
-					200,
-					() =>
-						fs.createReadStream(
-							path.resolve(
-								`${FIXTURES_DIRECTORY}/video-small.mp4`
-							)
-						),
-					{}
-				);
+				.reply(200, () => fs.createReadStream(path.resolve(`${FIXTURES_DIRECTORY}/video-small.mp4`)), {});
+
 		});
 
 		after(function () {
@@ -202,14 +169,14 @@ describe(MODULE_ID, function () {
 			rm('-rf', extractDir);
 		});
 
-		it('initialises the download and publishes the start event', async function () {
+		it('initialises the download and publishes the start event', async function() {
 			const dl = new underTest({
 				content,
 				contract: CONTRACT,
 				licence: LICENCE,
 				event,
 				req,
-				user: USER,
+				user: USER
 			});
 
 			await sleep(100);
@@ -217,27 +184,27 @@ describe(MODULE_ID, function () {
 			expect(dl.event.publish).to.have.been.called;
 		});
 
-		it('#downloadAsArchive', async function () {
+		it('#downloadAsArchive', async function() {
 			const dl = new underTest({
 				content,
 				contract: CONTRACT,
 				licence: LICENCE,
 				event,
 				req,
-				user: USER,
+				user: USER
 			});
 
 			expect(dl.downloadAsArchive).to.be.true;
 		});
 
-		it('#cloneRequestHeaders', async function () {
+		it('#cloneRequestHeaders', async function() {
 			const dl = new underTest({
 				content,
 				contract: CONTRACT,
 				licence: LICENCE,
 				event,
 				req,
-				user: USER,
+				user: USER
 			});
 
 			expect(dl.cloneRequestHeaders()).to.eql({
@@ -245,283 +212,227 @@ describe(MODULE_ID, function () {
 				'ft-real-path': `/syndication/download/${CONTENT_ID}?format=docx`,
 				'ft-vanity-url': `/syndication/download/${CONTENT_ID}?format=docx`,
 				'ft-flags-next-flags': '',
-				cookie: 'FTSession;spoor-id',
+				'cookie': 'FTSession;spoor-id',
 				'accept-language': 'en-GB,en-US;q=0.8,en;q=0.6',
 				'accept-encoding': 'gzip, deflate, sdch, br',
-				'user-agent':
-					'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+				'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
 			});
 		});
 
-		describe('#appendArticle', function () {
+		describe('#appendArticle', function() {
 			let dl;
-			let entrySpy = sinon.spy();
 
-			let article;
-
-			before(async function () {
+			before(async function() {
 				dl = new underTest({
 					content,
 					contract: CONTRACT,
 					licence: LICENCE,
 					event,
 					req,
-					user: USER,
+					user: USER
 				});
-
-				dl.on('entry', entrySpy);
 
 				await dl.appendArticle();
 
 				await sleep(100);
-
-				article = entrySpy.getCall(0).args[0];
 			});
 
-			it('#articleAppended', async function () {
+			it('#articleAppended', async function() {
 				expect(dl.articleAppended).to.be.true;
 			});
 
-			it('should have one entry', async function () {
-				expect(entrySpy).to.have.been.calledOnce;
+			it('should have one entry', async function() {
+				expect(dl._entries.length).to.equal(1)
 			});
 
-			it(`article entry's name should be: ${content.fileName}.${content.transcriptExtension}`, async function () {
-				expect(article.name).to.equals(
-					`${content.fileName}.${content.transcriptExtension}`
-				);
+			it(`article entry's name should be: ${content.fileName}.${content.transcriptExtension}`, async function() {
+				const [article] = dl._entries;
+
+				expect(article.name).to.equals(`${content.fileName}.${content.transcriptExtension}`);
 			});
 
-			it('article entry\'s source should be a buffer', async function () {
+			it('article entry\'s source should be a buffer', async function() {
+				const [article] = dl._entries;
+
 				expect(article.sourceType).to.equal('buffer');
 			});
 		});
 
-		describe('#appendCaptions', function () {
+		describe('#appendCaptions', function() {
 			let dl;
-			let entrySpy = sinon.spy();
 
-			let captions;
-
-			before(async function () {
+			before(async function() {
 				dl = new underTest({
 					content,
 					contract: CONTRACT,
 					licence: LICENCE,
 					event,
 					req,
-					user: USER,
+					user: USER
 				});
-
-				dl.on('entry', entrySpy);
 
 				await dl.appendCaptions();
 
 				await sleep(100);
-
-				captions = entrySpy.getCall(0).args[0];
 			});
 
-			it('#captionsAppended', async function () {
+			it('#captionsAppended', async function() {
 				expect(dl.captionsAppended).to.be.true;
 			});
 
-			it('should have one entry', async function () {
-				expect(entrySpy).to.have.been.calledOnce;
+			it('should have one entry', async function() {
+				expect(dl._entries.length).to.equal(1)
 			});
 
-			it(`caption entry's name should be: ${path.basename(
-				url.parse(content.captions[0].url).pathname
-			)}`, async function () {
-				expect(captions.name).to.equals(
-					`${path.basename(
-						url.parse(content.captions[0].url).pathname
-					)}`
-				);
+			it(`caption entry's name should be: ${path.basename(url.parse(content.captions[0].url).pathname)}`, async function() {
+				const [captions] = dl._entries;
+
+				expect(captions.name).to.equals(`${path.basename(url.parse(content.captions[0].url).pathname)}`);
 			});
 
-			it('caption entry\'s source should be a buffer', async function () {
+			it('caption entry\'s source should be a buffer', async function() {
+				const [captions] = dl._entries;
+
 				expect(captions.sourceType).to.equal('buffer');
 			});
 		});
 
-		describe('#appendMedia', function () {
+		describe('#appendMedia', function() {
 			let dl;
-			let entrySpy = sinon.spy();
 
-			let media;
-
-			before(async function () {
+			before(async function() {
 				dl = new underTest({
 					content,
 					contract: CONTRACT,
 					licence: LICENCE,
 					event,
 					req,
-					user: USER,
+					user: USER
 				});
-
-				dl.on('entry', entrySpy);
 
 				await dl.appendMedia();
 
 				await sleep(100);
-
-				media = entrySpy.getCall(0).args[0];
 			});
 
-			it('#mediaAppended', async function () {
+			it('#mediaAppended', async function() {
 				expect(dl.mediaAppended).to.be.true;
 			});
 
-			it('should have one entry', async function () {
-				expect(entrySpy).to.have.been.calledOnce;
+			it('should have one entry', async function() {
+				expect(dl._entries.length).to.equal(1)
 			});
 
-			it(`media entry's name should be: ${content.fileName}.${content.download.extension}`, async function () {
-				expect(media.name).to.equals(
-					`${content.fileName}.${content.download.extension}`
-				);
+			it(`media entry's name should be: ${content.fileName}.${content.download.extension}`, async function() {
+				const [media] = dl._entries;
+
+				expect(media.name).to.equals(`${content.fileName}.${content.download.extension}`);
 			});
 
-			it('media entry\'s source should be a stream', async function () {
+			it('media entry\'s source should be a stream', async function() {
+				const [media] = dl._entries;
+
 				expect(media.sourceType).to.equal('stream');
 			});
 		});
 
-		describe('#appendAll', function () {
+		describe('#appendAll', function() {
 			let dl;
-			let entrySpy = sinon.spy();
 
-			let article;
-			let captions;
-			let media;
-
-			before(async function () {
+			before(async function() {
 				dl = new underTest({
 					content,
 					contract: CONTRACT,
 					licence: LICENCE,
 					event,
 					req,
-					user: USER,
+					user: USER
 				});
-
-				dl.on('entry', entrySpy);
 
 				await dl.appendAll();
 
 				await sleep(100);
-
-				[2, 1, 0].map((callIndex) => {
-					const item = entrySpy.getCall(callIndex).args[0];
-
-					if (item.name.endsWith(content.transcriptExtension)) {
-						article = item;
-					}
-
-					if (
-						item.name ===
-						path.basename(
-							url.parse(content.captions[0].url).pathname
-						)
-					) {
-						captions = item;
-					}
-
-					if (item.name.endsWith(content.download.extension)) {
-						media = item;
-					}
-				});
 			});
 
-			it('#articleAppended', async function () {
+			it('#articleAppended', async function() {
 				expect(dl.articleAppended).to.be.true;
 			});
 
-			it('#captionsAppended', async function () {
+			it('#captionsAppended', async function() {
 				expect(dl.captionsAppended).to.be.true;
 			});
 
-			it('#mediaAppended', async function () {
+			it('#mediaAppended', async function() {
 				expect(dl.mediaAppended).to.be.true;
 			});
 
-			it('#mediaAppended', async function () {
+			it('#mediaAppended', async function() {
 				expect(dl.mediaAppended).to.be.true;
 			});
 
-			it('should have three entries', async function () {
-				expect(entrySpy).to.have.been.calledThrice;
+			it('should have three entries', async function() {
+				expect(dl._entries.length).to.equal(3)
 			});
 
-			it(`article entry's name should be: ${content.fileName}.${content.transcriptExtension}`, async function () {
-				expect(article.name).to.equals(
-					`${content.fileName}.${content.transcriptExtension}`
-				);
+			it(`article entry's name should be: ${content.fileName}.${content.transcriptExtension}`, async function() {
+				const article = dl._entries.find(item => item.name.endsWith(content.transcriptExtension));
+
+				expect(article.name).to.equals(`${content.fileName}.${content.transcriptExtension}`);
 			});
 
-			it('article entry\'s source should be a buffer', async function () {
+			it('article entry\'s source should be a buffer', async function() {
+				const article = dl._entries.find(item => item.name.endsWith(content.transcriptExtension));
+
 				expect(article.sourceType).to.equal('buffer');
 			});
 
-			it(`caption entry's name should be: ${path.basename(
-				url.parse(content.captions[0].url).pathname
-			)}`, async function () {
-				expect(captions.name).to.equals(
-					`${path.basename(
-						url.parse(content.captions[0].url).pathname
-					)}`
-				);
+			it(`caption entry's name should be: ${path.basename(url.parse(content.captions[0].url).pathname)}`, async function() {
+				const captions = dl._entries.find(item => item.name === path.basename(url.parse(content.captions[0].url).pathname));
+
+				expect(captions.name).to.equals(`${path.basename(url.parse(content.captions[0].url).pathname)}`);
 			});
 
-			it('caption entry\'s source should be a buffer', async function () {
+			it('caption entry\'s source should be a buffer', async function() {
+				const captions = dl._entries.find(item => item.name === path.basename(url.parse(content.captions[0].url).pathname));
+
 				expect(captions.sourceType).to.equal('buffer');
 			});
 
-			it(`media entry's name should be: ${content.fileName}.${content.download.extension}`, async function () {
-				expect(media.name).to.equals(
-					`${content.fileName}.${content.download.extension}`
-				);
+			it(`media entry's name should be: ${content.fileName}.${content.download.extension}`, async function() {
+				const media = dl._entries.find(item => item.name.endsWith(content.download.extension));
+
+				expect(media.name).to.equals(`${content.fileName}.${content.download.extension}`);
 			});
 
-			it('media entry\'s source should be a stream', async function () {
+			it('media entry\'s source should be a stream', async function() {
+				const media = dl._entries.find(item => item.name.endsWith(content.download.extension));
+
 				expect(media.sourceType).to.equal('stream');
 			});
 		});
 
-		describe('extracting archive', function () {
+		describe('extracting archive', function() {
 			let dl;
 			let article;
 			let captions;
 			let media;
 
-			before(function (done) {
+			before(function(done) {
 				dl = new underTest({
 					content,
 					contract: CONTRACT,
 					licence: LICENCE,
 					event,
 					req,
-					user: USER,
+					user: USER
 				});
 
 				dl.on('end', async () => {
 					extractedFiles = await decompress(filename, extractDir);
 
-					article = extractedFiles.find((item) =>
-						item.path.endsWith(content.transcriptExtension)
-					);
-					captions = extractedFiles.find(
-						(item) =>
-							item.path ===
-							path.basename(
-								url.parse(content.captions[0].url).pathname
-							)
-					);
-					media = extractedFiles.find((item) =>
-						item.path.endsWith(content.download.extension)
-					);
+					article = extractedFiles.find(item => item.path.endsWith(content.transcriptExtension));
+					captions = extractedFiles.find(item => item.path === path.basename(url.parse(content.captions[0].url).pathname));
+					media = extractedFiles.find(item => item.path.endsWith(content.download.extension));
 
 					done();
 				});
@@ -531,34 +442,16 @@ describe(MODULE_ID, function () {
 				dl.appendAll().then(() => {});
 			});
 
-			it('article', function () {
-				expect(
-					article.data.equals(
-						fs.readFileSync(
-							path.resolve(
-								`${FIXTURES_DIRECTORY}/article.${content.transcriptExtension}`
-							)
-						)
-					)
-				).to.be.true;
+			it('article', function() {
+				expect(article.data.equals(fs.readFileSync(path.resolve(`${FIXTURES_DIRECTORY}/article.${content.transcriptExtension}`)))).to.be.true;
 			});
 
-			it('captions', function () {
-				expect(captions.data.toString('utf8')).to.equal(
-					dl.captionFiles[0].file
-				);
+			it('captions', function() {
+				expect(captions.data.toString('utf8')).to.equal(dl.captionFiles[0].file);
 			});
 
-			it('media', function () {
-				expect(
-					media.data.equals(
-						fs.readFileSync(
-							path.resolve(
-								`${FIXTURES_DIRECTORY}/video-small.mp4`
-							)
-						)
-					)
-				).to.be.true;
+			it('media', function() {
+				expect(media.data.equals(fs.readFileSync(path.resolve(`${FIXTURES_DIRECTORY}/video-small.mp4`)))).to.be.true;
 			});
 		});
 	});
