@@ -24,7 +24,7 @@ accounts-customer-products
 
 ## Supported By
 
-accounts-customer-products
+customer-products-ops-cops
 
 ## Known About By
 
