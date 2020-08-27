@@ -9,25 +9,25 @@
 
         When on [ft.com](http://ft.com), users see coloured symbols next to the title of every  article/podcast/video on the page.
         
-        ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d906a092-b000-436a-8041-4d130a4256a7/Screenshot_2020-08-21_at_12.48.37.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d906a092-b000-436a-8041-4d130a4256a7/Screenshot_2020-08-21_at_12.48.37.png)
+        ![ft_homepage.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/ft_homepage.png)
 
         The symbols indicates different syndication grants:
 
-        ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/528e464b-923d-4ffd-b0ca-05c11b4d04be/Screenshot_2020-08-21_at_12.57.21.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/528e464b-923d-4ffd-b0ca-05c11b4d04be/Screenshot_2020-08-21_at_12.57.21.png)
+        ![syndication_symbols.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/syndication_symbols.png)
 
         On clicking on the `green tick` icon, the user can save or download the content
 
-        ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/27d5423e-18c2-49a7-a423-fa2c9ffeaedc/Screenshot_2020-08-21_at_13.02.58.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/27d5423e-18c2-49a7-a423-fa2c9ffeaedc/Screenshot_2020-08-21_at_13.02.58.png)
+        ![syndication_modal.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/syndication_modal.png)
 
     - **Republishing Platform**
 
         On the top right corner on the page, the `Republishing` link takes users to the republishing platform.
 
-        ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bf449894-0ecd-4540-b694-468378666afc/Screenshot_2020-05-13_at_16.59.13.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bf449894-0ecd-4540-b694-468378666afc/Screenshot_2020-05-13_at_16.59.13.png)
+        ![republishing_menu.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/republishing_menu.png)
 
         On the republishing tool, Users can see their contract details, allowance details and select their preferred download format.
 
-        ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c55eaaeb-8f9c-4b3a-bf45-374b25ed2051/Screenshot_2020-05-13_at_16.39.45.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c55eaaeb-8f9c-4b3a-bf45-374b25ed2051/Screenshot_2020-05-13_at_16.39.45.png)
+        ![republishing_platform.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/republishing_platform.png)
 
         Users can also manage saved, downloaded and spanish content.
 
@@ -42,11 +42,11 @@
         - Checks if logged in user is a syndication user
         - Gets all the `contentIds` from the DOM
 
-            ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5ca47e09-a987-480c-a766-a019b2de25b3/Screenshot_2020-08-25_at_13.32.50.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5ca47e09-a987-480c-a766-a019b2de25b3/Screenshot_2020-08-25_at_13.32.50.png)
+            ![get_content_ids_snippet.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/get_content_ids_snippet.png)
 
         - Passes them to [next-syndication-api](https://github.com/Financial-Times/next-syndication-api/tree/master/doc#post-syndicationresolve) to get the syndication data for each content ID
 
-            ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/314582be-8969-4440-9af5-e262a45fc84e/Screenshot_2020-08-25_at_13.35.42.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/314582be-8969-4440-9af5-e262a45fc84e/Screenshot_2020-08-25_at_13.35.42.png)
+            ![syndication_api_response_snippet.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/syndication_api_response_snippet.png)
 
         - Uses the response to put the syndication symbols
         
