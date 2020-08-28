@@ -1,147 +1,163 @@
-- **Quick Overview**
+# Syndication
+- [Quick Overview](#quick-overview)
+- [What do users see](#what-do-users-see)
+    - [Syndication Icons](#syndication-icons)
+    - [Republishing Platform](#republishing-platform)
+- [Key systems](#key-systems)
+    - [n-syndication](#n-syndication)
+    - [next-syn-list](#next-syn-list)
+    - [next-syndication-api](#next-syndication-api)
+    - [next-syndication-dl](#next-syndication-dl)
+    - [next-syndication-lambdas](#next-syndication-lambdas)
+    - [Syndication PostgresDB](#syndication-postgresdb)
+- [Diagrams](#diagrams)
 
-    Syndication (also known as Republishing), is the term for allowing other publishers to use our content in their own publications. At the time of writing this there are over 200 Syndication licences and nearly 600 end users for those licences. In total those ~200 licences amount to over £3.2m.
+## Quick Overview
 
-- **What do users see**
-    - **Syndication Icons**
+Syndication (also known as Republishing), is the term for allowing other publishers to use our content in their own publications.
 
-        Once the user has syndication licence, [ft.com](http://ft.com) appears sightly different. 
+## What do users see
+### Syndication Icons
 
-        When on [ft.com](http://ft.com), users see coloured symbols next to the title of every  article/podcast/video on the page.
-        
-        ![ft_homepage.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/ft_homepage.png)
+Once the user has syndication licence, [ft.com](http://ft.com) appears sightly different. 
 
-        The symbols indicates different syndication grants:
+When on [ft.com](http://ft.com), users see coloured symbols next to the title of every article/podcast/video on the page.
 
-        ![syndication_symbols.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/syndication_symbols.png)
+![ft_homepage.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/ft_homepage.png)
 
-        On clicking on the `green tick` icon, the user can save or download the content
+The symbols indicates different syndication grants:
 
-        ![syndication_modal.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/syndication_modal.png)
+![syndication_symbols.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/syndication_symbols.png)
 
-    - **Republishing Platform**
+On clicking on the `green tick` icon, the user can save or download the content
 
-        On the top right corner on the page, the `Republishing` link takes users to the republishing platform.
+![syndication_modal.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/syndication_modal.png)
 
-        ![republishing_menu.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/republishing_menu.png)
+### Republishing Platform
 
-        On the republishing tool, Users can see their contract details, allowance details and select their preferred download format.
+On the top right corner on the page, the `Republishing` link takes users to the republishing platform.
 
-        ![republishing_platform.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/republishing_platform.png)
+![republishing_menu.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/republishing_menu.png)
 
-        Users can also manage saved, downloaded and spanish content.
+On the republishing tool, Users can see their contract details, allowance details and select their preferred download format.
 
-- **Key systems**
+![republishing_platform.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/republishing_platform.png)
 
-    - [**n-syndication**](https://github.com/Financial-Times/n-syndication)
+Users can also manage saved, downloaded and Spanish content.
 
-        This is the client side library responsible for adding syndication symbols next to articles/podcast and videos headlines on ft.com. Allowing syndication customers to download or save content for republishing.
+## Key systems
 
-        **What it does**
+### [**n-syndication**](https://github.com/Financial-Times/n-syndication)
 
-        - Checks if logged in user is a syndication user
-        - Gets all the `contentIds` from the DOM
+This is the client side library responsible for adding syndication symbols next to article/podcast and video headlines on ft.com. Allowing syndication customers to download or save content for republishing.
 
-            ![get_content_ids_snippet.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/get_content_ids_snippet.png)
+**What it does**
 
-        - Passes them to [next-syndication-api](https://github.com/Financial-Times/next-syndication-api/tree/master/doc#post-syndicationresolve) to get the syndication data for each content ID
+- Checks if logged in user is a syndication user
+- Gets all the `contentIds` from the DOM
 
-            ![syndication_api_response_snippet.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/syndication_api_response_snippet.png)
+![get_content_ids_snippet.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/get_content_ids_snippet.png)
 
-        - Uses the response to put the syndication symbols
-        
-    - [**next-syn-list**](https://github.com/Financial-Times/next-syn-list)
+- Passes them to [next-syndication-api](https://github.com/Financial-Times/next-syndication-api/tree/master/doc#post-syndicationresolve) to get the syndication data for each content ID
 
-        This is the application for the republishing platform.
+![syndication_api_response_snippet.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/syndication_api_response_snippet.png)
 
-        The republishing platform allows users to view their contract, manage saved and downloaded content
+- Uses the response to put the syndication symbols
 
-    - [**next-syndication-api**](https://github.com/Financial-Times/next-syndication-api)
+### [**next-syn-list**](https://github.com/Financial-Times/next-syn-list)
 
-        This is the REST API responsible for powering syndication (Heart of syndication). It lives in heroku with a Postgres DB attached. It handles request from the `n-syndication` and `next-syn-list`. It also runs some cron jobs and sync tasks
+This is the application for the republishing platform.
 
-        Here are the available [API endpoints](https://github.com/Financial-Times/next-syndication-api/tree/master/doc)
+The republishing platform allows users to view their contract, manage saved and downloaded content
 
-        **What it does**
+### [**next-syndication-api**](https://github.com/Financial-Times/next-syndication-api)
 
-        - Manages connection and interactions with attached Postgres DB
-            - Stores most of its data in the Postgres DB
-        - Every 24 hours updates information about contracts with up to date data from salesforce.
-        - Data about saved and downloaded content is added to the DB
-        - It stores Personal Identifiable Information (Membership API were flaky)
+This is the REST API responsible for powering syndication (Heart of syndication). It lives in heroku with a Postgres DB attached. It handles request from the `n-syndication` and `next-syn-list`. It also runs some cron jobs and sync tasks
 
-        - **Cron Jobs**
-            - **Backup**
-                - Runs every hour  `0 7 * * * *`
-                - Export database schema, zips it and uploads it to the `production` folder of the `next-syndication-db-backups` bucket on AWS (FT Infra Prod account).
-            - **Redshift**
-                - Runs once a day `0 0 7 * * *`
-                - Export analytics and uploads it to the `redshift` folder of the `next-syndication-db-backups` bucket on AWS (FT Infra Prod account).
-            - **Tidy-Bucket**
-                - Runs once a day `0 0 2 * * *`
-                - Deletes backup and redshift files older than one month from the S3 bucket.
+Here are the available [API endpoints](https://github.com/Financial-Times/next-syndication-api/tree/master/doc)
 
-            The cron jobs are defined [here](https://github.com/Financial-Times/next-syndication-api/tree/master/worker/crons)
+**What it does**
+- Manages connection and interactions with attached Postgres DB
+- Stores most of its data in the Postgres DB
+- Every 24 hours updates information about contracts with up to date data from salesforce.
+- Data about saved and downloaded content is added to the DB
+- It stores Personal Identifiable Information (Membership API were flaky)
 
-        - **Sync Tasks**
-            - **content-es**
-                - Subscribes to `next-syndication-translations` SQS on AWS(FT Infra Prod account).
-                - When a `created` event is triggered, the content is created / updated in the PostgresDB .
-                - When a `deleted` event is triggered, the content is marked as deleted in the PostgresDB.
 
-            - **db-persist**
-                - Subscribes to `next-syndication-downloads-prod` SQS on AWS(FT Infra Prod account).
-                - When save, unsave, and download event is triggered, the event is
-                    - Written into the PostgresDB
-                    - Published to Spoor
-                    - For download event that requires contributor payment, an email syndication@ft.com with content, user and contract data
+**Cron Jobs**
+- **Backup**
+    - Runs every hour  `0 7 * * * *`
+    - Export database schema, zips it and uploads it to the `production` folder of the `next-syndication-db-backups` bucket on AWS (FT Infra Prod account).
+- **Redshift**
+    - Runs once a day `0 0 7 * * *`
+    - Export analytics and uploads it to the `redshift` folder of the `next-syndication-db-backups` bucket on AWS (FT Infra Prod account).
+- **Tidy-Bucket**
+    - Runs once a day `0 0 2 * * *`
+    - Deletes backup and redshift files older than one month from the S3 bucket.
 
-            The sync tasks are defined [here](https://github.com/Financial-Times/next-syndication-api/tree/master/worker/sync)
+The cron jobs are defined [here](https://github.com/Financial-Times/next-syndication-api/tree/master/worker/crons)
 
-    - [**next-syndication-dl**](https://github.com/Financial-Times/next-syndication-dl)
 
-        Deploys `next-syndication-api` for the purposes of running the downloads as a separate application.
+**Sync Tasks**
+- **content-es**
+    - Subscribes to `next-syndication-translations` SQS on AWS(FT Infra Prod account).
+    - When a `created` event is triggered, the content is created / updated in the PostgresDB .
+    - When a `deleted` event is triggered, the content is marked as deleted in the PostgresDB.
 
-    - [**next-syndication-lambdas**](https://github.com/Financial-Times/next-syndication-lambdas)
-        - Serverless application
-        - One function - transformXml
-            - Used for Spanish content
+- **db-persist**
+    - Subscribes to `next-syndication-downloads-prod` SQS on AWS(FT Infra Prod account).
+    - When save, unsave, and download event is triggered, the event is
+        - Written into the PostgresDB
+        - Published to Spoor
+        - For download event that requires contributor payment, an email syndication@ft.com with content, user and contract data
 
-        **How does it work - Spanish Content**
+The sync tasks are defined [here](https://github.com/Financial-Times/next-syndication-api/tree/master/worker/sync)
 
-        - A 3rd Party, Vanguard Publications translates the articles
-        - They upload the XML file into an S3 bucket called **ft-article-translations-en-to-es-from-vanguard-publications**
-        - This triggers a Lambda function which transforms the XML into JSON and puts it in another S3 bucket called **ft-next-content-translations**
-        - That triggers an event (on create and delete), which prompts the syndication-api to go and fetch the content, and upserts it into the Postgres DB (**syndication.content_es**)
+### [**next-syndication-dl**](https://github.com/Financial-Times/next-syndication-dl)
 
-    - **Syndication PostgresDB**
+Deploys `next-syndication-api` for the purposes of running the downloads as a separate application.
 
-- **Diagrams**
 
-    **High Level** **Architecture** 
+### [**next-syndication-lambdas**](https://github.com/Financial-Times/next-syndication-lambdas)
+- Serverless application
+- One function - transformXml
+- Used for Spanish content
 
-    [Syndication | Lucidchart](https://app.lucidchart.com/invitations/accept/1166b19b-7ad0-4cf7-a679-3cfa3a618d76)
+**How does it work - Spanish Content**
 
-    **Cron Jobs**
+- A 3rd Party, Vanguard Publications translates the articles
+- They upload the XML file into an S3 bucket called **ft-article-translations-en-to-es-from-vanguard-publications**
+- This triggers a Lambda function which transforms the XML into JSON and puts it in another S3 bucket called **ft-next-content-translations**
+- That triggers an event (on create and delete), which prompts the syndication-api to go and fetch the content, and upserts it into the Postgres DB (**syndication.content_es**)
 
-    [Syndication - Cron Jobs | Lucidchart](https://app.lucidchart.com/invitations/accept/5ab2ecac-3235-4aa0-a325-f71526ace32b)
+### [**Syndication PostgresDB**]()
 
-    **Sync Tasks**
+## Diagrams
 
-    [Syndication - Sync Tasks | Lucidchart](https://app.lucidchart.com/invitations/accept/6b57996f-8927-416a-8d25-deeb76755798)
+### High Level Architecture
 
-    **Display Syndication Icons on FT.com**
+[Syndication | Lucidchart](https://app.lucidchart.com/invitations/accept/1166b19b-7ad0-4cf7-a679-3cfa3a618d76)
 
-    [Financial-Times/next-syndication-api](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/02%20Display%20Syndication%20Icons%20on%20FT.com.png)
+### Cron Jobs
 
-    **Authenticate Syndication User and Contract**
+[Syndication - Cron Jobs | Lucidchart](https://app.lucidchart.com/invitations/accept/5ab2ecac-3235-4aa0-a325-f71526ace32b)
 
-    [Financial-Times/next-syndication-api](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/03%20Authenticate%20Syndication%20User%20and%20Contract.png)
+### Sync Tasks
 
-    **Save for later**
+[Syndication - Sync Tasks | Lucidchart](https://app.lucidchart.com/invitations/accept/6b57996f-8927-416a-8d25-deeb76755798)
 
-    [Financial-Times/next-syndication-api](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/04%20Save%20for%20Later.png)
+### Display Syndication Icons on FT.com
 
-    **Download**
+[Financial-Times/next-syndication-api](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/02%20Display%20Syndication%20Icons%20on%20FT.com.png)
 
-    [Financial-Times/next-syndication-api](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/05%20Download.png)
+### Authenticate Syndication User and Contract
+
+[Financial-Times/next-syndication-api](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/03%20Authenticate%20Syndication%20User%20and%20Contract.png)
+
+### Save for later
+
+[Financial-Times/next-syndication-api](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/04%20Save%20for%20Later.png)
+
+### Download
+
+[Financial-Times/next-syndication-api](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/05%20Download.png)
