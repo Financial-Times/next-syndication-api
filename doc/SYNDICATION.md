@@ -66,33 +66,31 @@ This is the client side library responsible for adding syndication symbols next 
 
 ### [**next-syn-list**](https://github.com/Financial-Times/next-syn-list)
 
-This is the application for the republishing platform.
-
-The republishing platform allows users to view their contract, manage saved and downloaded content
+This is the application for the Republishing platform.
 
 ### [**next-syndication-api**](https://github.com/Financial-Times/next-syndication-api)
 
-This is the REST API responsible for powering syndication (Heart of syndication). It lives in heroku with a Postgres DB attached. It handles request from the `n-syndication` and `next-syn-list`. It also runs some cron jobs and sync tasks
+This is the REST API responsible for powering Syndication. It lives in Heroku with a Postgres DB attached. It handles requests from `n-syndication` and `next-syn-list`. It also runs some Cron jobs and sync tasks.
 
 Here are the available [API endpoints](https://github.com/Financial-Times/next-syndication-api/tree/master/doc)
 
 **What it does**
 - Manages connection and interactions with attached Postgres DB
 - Stores most of its data in the Postgres DB
-- Every 24 hours updates information about contracts with up to date data from salesforce.
+- Periodically updates information about contracts with up to date data from salesforce.
 - Data about saved and downloaded content is added to the DB
 - It stores Personal Identifiable Information (Membership API were flaky)
 
 
 **Cron Jobs**
 - **Backup**
-    - Runs every hour  `0 7 * * * *`
+    - Runs [periodically](https://github.com/Financial-Times/next-syndication-api/blob/master/config/default.yaml#L41).
     - Export database schema, zips it and uploads it to the `production` folder of the `next-syndication-db-backups` bucket on AWS (FT Infra Prod account).
 - **Redshift**
-    - Runs once a day `0 0 7 * * *`
+    - Runs [periodically](https://github.com/Financial-Times/next-syndication-api/blob/master/config/default.yaml#L42).
     - Export analytics and uploads it to the `redshift` folder of the `next-syndication-db-backups` bucket on AWS (FT Infra Prod account).
 - **Tidy-Bucket**
-    - Runs once a day `0 0 2 * * *`
+    - Runs [periodically](https://github.com/Financial-Times/next-syndication-api/blob/master/config/default.yaml#L43).
     - Deletes backup and redshift files older than one month from the S3 bucket.
 
 The cron jobs are defined [here](https://github.com/Financial-Times/next-syndication-api/tree/master/worker/crons)
@@ -109,7 +107,7 @@ The cron jobs are defined [here](https://github.com/Financial-Times/next-syndica
     - When save, unsave, and download event is triggered, the event is
         - Written into the PostgresDB
         - Published to Spoor
-        - For download event that requires contributor payment, an email syndication@ft.com with content, user and contract data
+        - For download event that requires contributor payment, an email is sent to syndication@ft.com containing content, user and contract data.
 
 The sync tasks are defined [here](https://github.com/Financial-Times/next-syndication-api/tree/master/worker/sync)
 
@@ -130,7 +128,7 @@ Deploys `next-syndication-api` for the purposes of running the downloads as a se
 - This triggers a Lambda function which transforms the XML into JSON and puts it in another S3 bucket called **ft-next-content-translations**
 - That triggers an event (on create and delete), which prompts the syndication-api to go and fetch the content, and upserts it into the Postgres DB (**syndication.content_es**)
 
-### [**Syndication PostgresDB**]()
+### [**Syndication PostgresDB**](https://github.com/Financial-Times/next-syndication-db-schema)
 
 ## Diagrams
 
