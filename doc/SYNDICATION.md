@@ -23,25 +23,25 @@ Once the user has syndication licence, [ft.com](http://ft.com) appears sightly d
 
 When on [ft.com](http://ft.com), users see coloured symbols next to the title of every article/podcast/video on the page.
 
-![ft_homepage.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/ft_homepage.png)
+![ft_homepage.png](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/images/ft_homepage.png)
 
 The symbols indicates different syndication grants:
 
-![syndication_symbols.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/syndication_symbols.png)
+![syndication_symbols.png](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/images/syndication_symbols.png)
 
 On clicking on the `green tick` icon, the user can save or download the content
 
-![syndication_modal.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/syndication_modal.png)
+![syndication_modal.png](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/images/syndication_modal.png)
 
 ### Republishing Platform
 
 On the top right corner on the page, the `Republishing` link takes users to the republishing platform.
 
-![republishing_menu.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/republishing_menu.png)
+![republishing_menu.png](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/images/republishing_menu.png)
 
 On the republishing tool, Users can see their contract details, allowance details and select their preferred download format.
 
-![republishing_platform.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/republishing_platform.png)
+![republishing_platform.png](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/images/republishing_platform.png)
 
 Users can also manage saved, downloaded and Spanish content.
 
@@ -56,11 +56,11 @@ This is the client side library responsible for adding syndication symbols next 
 - Checks if logged in user is a syndication user
 - Gets all the `contentIds` from the DOM
 
-![get_content_ids_snippet.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/get_content_ids_snippet.png)
+![get_content_ids_snippet.png](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/images/get_content_ids_snippet.png)
 
 - Passes them to [next-syndication-api](https://github.com/Financial-Times/next-syndication-api/tree/master/doc#post-syndicationresolve) to get the syndication data for each content ID
 
-![syndication_api_response_snippet.png](https://github.com/Financial-Times/next-syndication-api/blob/feat/add-syndication-md/doc/images/syndication_api_response_snippet.png)
+![syndication_api_response_snippet.png](https://github.com/Financial-Times/next-syndication-api/blob/master/doc/images/syndication_api_response_snippet.png)
 
 - Uses the response to put the syndication symbols
 
