@@ -537,7 +537,7 @@
         "containedIn": [],
         "canBeDistributed": "yes",
         "canBeSyndicated": "yes",
-        "canAllGraphicsBeSyndicated": null,
+        "canAllGraphicsBeSyndicated": false,
         "hasGraphics": false,
         "comments": {
             "enabled": true

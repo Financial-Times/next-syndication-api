@@ -36,7 +36,7 @@ module.exports = exports = function article(content, format) {
 	const countOfGraphics = content.contentStats && content.contentStats.graphics && content.contentStats.graphics;
 	const countOfSharableGraphics = content.embeds ? content.embeds.filter(embed => embed && embed.type.endsWith('Graphic')).filter(embed => embed.canBeSyndicated === 'yes').lenght : 0;
 
-	content.canAllGraphicsBeSyndicated = countOfGraphics > 0 ? countOfSharableGraphics < countOfGraphics : null;
+	content.canAllGraphicsBeSyndicated = countOfGraphics > 0 ? countOfSharableGraphics < countOfGraphics : false;
 
 	if (content.bodyHTML) {
 		content.document = formatArticleXML(`<body>${content.bodyHTML}</body>`);

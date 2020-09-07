@@ -256,7 +256,7 @@ describe(MODULE_ID, function () {
 			type: 'article',
 			wordCount: undefined
 		}, {
-			canAllGraphicsBeSyndicated: null,
+			canAllGraphicsBeSyndicated: false,
 			canBeSyndicated: 'yes',
 			canDownload: 1,
 			downloaded: true,
