@@ -19,6 +19,8 @@
         "containedIn": [],
         "canBeDistributed": "yes",
         "canBeSyndicated": "yes",
+        "canAllGraphicsBeSyndicated": false,
+        "hasGraphics": true,
         "comments": {
             "enabled": true
         },
@@ -535,6 +537,8 @@
         "containedIn": [],
         "canBeDistributed": "yes",
         "canBeSyndicated": "yes",
+        "canAllGraphicsBeSyndicated": null,
+        "hasGraphics": false,
         "comments": {
             "enabled": true
         },
