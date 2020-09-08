@@ -70,7 +70,7 @@ function tidy(item, includeBody) {
 		delete item.fileName;
 	}
 
-	if (item.hasGraphics === undefined){
+	if (item.type !== 'article'){
 		delete item.canAllGraphicsBeSyndicated;
 		delete item.hasGraphics;
 	}
