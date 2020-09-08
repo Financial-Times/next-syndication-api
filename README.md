@@ -19,6 +19,8 @@ For an explanation, including a Slides deck which explains the infrastructure, p
     ~$ cd next-syndication-api
 
     ~$ make install
+    
+    ~$ make .env
 
 ```
 
