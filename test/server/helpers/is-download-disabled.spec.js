@@ -12,45 +12,45 @@ const MODULE_ID =
 
 describe(MODULE_ID, function () {
 	let item;
-	let user = {};
+	let contract = {};
 	it('returns true if item type is package', function () {
 		item = {
 			type: 'package',
 		};
-		expect(isDownloadDisabled(item, user)).to.be.true;
+		expect(isDownloadDisabled(item, contract)).to.be.true;
 	});
 	it('returns true if item is not avaliable', function () {
 		item = {
 			notAvailable: true,
 		};
-		expect(isDownloadDisabled(item, user)).to.be.true;
+		expect(isDownloadDisabled(item, contract)).to.be.true;
 	});
 	it('returns true if item canBeSyndicated is verify', function () {
 		item = {
 			canBeSyndicated: 'verify',
 		};
-		expect(isDownloadDisabled(item, user)).to.be.true;
+		expect(isDownloadDisabled(item, contract)).to.be.true;
 	});
-	it('returns true if item.canBeSyndicated is withContributorPayment and user.contributor_content is not true', function () {
+	it('returns true if item.canBeSyndicated is withContributorPayment and contract.contributor_content is not true', function () {
 		item = {
 			canBeSyndicated: 'withContributorPayment',
 		};
-		user = {
+		contract = {
 			contributor_content: false,
 		};
-		expect(isDownloadDisabled(item, user)).to.be.true;
+		expect(isDownloadDisabled(item, contract)).to.be.true;
 	});
 	it('returns true if item canBeSyndicated is no', function () {
 		item = {
 			canBeSyndicated: 'no',
 		};
-		expect(isDownloadDisabled(item, user)).to.be.true;
+		expect(isDownloadDisabled(item, contract)).to.be.true;
 	});
 	it('returns true if item canDownload is less than 1', function () {
 		item = {
 			canDownload: 0,
 		};
-		expect(isDownloadDisabled(item, user)).to.be.true;
+		expect(isDownloadDisabled(item, contract)).to.be.true;
 	});
 	it('returns false if item type is article, is avaliable, can be syndicated and can be downloaded', function () {
 		item = {
@@ -59,6 +59,6 @@ describe(MODULE_ID, function () {
 			canBeSyndicated: 'yes',
 			canDownload: 2,
 		};
-		expect(isDownloadDisabled(item, user)).to.be.false;
+		expect(isDownloadDisabled(item, contract)).to.be.false;
 	});
 });
