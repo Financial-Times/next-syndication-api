@@ -31,7 +31,7 @@ module.exports = exports = async (req, res, next) => {
 
 		CSV.push(Object.keys(EXPORT_HEADERS).map(key => EXPORT_HEADERS[key]).join(','));
 
-		CSV.push(...items.map(item => Object.keys(EXPORT_HEADERS).map(key => safe(item[key])).join(',')));
+		CSV.push(...items.map(item => Object.keys(EXPORT_HEADERS).map(key => safe(item, key)).join(',')));
 
 		res.send(Buffer.from(CSV.join('\n'), 'utf8'));
 
@@ -52,7 +52,10 @@ module.exports = exports = async (req, res, next) => {
 
 };
 
-function safe(value) {
+function safe(item, key) {
+
+	let value = item[key];
+
 	switch (Object.prototype.toString.call(value)) {
 		case '[object Date]':
 			value = value.toJSON();
@@ -62,6 +65,11 @@ function safe(value) {
 		case '[object Object]':
 			value = JSON.stringify(value).replace(RE_QUOTES, '\"');
 			break;
+	}
+
+	// Sets value for content_type to 'rich_article' when item has graphics
+	if (key === 'content_type' && value === 'article' && item.has_grahics){
+		value = 'rich_article';
 	}
 
 	if (String(value).includes(',')) {
