@@ -11,6 +11,7 @@ module.exports = exports = (config) => {
 			event: {
 				content_id: content.id,
 				content_type: content.content_type,
+				has_graphics: content.hasGraphics,
 				content_url: content.webUrl,
 				contract_id: contract.contract_id,
 				download_format: content.extension,

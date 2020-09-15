@@ -44,6 +44,7 @@ module.exports = exports = async (req, res, next) => {
 			event: {
 				content_id: content.id,
 				content_type: content.content_type,
+				has_graphics: content.hasGraphics,
 				content_url: content.webUrl,
 				contract_id: syndication_contract.id,
 				iso_lang_code: lang,
