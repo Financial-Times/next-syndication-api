@@ -33,10 +33,13 @@ module.exports = exports = function article(content, format) {
 
 	content.hasGraphics = Boolean(content.contentStats && content.contentStats.graphics);
 
-	const countOfGraphics = content.contentStats && content.contentStats.graphics;
-	const countOfSharableGraphics = content.embeds ? content.embeds.filter(embed => embed && embed.type.endsWith('Graphic') && embed.canBeSyndicated === 'yes').length : 0;
+	// Currently embeds can have more than one item for each picture - for different screen sizes
+	// We are assuming that canBeSyndicated is the same for all sizes of a picture
+	// We are asking if ALL Graphics can be syndicated, which means as long as at least one item
+	// can't be, the answer to this is 'no'
+	const atLeastOneGraphicCantBeShared = content.embeds && content.embeds.filter(embed => embed && embed.type.endsWith('Graphic')).some(item => item.canBeSyndicated !== 'yes');
 
-	content.canAllGraphicsBeSyndicated = countOfGraphics > 0 ? countOfSharableGraphics < countOfGraphics : false;
+	content.canAllGraphicsBeSyndicated = Boolean(atLeastOneGraphicCantBeShared);
 
 	if (content.bodyHTML) {
 		content.document = formatArticleXML(`<body>${content.bodyHTML}</body>`);
