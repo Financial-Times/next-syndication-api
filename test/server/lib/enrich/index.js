@@ -45,7 +45,7 @@ describe(MODULE_ID, function () {
 			it('fileName', function() {
 				expect(item.fileName).to.equal(`${DOWNLOAD_FILENAME_PREFIX}${item.title.replace(RE_SPACE, '_').replace(RE_BAD_CHARS, '').substring(0, 12)}`);
 			});
-			
+
 			it('hasGraphics', function() {
 				expect(item.hasGraphics).to.be.a('boolean');
 			});

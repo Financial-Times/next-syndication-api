@@ -26,11 +26,11 @@ module.exports = exports = function article(content, format) {
 	}
 
 	content.extension = DOWNLOAD_ARTICLE_FORMATS[format] || 'docx';
-	
+
 	if (content.body && !content.bodyHTML) {
 		content.bodyHTML = content.body;
 	}
-	
+
 	content.hasGraphics = content.contentStats && content.contentStats.graphics > 0;
 
 	if (content.bodyHTML) {
