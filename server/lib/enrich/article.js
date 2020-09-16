@@ -31,7 +31,7 @@ module.exports = exports = function article(content, format) {
 		content.bodyHTML = content.body;
 	}
 
-	content.hasGraphics = content.contentStats && content.contentStats.graphics > 0;
+	content.hasGraphics = Boolean(content.contentStats && content.contentStats.graphics);
 
 	if (content.bodyHTML) {
 		content.document = formatArticleXML(`<body>${content.bodyHTML}</body>`);
