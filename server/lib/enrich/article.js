@@ -39,7 +39,7 @@ module.exports = exports = function article(content, format) {
 	// can't be, the answer to this is 'no'
 	const atLeastOneGraphicCantBeShared = content.embeds && content.embeds.filter(embed => embed && embed.type.endsWith('Graphic')).some(item => item.canBeSyndicated !== 'yes');
 
-	content.canAllGraphicsBeSyndicated = Boolean(atLeastOneGraphicCantBeShared);
+	content.canAllGraphicsBeSyndicated = !atLeastOneGraphicCantBeShared;
 
 	if (content.bodyHTML) {
 		content.document = formatArticleXML(`<body>${content.bodyHTML}</body>`);
