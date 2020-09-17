@@ -59,6 +59,14 @@ describe(MODULE_ID, function () {
 			it('bodyHTML__PLAIN', function() {
 				expect(item.bodyHTML__PLAIN).to.be.a('string');
 			});
+
+			it('hasGraphics', function() {
+				expect(item.hasGraphics).to.be.a('boolean');
+			});
+
+			it('canAllGraphicsBeSyndicated', function() {
+				expect(item.canAllGraphicsBeSyndicated).to.be.a('boolean');
+			});
 		});
 	});
 });

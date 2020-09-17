@@ -70,5 +70,10 @@ function tidy(item, includeBody) {
 		delete item.fileName;
 	}
 
+	if (item.type !== 'article'){
+		delete item.canAllGraphicsBeSyndicated;
+		delete item.hasGraphics;
+	}
+
 	return item;
 }

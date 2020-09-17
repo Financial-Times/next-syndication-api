@@ -1,19 +1,22 @@
 {
   "id": "ef4c49fe-980e-11e7-b83c-9588e51488a0",
-  "webUrl": "http://www.ft.com/cms/s/ef4c49fe-980e-11e7-b83c-9588e51488a0.html",
+  "webUrl": "https://www.ft.com/content/ef4c49fe-980e-11e7-b83c-9588e51488a0",
   "title": "Tech companies in the city: the backlash",
   "alternativeTitles": {
     "promotionalTitle": "Tech companies in the city: the backlash"
   },
+  "standfirst": "‘As Seattle’s Amazon-land ballooned, its footprint became a sore point’",
   "provenance": [
-    "http://api.ft.com/internalcontent/ef4c49fe-980e-11e7-b83c-9588e51488a0"
+    "https://api.ft.com/internalcontent/ef4c49fe-980e-11e7-b83c-9588e51488a0"
   ],
   "byline": "Leslie Hook",
-  "standfirst": "‘As Seattle’s Amazon-land ballooned, its footprint became a sore point’",
   "publishedDate": "2017-09-15T04:01:25.000Z",
   "firstPublishedDate": "2017-09-15T04:01:25.000Z",
-  "publishReference": "tid_oyutrewelx",
-  "curatedRelatedContent": [ ],
+  "publishReference": "SYNTHETIC-REQ-MONtid_Nc4lS23YUV_carousel_1534772628",
+  "bodyText": "Cities and big tech companies usually do not get along very well. Just look at San Francisco or Seattle — many locals love nothing more than a good gripe against Google or Uber or Amazon.\n\nIt’s been curious, then, to watch cities rush forward after Amazon said it was looking for a site to build a second headquarters in North America. Mayors from Pittsburgh to Chicago to Memphis have jumped on Twitter and on the phone to woo Amazon, promising their constituents they will work hard to win the company’s favour.\n\nThe prize is certainly vast — Amazon has said it will spend at least $5bn to build the new headquarters, which will be home to some 50,000 employees.\n\nIn Seattle, Amazon’s hometown, however, the company’s presence is somewhat controversial. Any visitor is immediately struck by the scale of Amazon’s urban campus, some 33 buildings right in the heart of town. The buildings are not walled off, but there is a noticeable change in atmosphere as you enter Amazon-land: the sidewalks get cleaner, the people have fewer tattoos and fancy fitness studios become more frequent.\n\nAs the campus has ballooned from 20,000 people two years ago to more than 40,000 people today, its footprint has become a sore point. Many workers live nearby — one in five walks to work — heightening the sense that downtown Seattle has become a company town.\n\nSuddenly Seattle’s conversations about rent control, a practice long banned in Washington state, have become serious. Seattle even elected its first socialist city council member in many decades in 2014, who campaigned in part on concerns about affordable housing and gentrification. None of this used to happen in the city, long known as a low-tax, business-friendly jurisdiction. (Washington’s low taxes were a key reason why Jeff Bezos set up shop there all those years ago.)\n\nAmazon has not been totally blind to these concerns. As if to mute its presence, the company has avoided any big “Amazon” signs on building exteriors. It is also creating a botanical garden in the centre of Seattle, housed in three greenhouse spheres — although these will not be fully open to the public. Instead they will be used mostly for corporate meetings.\n\nA similar frisson with big tech has long been felt in San Francisco, where locals harbour deep resentment for the hordes of tech workers that have flooded the city. For years, irritated San Franciscans staged protests at the bus stops where Google’s fleet of big white commuter buses picked up city-dwelling tech workers with their lattes and even their dogs, to ferry them to company headquarters in Silicon Valley. These protests have died down recently, partly because soaring rents in the city have priced out many former and would-be protesters.\n\nThe dispute between cities and the tech corporations boils down to the question of what it means for companies to be good corporate citizens. The inefficiencies of government mean that cities are often unable to cope with rapid change, even while an increased tax base may help fill city coffers. Companies must then try to fill in infrastructure gaps themselves, but often these efforts draw the ire of the public, which perceives them as only benefiting the corporations and their staff.\n\nWhile big tech companies are trying to manage the backlash from the cities they inhabit, a growing number of start-ups are trying to design tech-utopian cities of the future. These groups are working on 3D-printed buildings, trains that move at close to the speed of sound and new systems of banking and taxation that could replace the role of government as we know it.\n\nThe concept of a “city in a box” is often tossed around, as if these urban visions will spring forth fully formed once the technology is perfected. But before they invent the cities of the future, tech companies must first learn how to live within the cities of today.\n\nLeslie Hook is the FT’s San Francisco correspondent\n\nIllustration by Christopher de Lorenzo",
+  "curatedRelatedContent": [],
+  "containedIn": [],
+  "canBeDistributed": "yes",
   "canBeSyndicated": "yes",
   "comments": {
     "enabled": true
@@ -24,84 +27,57 @@
     "scoop": false
   },
   "realtime": false,
+  "editorialDesk": "/FT/Weekend/The Magazine",
   "originatingParty": "FT",
-  "_lastUpdatedDateTime": "2017-09-15T07:03:59.228Z",
+  "_lastUpdatedDateTime": "2020-09-03T09:22:46.137Z",
+  "_lastUpdatedVersion": "fc268c176f0ba875ad15b6671e797dda89a9cc3b",
   "type": "article",
   "accessLevel": "subscribed",
-  "topper": { },
-  "leadImages": [ ],
-  "containedIn": [ ],
+  "topper": {},
   "mainImage": {
+    "url": "http://prod-upp-image-read.ft.com/ecdc60f0-97dc-11e7-a652-cde3f882dd7b",
     "title": "",
     "description": "",
-    "url": "http://prod-upp-image-read.ft.com/ecdc60f0-97dc-11e7-a652-cde3f882dd7b",
+    "copyright": "© Christopher de Lorenzo",
     "width": 2048,
     "height": 1152,
-    "ratio": 1.7777777777777777,
+    "ratio": 1.77778,
     "aspectRatio": 0.5625
   },
-  "bodyHTML": "<figure class=\"n-content-image\"><img src=\"http://com.ft.imagepublish.prod.s3.amazonaws.com/ecdc60f0-97dc-11e7-a652-cde3f882dd7b\" alt=\"\" role=\"presentation\" width=\"2048\" height=\"1152\" data-copyright=\"© Christopher de Lorenzo\"><figcaption class=\"n-content-image__caption\">© Christopher de Lorenzo</figcaption></figure><p>Cities and big tech companies usually do not get along very well. Just look at San Francisco or Seattle — many locals love nothing more than a good gripe against Google or Uber or Amazon.</p><p>It’s been curious, then, to watch <a href=\"/content/eb3642da-94b1-11e7-a9e6-11d2f0ebb7f0\">cities rush forward after Amazon</a> said it was looking for a site to build a second headquarters in North America. Mayors from Pittsburgh to Chicago to Memphis have jumped on Twitter and on the phone to woo Amazon, promising their constituents they will work hard to win the company’s favour.</p><p>The prize is certainly vast — Amazon has said it will spend at least $5bn to build the new headquarters, which will be home to some 50,000 employees.</p><p>In Seattle, Amazon’s hometown, however, the company’s presence is somewhat controversial. Any visitor is immediately struck by the scale of Amazon’s urban campus, some 33 buildings right in the heart of town. The buildings are not walled off, but there is a noticeable change in atmosphere as you enter Amazon-land: the sidewalks get cleaner, the people have fewer tattoos and fancy fitness studios become more frequent.</p><p>As the campus has ballooned from 20,000 people two years ago to more than 40,000 people today, its footprint has become a sore point. Many workers live nearby — one in five walks to work — heightening the sense that downtown Seattle has become a company town.</p><p>Suddenly Seattle’s conversations about rent control, a practice long banned in Washington state, have become serious. Seattle even elected its first socialist city council member in many decades in 2014, who campaigned in part on concerns about affordable housing and gentrification. None of this used to happen in the city, long known as a low-tax, business-friendly jurisdiction. (Washington’s low taxes were a key reason why <a href=\"https://www.ft.com/topics/people/Jeff_Bezos\">Jeff Bezos</a> set up shop there all those years ago.)</p><p>Amazon has not been totally blind to these concerns. As if to mute its presence, the company has avoided any big “Amazon” signs on building exteriors. It is also creating a botanical garden in the centre of Seattle, housed in three greenhouse spheres — although these will not be fully open to the public. Instead they will be used mostly for corporate meetings.</p><p>A similar frisson with big tech has long been felt in San Francisco, where locals harbour deep resentment for the hordes of tech workers that have flooded the city. For years, irritated San Franciscans staged <a href=\"https://www.wired.com/2016/02/sfs-tech-bus-problem-isnt-about-buses-its-about-housing/\">protests</a> at the bus stops where Google’s fleet of big white commuter buses picked up city-dwelling tech workers with their lattes and even their dogs, to ferry them to company headquarters in Silicon Valley. These protests have died down recently, partly because soaring rents in the city have priced out many former and would-be protesters.</p><p>The dispute between cities and the tech corporations boils down to the question of what it means for companies to be good corporate citizens. The inefficiencies of government mean that cities are often unable to cope with rapid change, even while an increased tax base may help fill city coffers. Companies must then try to fill in infrastructure gaps themselves, but often these efforts draw the ire of the public, which perceives them as only benefiting the corporations and their staff.</p><p>While big tech companies are trying to manage the backlash from the cities they inhabit, a growing number of start-ups are trying to design <a href=\"http://uk.businessinsider.com/silicon-valley-is-building-utopian-cities-2016-6?r=US&amp;IR=T\">tech-utopian cities</a> of the future. These groups are working on 3D-printed buildings, trains that move at close to the speed of sound and new systems of banking and taxation that could replace the role of government as we know it.</p><p>The concept of a “city in a box” is often tossed around, as if these urban visions will spring forth fully formed once the technology is perfected. But before they invent the cities of the future, tech companies must first learn how to live within the cities of today.</p><p><em>Leslie Hook is the FT’s San Francisco correspondent</em></p><p><em>Illustration by Christopher de Lorenzo</em></p>",
-  "contentStats": {
-    "relatedBoxes": 0,
-    "pullQuotes": 0,
-    "pullQuotesWithImages": 0,
-    "bigNumbers": 0,
-    "images": 1,
-    "responsiveImages": 0,
-    "graphics": 0,
-    "videos": 0,
-    "internalVideos": 0,
-    "externalVideos": 0,
-    "subheadings": 0,
-    "curatedRecommended": 0,
-    "layouts": 0,
-    "layoutSlots": 0,
-    "infoBox": 0
-  },
+  "embeds": [
+    {
+      "apiUrl": "https://api.ft.com/content/ecdc60f0-97dc-11e7-a652-cde3f882dd7b",
+      "binaryUrl": "http://com.ft.imagepublish.prod.s3.amazonaws.com/ecdc60f0-97dc-11e7-a652-cde3f882dd7b",
+      "copyright": {
+        "notice": "© Christopher de Lorenzo"
+      },
+      "firstPublishedDate": "2017-09-18T15:52:00.000Z",
+      "id": "ecdc60f0-97dc-11e7-a652-cde3f882dd7b",
+      "identifiers": [
+        {
+          "authority": "http://api.ft.com/system/FTCOM-METHODE",
+          "identifierValue": "ecdc60f0-97dc-11e7-a652-cde3f882dd7b"
+        }
+      ],
+      "publishReference": "tid_bz5i3bz918",
+      "publishedDate": "2017-09-18T15:52:00.000Z",
+      "type": "http://www.ft.com/ontology/content/Image",
+      "canBeSyndicated": "verify"
+    }
+  ],
+  "bodyHTML": "\n\t\t\t<figure class=\"n-content-image\">\n\t\t\t\t<img src=\"http://com.ft.imagepublish.prod.s3.amazonaws.com/ecdc60f0-97dc-11e7-a652-cde3f882dd7b\" data-id=\"https://api.ft.com/content/ecdc60f0-97dc-11e7-a652-cde3f882dd7b\" data-image-type=\"image\" data-original-image-width=\"2048\" data-original-image-height=\"1152\" aria-hidden=\"true\" alt width=\"2048\" height=\"1152\" data-copyright=\"&#xA9; Christopher de Lorenzo\">\n\t\t\t\t\n\t\t\t<figcaption class=\"n-content-image__caption\">\n\t\t\t\t&#xA9; Christopher de Lorenzo\n\t\t\t</figcaption>\n\t\t\n\t\t\t</figure>\n\t\t<p>Cities and big tech companies usually do not get along very well. Just look at San Francisco or Seattle &#x2014; many locals love nothing more than a good gripe against Google or Uber or Amazon.</p><p>It&#x2019;s been curious, then, to watch <a href=\"/content/eb3642da-94b1-11e7-a9e6-11d2f0ebb7f0\">cities rush forward after Amazon</a> said it was looking for a site to build a second headquarters in North America. Mayors from Pittsburgh to Chicago to Memphis have jumped on Twitter and on the phone to woo Amazon, promising their constituents they will work hard to win the company&#x2019;s favour.</p><p>The prize is certainly vast &#x2014; Amazon has said it will spend at least $5bn to build the new headquarters, which will be home to some 50,000 employees.</p><p>In Seattle, Amazon&#x2019;s hometown, however, the company&#x2019;s presence is somewhat controversial. Any visitor is immediately struck by the scale of Amazon&#x2019;s urban campus, some 33 buildings right in the heart of town. The buildings are not walled off, but there is a noticeable change in atmosphere as you enter Amazon-land: the sidewalks get cleaner, the people have fewer tattoos and fancy fitness studios become more frequent.</p><p>As the campus has ballooned from 20,000 people two years ago to more than 40,000 people today, its footprint has become a sore point. Many workers live nearby &#x2014; one in five walks to work &#x2014; heightening the sense that downtown Seattle has become a company town.</p><p>Suddenly Seattle&#x2019;s conversations about rent control, a practice long banned in Washington state, have become serious. Seattle even elected its first socialist city council member in many decades in 2014, who campaigned in part on concerns about affordable housing and gentrification. None of this used to happen in the city, long known as a low-tax, business-friendly jurisdiction. (Washington&#x2019;s low taxes were a key reason why <a href=\"https://www.ft.com/topics/people/Jeff_Bezos\">Jeff Bezos</a> set up shop there all those years ago.)</p><p>Amazon has not been totally blind to these concerns. As if to mute its presence, the company has avoided any big &#x201C;Amazon&#x201D; signs on building exteriors. It is also creating a botanical garden in the centre of Seattle, housed in three greenhouse spheres &#x2014; although these will not be fully open to the public. Instead they will be used mostly for corporate meetings.</p><p>A similar frisson with big tech has long been felt in San Francisco, where locals harbour deep resentment for the hordes of tech workers that have flooded the city. For years, irritated San Franciscans staged <a href=\"https://www.wired.com/2016/02/sfs-tech-bus-problem-isnt-about-buses-its-about-housing/\" target=\"_blank\" rel=\"noreferrer noopener\">protests</a> at the bus stops where Google&#x2019;s fleet of big white commuter buses picked up city-dwelling tech workers with their lattes and even their dogs, to ferry them to company headquarters in Silicon Valley. These protests have died down recently, partly because soaring rents in the city have priced out many former and would-be protesters.</p><p>The dispute between cities and the tech corporations boils down to the question of what it means for companies to be good corporate citizens. The inefficiencies of government mean that cities are often unable to cope with rapid change, even while an increased tax base may help fill city coffers. Companies must then try to fill in infrastructure gaps themselves, but often these efforts draw the ire of the public, which perceives them as only benefiting the corporations and their staff.</p><p>While big tech companies are trying to manage the backlash from the cities they inhabit, a growing number of start-ups are trying to design <a href=\"http://uk.businessinsider.com/silicon-valley-is-building-utopian-cities-2016-6?r=US&amp;IR=T\" target=\"_blank\" rel=\"noreferrer noopener\">tech-utopian cities</a> of the future. These groups are working on 3D-printed buildings, trains that move at close to the speed of sound and new systems of banking and taxation that could replace the role of government as we know it.</p><p>The concept of a &#x201C;city in a box&#x201D; is often tossed around, as if these urban visions will spring forth fully formed once the technology is perfected. But before they invent the cities of the future, tech companies must first learn how to live within the cities of today.</p><p><em>Leslie Hook is the FT&#x2019;s San Francisco correspondent</em></p><p><em>Illustration by Christopher de Lorenzo</em></p>",
+  "openingHTML": "<figure class=\"n-content-image\">\n\t\t\t\t<img src=\"http://com.ft.imagepublish.prod.s3.amazonaws.com/ecdc60f0-97dc-11e7-a652-cde3f882dd7b\" data-id=\"https://api.ft.com/content/ecdc60f0-97dc-11e7-a652-cde3f882dd7b\" data-image-type=\"image\" data-original-image-width=\"2048\" data-original-image-height=\"1152\" aria-hidden=\"true\" alt width=\"2048\" height=\"1152\" data-copyright=\"&#xA9; Christopher de Lorenzo\">\n\t\t\t\t\n\t\t\t<figcaption class=\"n-content-image__caption\">\n\t\t\t\t&#xA9; Christopher de Lorenzo\n\t\t\t</figcaption>\n\t\t\n\t\t\t</figure><p>Cities and big tech companies usually do not get along very well. Just look at San Francisco or Seattle &#x2014; many locals love nothing more than a good gripe against Google or Uber or Amazon.</p>",
+  "_editorialComponents": [],
   "url": "https://www.ft.com/content/ef4c49fe-980e-11e7-b83c-9588e51488a0",
   "relativeUrl": "/content/ef4c49fe-980e-11e7-b83c-9588e51488a0",
   "annotations": [
     {
-      "apiUrl": "http://api.ft.com/things/f967910f-67d5-31f7-a031-64f8af0d9cf1",
-      "directType": "http://www.ft.com/ontology/Section",
-      "id": "f967910f-67d5-31f7-a031-64f8af0d9cf1",
-      "predicate": "http://www.ft.com/ontology/classification/isClassifiedBy",
-      "prefLabel": "Life & Arts",
-      "type": "SECTION",
-      "types": [
-        "http://www.ft.com/ontology/core/Thing",
-        "http://www.ft.com/ontology/concept/Concept",
-        "http://www.ft.com/ontology/classification/Classification",
-        "http://www.ft.com/ontology/Section"
-      ],
-      "url": "https://www.ft.com/life-arts",
-      "preposition": "in",
-      "relativeUrl": "/life-arts"
-    },
-    {
-      "apiUrl": "http://api.ft.com/things/e569e23b-0c3e-3d20-8ed0-4c17b8177c05",
-      "directType": "http://www.ft.com/ontology/Genre",
-      "id": "e569e23b-0c3e-3d20-8ed0-4c17b8177c05",
-      "predicate": "http://www.ft.com/ontology/classification/isClassifiedBy",
-      "prefLabel": "Comment",
-      "type": "GENRE",
-      "types": [
-        "http://www.ft.com/ontology/core/Thing",
-        "http://www.ft.com/ontology/concept/Concept",
-        "http://www.ft.com/ontology/classification/Classification",
-        "http://www.ft.com/ontology/Genre"
-      ],
-      "url": "https://www.ft.com/stream/e569e23b-0c3e-3d20-8ed0-4c17b8177c05",
-      "preposition": "",
-      "relativeUrl": "/stream/e569e23b-0c3e-3d20-8ed0-4c17b8177c05"
-    },
-    {
-      "FIGI": "BBG000BVQ4Z3",
-      "apiUrl": "http://api.ft.com/organisations/23629959-5137-384a-a8af-3f7d9cb16912",
+      "FIGI": "BBG000BVPV84",
+      "apiUrl": "http://api.ft.com/organisations/84cf4073-a674-4a93-aef9-dcc1832a65cb",
       "directType": "http://www.ft.com/ontology/company/PublicCompany",
-      "id": "23629959-5137-384a-a8af-3f7d9cb16912",
+      "id": "84cf4073-a674-4a93-aef9-dcc1832a65cb",
       "predicate": "http://www.ft.com/ontology/annotation/about",
-      "prefLabel": "Amazon",
+      "prefLabel": "Amazon.com",
       "type": "ORGANISATION",
       "types": [
         "http://www.ft.com/ontology/core/Thing",
@@ -110,48 +86,80 @@
         "http://www.ft.com/ontology/company/Company",
         "http://www.ft.com/ontology/company/PublicCompany"
       ],
-      "url": "https://www.ft.com/topics/organisations/Amazon",
       "preposition": "on",
-      "relativeUrl": "/topics/organisations/Amazon"
+      "url": "https://www.ft.com/stream/84cf4073-a674-4a93-aef9-dcc1832a65cb",
+      "relativeUrl": "/stream/84cf4073-a674-4a93-aef9-dcc1832a65cb"
     },
     {
-      "apiUrl": "http://api.ft.com/things/df5190e2-20f9-379b-9054-06ecfbdcb3a0",
-      "directType": "http://www.ft.com/ontology/Section",
-      "id": "df5190e2-20f9-379b-9054-06ecfbdcb3a0",
-      "predicate": "http://www.ft.com/ontology/classification/isPrimarilyClassifiedBy",
-      "prefLabel": "FT Magazine",
-      "type": "SECTION",
+      "apiUrl": "http://api.ft.com/things/6da31a37-691f-4908-896f-2829ebe2309e",
+      "directType": "http://www.ft.com/ontology/Genre",
+      "id": "6da31a37-691f-4908-896f-2829ebe2309e",
+      "predicate": "http://www.ft.com/ontology/classification/isClassifiedBy",
+      "prefLabel": "Opinion",
+      "type": "GENRE",
       "types": [
         "http://www.ft.com/ontology/core/Thing",
         "http://www.ft.com/ontology/concept/Concept",
         "http://www.ft.com/ontology/classification/Classification",
-        "http://www.ft.com/ontology/Section"
+        "http://www.ft.com/ontology/Genre"
       ],
+      "preposition": "",
+      "url": "https://www.ft.com/opinion",
+      "relativeUrl": "/opinion"
+    },
+    {
+      "apiUrl": "http://api.ft.com/things/0b83bc44-4a55-4958-882e-73ba6b2b0aa6",
+      "directType": "http://www.ft.com/ontology/Topic",
+      "id": "0b83bc44-4a55-4958-882e-73ba6b2b0aa6",
+      "predicate": "http://www.ft.com/ontology/classification/isClassifiedBy",
+      "prefLabel": "Life & Arts",
+      "type": "TOPIC",
+      "types": [
+        "http://www.ft.com/ontology/core/Thing",
+        "http://www.ft.com/ontology/concept/Concept",
+        "http://www.ft.com/ontology/Topic"
+      ],
+      "preposition": "on",
+      "url": "https://www.ft.com/life-arts",
+      "relativeUrl": "/life-arts"
+    },
+    {
+      "apiUrl": "http://api.ft.com/brands/f12aa89a-5506-4a68-aff6-4ce78d0e709f",
+      "directType": "http://www.ft.com/ontology/product/Brand",
+      "id": "f12aa89a-5506-4a68-aff6-4ce78d0e709f",
+      "predicate": "http://www.ft.com/ontology/classification/isPrimarilyClassifiedBy",
+      "prefLabel": "FT Magazine",
+      "type": "BRAND",
+      "types": [
+        "http://www.ft.com/ontology/core/Thing",
+        "http://www.ft.com/ontology/concept/Concept",
+        "http://www.ft.com/ontology/classification/Classification",
+        "http://www.ft.com/ontology/product/Brand"
+      ],
+      "preposition": "from",
       "url": "https://www.ft.com/magazine",
-      "preposition": "in",
       "relativeUrl": "/magazine"
     },
     {
-      "apiUrl": "http://api.ft.com/things/2dd66dcb-b87d-35ef-b1bf-ce8706f2c382",
-      "directType": "http://www.ft.com/ontology/Section",
-      "id": "2dd66dcb-b87d-35ef-b1bf-ce8706f2c382",
+      "apiUrl": "http://api.ft.com/things/6b32f2c1-da43-4e19-80b9-8aef4ab640d7",
+      "directType": "http://www.ft.com/ontology/Topic",
+      "id": "6b32f2c1-da43-4e19-80b9-8aef4ab640d7",
       "predicate": "http://www.ft.com/ontology/classification/isClassifiedBy",
-      "prefLabel": "Technology",
-      "type": "SECTION",
+      "prefLabel": "Technology sector",
+      "type": "TOPIC",
       "types": [
         "http://www.ft.com/ontology/core/Thing",
         "http://www.ft.com/ontology/concept/Concept",
-        "http://www.ft.com/ontology/classification/Classification",
-        "http://www.ft.com/ontology/Section"
+        "http://www.ft.com/ontology/Topic"
       ],
-      "url": "https://www.ft.com/technology",
-      "preposition": "in",
-      "relativeUrl": "/technology"
+      "preposition": "on",
+      "url": "https://www.ft.com/companies/technology",
+      "relativeUrl": "/companies/technology"
     },
     {
-      "apiUrl": "http://api.ft.com/people/0bd76a95-4aa7-358a-bf78-d70657658f53",
+      "apiUrl": "http://api.ft.com/people/14c63939-4e28-4aaa-bf44-af570a20990e",
       "directType": "http://www.ft.com/ontology/person/Person",
-      "id": "0bd76a95-4aa7-358a-bf78-d70657658f53",
+      "id": "14c63939-4e28-4aaa-bf44-af570a20990e",
       "predicate": "http://www.ft.com/ontology/annotation/hasAuthor",
       "prefLabel": "Leslie Hook",
       "type": "PERSON",
@@ -160,39 +168,39 @@
         "http://www.ft.com/ontology/concept/Concept",
         "http://www.ft.com/ontology/person/Person"
       ],
-      "url": "https://www.ft.com/stream/0bd76a95-4aa7-358a-bf78-d70657658f53",
       "preposition": "from",
-      "relativeUrl": "/stream/0bd76a95-4aa7-358a-bf78-d70657658f53",
       "attributes": [
         {
           "key": "headshot",
-          "value": "fthead:leslie-hook"
+          "value": "fthead-v1:leslie-hook"
         }
-      ]
+      ],
+      "url": "https://www.ft.com/leslie-hook",
+      "relativeUrl": "/leslie-hook"
     }
   ],
-  "displayConcept": {
-    "apiUrl": "http://api.ft.com/things/df5190e2-20f9-379b-9054-06ecfbdcb3a0",
-    "directType": "http://www.ft.com/ontology/Section",
-    "id": "df5190e2-20f9-379b-9054-06ecfbdcb3a0",
-    "prefLabel": "FT Magazine",
-    "type": "SECTION",
+  "genreConcept": {
+    "apiUrl": "http://api.ft.com/things/6da31a37-691f-4908-896f-2829ebe2309e",
+    "directType": "http://www.ft.com/ontology/Genre",
+    "id": "6da31a37-691f-4908-896f-2829ebe2309e",
+    "predicate": "http://www.ft.com/ontology/classification/isClassifiedBy",
+    "prefLabel": "Opinion",
+    "type": "GENRE",
     "types": [
       "http://www.ft.com/ontology/core/Thing",
       "http://www.ft.com/ontology/concept/Concept",
       "http://www.ft.com/ontology/classification/Classification",
-      "http://www.ft.com/ontology/Section"
+      "http://www.ft.com/ontology/Genre"
     ],
-    "url": "https://www.ft.com/magazine",
-    "preposition": "in",
-    "relativeUrl": "/magazine"
+    "preposition": "",
+    "url": "https://www.ft.com/opinion",
+    "relativeUrl": "/opinion"
   },
-  "genreConcept": null,
   "authorConcepts": [
     {
-      "apiUrl": "http://api.ft.com/people/0bd76a95-4aa7-358a-bf78-d70657658f53",
+      "apiUrl": "http://api.ft.com/people/14c63939-4e28-4aaa-bf44-af570a20990e",
       "directType": "http://www.ft.com/ontology/person/Person",
-      "id": "0bd76a95-4aa7-358a-bf78-d70657658f53",
+      "id": "14c63939-4e28-4aaa-bf44-af570a20990e",
       "predicate": "http://www.ft.com/ontology/annotation/hasAuthor",
       "prefLabel": "Leslie Hook",
       "type": "PERSON",
@@ -201,15 +209,115 @@
         "http://www.ft.com/ontology/concept/Concept",
         "http://www.ft.com/ontology/person/Person"
       ],
-      "url": "https://www.ft.com/stream/0bd76a95-4aa7-358a-bf78-d70657658f53",
       "preposition": "from",
-      "relativeUrl": "/stream/0bd76a95-4aa7-358a-bf78-d70657658f53",
       "attributes": [
         {
           "key": "headshot",
-          "value": "fthead:leslie-hook"
+          "value": "fthead-v1:leslie-hook"
         }
-      ]
+      ],
+      "url": "https://www.ft.com/leslie-hook",
+      "relativeUrl": "/leslie-hook"
     }
-  ]
+  ],
+  "design": {
+    "theme": "basic",
+    "layout": "default"
+  },
+  "displayConcept": {
+    "apiUrl": "http://api.ft.com/brands/f12aa89a-5506-4a68-aff6-4ce78d0e709f",
+    "directType": "http://www.ft.com/ontology/product/Brand",
+    "id": "f12aa89a-5506-4a68-aff6-4ce78d0e709f",
+    "predicate": "http://www.ft.com/ontology/classification/isPrimarilyClassifiedBy",
+    "prefLabel": "FT Magazine",
+    "type": "BRAND",
+    "types": [
+      "http://www.ft.com/ontology/core/Thing",
+      "http://www.ft.com/ontology/concept/Concept",
+      "http://www.ft.com/ontology/classification/Classification",
+      "http://www.ft.com/ontology/product/Brand"
+    ],
+    "preposition": "from",
+    "url": "https://www.ft.com/magazine",
+    "relativeUrl": "/magazine",
+    "isDisplayTag": false
+  },
+  "teaser": {
+    "id": "ef4c49fe-980e-11e7-b83c-9588e51488a0",
+    "url": "https://www.ft.com/content/ef4c49fe-980e-11e7-b83c-9588e51488a0",
+    "relativeUrl": "/content/ef4c49fe-980e-11e7-b83c-9588e51488a0",
+    "type": "article",
+    "indicators": {
+      "isColumn": true,
+      "isOpinion": true,
+      "isScoop": false,
+      "isExclusive": false,
+      "isEditorsChoice": false,
+      "accessLevel": "subscribed"
+    },
+    "metaPrefixText": null,
+    "metaSuffixText": null,
+    "metaLink": {
+      "id": "14c63939-4e28-4aaa-bf44-af570a20990e",
+      "predicate": "http://www.ft.com/ontology/annotation/hasAuthor",
+      "prefLabel": "Leslie Hook",
+      "type": "PERSON",
+      "attributes": [
+        {
+          "key": "headshot",
+          "value": "fthead-v1:leslie-hook"
+        }
+      ],
+      "url": "https://www.ft.com/leslie-hook",
+      "relativeUrl": "/leslie-hook"
+    },
+    "metaAltLink": {
+      "id": "f12aa89a-5506-4a68-aff6-4ce78d0e709f",
+      "predicate": "http://www.ft.com/ontology/classification/isPrimarilyClassifiedBy",
+      "prefLabel": "FT Magazine",
+      "type": "BRAND",
+      "url": "https://www.ft.com/magazine",
+      "relativeUrl": "/magazine"
+    },
+    "title": "Tech companies in the city: the backlash",
+    "standfirst": "‘As Seattle’s Amazon-land ballooned, its footprint became a sore point’",
+    "altStandfirst": null,
+    "publishedDate": "2017-09-15T04:01:25.000Z",
+    "firstPublishedDate": "2017-09-15T04:01:25.000Z",
+    "image": {
+      "url": "http://prod-upp-image-read.ft.com/ecdc60f0-97dc-11e7-a652-cde3f882dd7b",
+      "width": 2048,
+      "height": 1152
+    },
+    "headshot": "fthead-v1:leslie-hook",
+    "parentTheme": null
+  },
+  "contentStats": {
+    "wordCount": 655,
+    "paragraphs": 13,
+    "relatedBoxes": 0,
+    "pullQuotes": 0,
+    "pullQuotesWithImages": 0,
+    "bigNumbers": 0,
+    "images": 1,
+    "responsiveImages": 0,
+    "graphics": 0,
+    "audio": 0,
+    "videos": 0,
+    "internalVideos": 0,
+    "externalVideos": 0,
+    "subheadings": 0,
+    "curatedRecommended": 0,
+    "layouts": 0,
+    "layoutSlots": 0,
+    "infoBox": 0,
+    "tables": 0,
+    "timelines": 0,
+    "singleArticleRecommendations": 0,
+    "sentiment": 12,
+    "scoreGraphicVolume": 0,
+    "scoreGraphicDensity": 0,
+    "scorePictureVolume": 1,
+    "scorePictureDensity": 0.001527
+  }
 }

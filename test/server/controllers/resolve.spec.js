@@ -240,24 +240,28 @@ describe(MODULE_ID, function () {
 		await underTest(req, res, () => {});
 
 		expect(res.json).to.have.been.calledWith([{
+			canAllGraphicsBeSyndicated: false,
 			canBeSyndicated: 'yes',
 			canDownload: 1,
 			downloaded: true,
 			embargoPeriod: null,
+			hasGraphics: true,
 			id: '42ad255a-99f9-11e7-b83c-9588e51488a0',
 			lang: 'en',
 			messageCode: 'MSG_2100',
-			publishedDate: '2017-09-15T10:38:16.000Z',
+			publishedDate: '2017-09-15T15:48:53.000Z',
 			publishedDateDisplay: '15th Sep 2017',
 			saved: false,
 			title: 'Pound leaps to highest level since Brexit vote',
 			type: 'article',
 			wordCount: undefined
 		}, {
+			canAllGraphicsBeSyndicated: false,
 			canBeSyndicated: 'yes',
 			canDownload: 1,
 			downloaded: true,
 			embargoPeriod: null,
+			hasGraphics: false,
 			id: 'ef4c49fe-980e-11e7-b83c-9588e51488a0',
 			lang: 'en',
 			messageCode: 'MSG_2100',
