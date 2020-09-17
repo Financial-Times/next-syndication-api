@@ -31,7 +31,6 @@ module.exports = exports = function article(content, format) {
 		content.bodyHTML = content.body;
 	}
 
-	
 	content.wordCount = content.contentStats && content.contentStats.wordCount;
 	content.hasGraphics = Boolean(content.contentStats && content.contentStats.graphics);
 

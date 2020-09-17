@@ -204,7 +204,9 @@ describe(MODULE_ID, function () {
 
 			it('should send a buffer of the CSV', function () {
 				expect(res.send).to.have.been.calledWith(Buffer.from([DownloadsHeaders].concat(downloadedItems.map(item =>
-					Object.keys(EXPORT.downloads).map(key => item[key]).join(','))).join('\n'), 'utf8'));
+					Object.keys(EXPORT.downloads).map(
+						key => key === 'content_type' && item[key] === 'article' && item.has_graphics? 'rich_article':item[key]
+						).join(','))).join('\n'), 'utf8'));
 			});
 
 			it('should set the status to 200', function () {
@@ -282,7 +284,9 @@ describe(MODULE_ID, function () {
 
 			it('should send a buffer of the CSV', function () {
 				expect(res.send).to.have.been.calledWith(Buffer.from([SavedItemsHeaders].concat(savedItems.map(item =>
-					Object.keys(EXPORT.saved_items).map(key => item[key]).join(','))).join('\n'), 'utf8'));
+					Object.keys(EXPORT.saved_items).map(
+						key => key === 'content_type' && item[key] === 'article' && item.has_graphics? 'rich_article': item[key]
+						).join(','))).join('\n'), 'utf8'));
 			});
 
 			it('should set the status to 200', function () {

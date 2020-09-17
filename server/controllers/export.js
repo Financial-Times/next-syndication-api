@@ -68,7 +68,7 @@ function safe(item, key) {
 	}
 
 	// Sets value for content_type to 'rich_article' when item has graphics
-	if (key === 'content_type' && value === 'article' && item.has_grahics){
+	if (key === 'content_type' && value === 'article' && item.has_graphics){
 		value = 'rich_article';
 	}
 
