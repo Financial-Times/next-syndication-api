@@ -37,7 +37,13 @@ module.exports = exports = function article(content, format) {
 	// We are assuming that canBeSyndicated is the same for all sizes of a picture
 	// We are asking if ALL Graphics can be syndicated, which means as long as at least one item
 	// can't be, the answer to this is 'no'
-	const atLeastOneGraphicCantBeShared = content.embeds && content.embeds.filter(embed => embed && embed.type.endsWith('Graphic')).some(item => item.canBeSyndicated !== 'yes');
+	const atLeastOneGraphicCantBeShared =
+		content.embeds &&
+		content.embeds
+			.filter(
+				(embed) => embed && embed.type && embed.type.endsWith("Graphic")
+			)
+			.some((item) => item.canBeSyndicated !== "yes");
 
 	content.canAllGraphicsBeSyndicated = !atLeastOneGraphicCantBeShared;
 
