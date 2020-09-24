@@ -16,6 +16,12 @@ const pg = require('../../db/pg');
 const getSalesforceContractByID = require('./get-salesforce-contract-by-id');
 const reformatSalesforceContract = require('./reformat-salesforce-contract');
 
+function contentAllowedToStringList(contentAllowed = [], theInclude = 'Rich Articles', filterFor = 'Articles') {
+	//TODO move Rich articles to begining of the array/string
+	const transformedArray = contentAllowed.includes(theInclude)? contentAllowed.filter(item => item !== filterFor) : contentAllowed;
+	return `${transformedArray.slice(0, -1).join(', ')} & ${transformedArray[transformedArray.length - 1]}`;
+};
+
 function decorateContract(contract) {
 	contract.contract_date = `${moment(contract.start_date).format('DD/MM/YY')} - ${moment(contract.end_date).format('DD/MM/YY')}`;
 
@@ -56,12 +62,17 @@ function decorateContract(contract) {
 		return acc;
 	}, {});
 
+	//TODO decide on either update to api so content_allowed is an array and tranform is handled by client
+	//contract.content_allowed = contentAllowed;
+	// or keep a string and transfrom here:
 	switch (contentAllowed.length) {
+		case 0:
+			contract.content_allowed = 'None';
 		case 1:
 			contract.content_allowed = `${contentAllowed[0]} only`;
 			break;
 		default:
-			contract.content_allowed = `${contentAllowed.slice(0, -1).join(', ')} & ${contentAllowed[contentAllowed.length - 1]}`;
+			contract.content_allowed = contentAllowedToStringList(contentAllowed, 'Rich Articles', 'Articles');
 	}
 
 	return contract;
