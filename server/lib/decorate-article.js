@@ -5,7 +5,7 @@ const path = require('path');
 
 const handlebars  = require('./handlebars');
 const moment = require('moment');
-const { DOMParser } = require('xmldom');
+const { JSDOM } = require('jsdom');
 
 const Handlebars = handlebars();
 
@@ -22,7 +22,9 @@ module.exports = exports = (doc, content) => {
 		rich: content.extension !== 'plain',
 		title: content.title,
 		webUrl: content.url || content.webUrl,
-		wordCount: content.wordCount
+		wordCount: content.wordCount,
+		showAllGraphicsCantBeSyndicatedMessage: false, // TODO: Implement logic
+		showGraphicsAreAvailableForSyndicationMessage: false  // TODO: Implement logic
 	};
 
 	if (content.lang && content.lang !== 'en') {
@@ -36,8 +38,8 @@ module.exports = exports = (doc, content) => {
 		}
 	}
 
-	let hd = new DOMParser().parseFromString(HD(dict));
-	let ft = new DOMParser().parseFromString(FT(dict));
+	let hd = (new JSDOM(HD(dict))).window.document;
+	let ft = (new JSDOM(FT(dict))).window.document;
 
 	doc.documentElement.insertBefore(hd.documentElement, doc.documentElement.firstChild);
 	doc.documentElement.appendChild(ft.documentElement);

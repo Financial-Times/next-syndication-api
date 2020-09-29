@@ -1,6 +1,6 @@
 'use strict';
 
-const { DOMParser } = require('xmldom');
+const { JSDOM } = require('jsdom');
 
 const {
 	FORMAT_ARTICLE_CLEAN_ELEMENTS,
@@ -9,7 +9,12 @@ const {
 } = require('config');
 
 module.exports = exports = xml => {
-	let doc = new DOMParser().parseFromString(xml, FORMAT_ARTICLE_CONTENT_TYPE);
+	let doc = (new JSDOM(xml, {
+		contentType: FORMAT_ARTICLE_CONTENT_TYPE
+	})).window.document;
+
+	// remove all image content type.
+	removeElementsByQuerySelector(doc, 'img[data-image-type=image]');
 
 	removeElementsByTagName(doc, ...FORMAT_ARTICLE_STRIP_ELEMENTS);
 	// first sanitize content by striping inline XML elements without deleting the content
@@ -17,13 +22,21 @@ module.exports = exports = xml => {
 	// then remove the remaining top level XML elements with the same tagName
 	removeElementsByTagName(doc, 'ft-content');
 	removeWhiteSpace(doc);
-
 	return doc;
 };
 
 exports.removeProprietaryXML = removeProprietaryXML;
 exports.removeElementsByTagName = removeElementsByTagName;
 exports.removeWhiteSpace = removeWhiteSpace;
+
+
+function removeElementsByQuerySelector(doc, ...querySelectors) {
+	querySelectors.forEach(querySelector =>
+		Array.from(doc.querySelectorAll(querySelector)).forEach(el => el.parentNode.removeChild(el)));
+
+	return doc;
+}
+
 
 function removeElementsByTagName(doc, ...tagNames) {
 	tagNames.forEach(tagName =>
