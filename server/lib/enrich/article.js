@@ -52,13 +52,7 @@ module.exports = exports = function article(content, format) {
 
 		content.wordCount = getWordCount(content.document);
 
-		console.log('before', content.document.body.outerHTML); // eslint-disable-line
-
 		content.document = decorateArticle(content.document, content);
-
-		console.log('after', content.document.body.outerHTML); // eslint-disable-line
-
-		console.log(content.document.textContent); // eslint-disable-line
 
 		content.bodyHTML__CLEAN = content.document.body.outerHTML;
 
