@@ -52,14 +52,20 @@ module.exports = exports = function article(content, format) {
 
 		content.wordCount = getWordCount(content.document);
 
+		console.log('before', content.document.body.outerHTML); // eslint-disable-line
+
 		content.document = decorateArticle(content.document, content);
 
-		content.bodyHTML__CLEAN = content.document.toString();
+		console.log('after', content.document.body.outerHTML); // eslint-disable-line
+
+		console.log(content.document.textContent); // eslint-disable-line
+
+		content.bodyHTML__CLEAN = content.document.body.outerHTML;
 
 		// we need to strip all formatting — leaving only paragraphs — and pass this to pandoc for plain text
 		// otherwise it will uppercase the whole article title and anything bold, as well as leave other weird
 		// formatting in the text file
-		content.bodyHTML__PLAIN = toPlainText(content.document.toString());
+		content.bodyHTML__PLAIN = toPlainText(content.document.body.outerHTML);
 	}
 
 	content.fileName = DOWNLOAD_FILENAME_PREFIX + content.title.replace(RE_SPACE, '_').replace(RE_BAD_CHARS, '').substring(0, 12);

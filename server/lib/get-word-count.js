@@ -2,8 +2,8 @@
 
 const RE_VALID_ONE_CHARS = /^[IAa0-9]$/;
 
-module.exports = exports = doc => {
-	let textContent = walk(doc.documentElement, []);
+module.exports = exports = contentDocument => {
+	let textContent = walk(contentDocument, []);
 
 	textContent = textContent.join(' ').trim().split(/[\u{32}\u{160}\s]/u)
 		.filter(item => !!item && (item.length > 1 || RE_VALID_ONE_CHARS.test(item)));

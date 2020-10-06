@@ -5,15 +5,15 @@ const path = require('path');
 
 const handlebars  = require('./handlebars');
 const moment = require('moment');
-const { DOMParser } = require('xmldom');
+const { JSDOM } = require('jsdom');
 
 const Handlebars = handlebars();
 
 const BASE_PATH = path.dirname(path.relative(process.cwd(), __dirname));
-const HD = Handlebars.compile(fs.readFileSync(path.resolve(BASE_PATH, './views/partial/article_metadata_hd.html.hbs'), 'utf8'), { noEscape: true });
-const FT = Handlebars.compile(fs.readFileSync(path.resolve(BASE_PATH, './views/partial/article_metadata_ft.html.hbs'), 'utf8'), { noEscape: true });
+const headerTemplate = Handlebars.compile(fs.readFileSync(path.resolve(BASE_PATH, './views/partial/article_metadata_hd.html.hbs'), 'utf8'), { noEscape: true });
+const footerTemplate = Handlebars.compile(fs.readFileSync(path.resolve(BASE_PATH, './views/partial/article_metadata_ft.html.hbs'), 'utf8'), { noEscape: true });
 
-module.exports = exports = (doc, content) => {
+module.exports = exports = (contentDocument, content) => {
 	let publishedDate = moment(content.publishedDate);
 	let dict = {
 		byline: content.byline,
@@ -36,11 +36,11 @@ module.exports = exports = (doc, content) => {
 		}
 	}
 
-	let hd = new DOMParser().parseFromString(HD(dict));
-	let ft = new DOMParser().parseFromString(FT(dict));
+	const headerDocument = JSDOM.fragment(headerTemplate(dict));
+	const footerDocument = JSDOM.fragment(footerTemplate(dict));
 
-	doc.documentElement.insertBefore(hd.documentElement, doc.documentElement.firstChild);
-	doc.documentElement.appendChild(ft.documentElement);
+	contentDocument.body.insertBefore(headerDocument, contentDocument.body.firstChild);
+	contentDocument.body.appendChild(footerDocument);
 
-	return doc;
+	return contentDocument;
 };
