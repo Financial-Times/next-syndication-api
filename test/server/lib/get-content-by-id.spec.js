@@ -56,7 +56,7 @@ describe(MODULE_ID, function () {
 						.and.to.have.string(contentId);
 				});
 
-				it(`should have a \`document:xmldom.Documnet\` for content_id="${contentId}"`, async function () {
+				it(`should have a \`document:jsdom.window.Document\` for content_id="${contentId}"`, async function () {
 					const content = await underTest(contentId);
 
 					expect(content.document.constructor.name).to.equal('Document');
@@ -169,7 +169,7 @@ describe(MODULE_ID, function () {
 				'98b46b5f-17d3-40c2-8eaa-082df70c5f01',
 				'93991a3c-0436-41bb-863e-61242e09859c'
 			].forEach(contentId => {
-				it(`should have a \`document:xmldom.Documnet\` for content_id="${contentId}"`, async function () {
+				it(`should have a \`document:jsdom.window.Document\` for content_id="${contentId}"`, async function () {
 					const content = await underTest(contentId);
 
 					expect(content.document.constructor.name).to.equal('Document');

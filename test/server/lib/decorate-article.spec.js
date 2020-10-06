@@ -4,7 +4,7 @@ const path = require('path');
 
 const { expect } = require('chai');
 
-const { DOMParser } = require('xmldom');
+const { JSDOM } = require('jsdom');
 
 const underTest = require('../../../server/lib/decorate-article');
 
@@ -37,29 +37,29 @@ describe(MODULE_ID, function () {
 		extension: 'docx'
 	};
 
-	let xml = new DOMParser().parseFromString(content.bodyXML__CLEAN);
+	const { document: contentDocument } = (new JSDOM(content.bodyXML__CLEAN)).window;
 
-	it('returns a xmldom.dom.Document instance', function () {
-		expect(underTest(xml, content).constructor.name).to.equal('Document');
+	it('returns a jsdom.window.Document instance', function () {
+		expect(underTest(contentDocument, content).constructor.name).to.equal('Document');
 	});
 
-	it('returns the same xmldom.dom.Document instance it was passed', function () {
-		expect(underTest(xml, content)).to.equal(xml);
+	it('returns the same jsdom.window.Document instance it was passed', function () {
+		expect(underTest(contentDocument, content)).to.equal(contentDocument);
 	});
 
 	it('prepends a header to the XML Document', function () {
-		underTest(xml, content);
+		underTest(contentDocument, content);
 
-		let el = xml.documentElement.firstChild;
+		let el = contentDocument.body.firstElementChild;
 
-		expect(el.tagName).to.equal('header');
+		expect(el.tagName).to.equal('HEADER');
 	});
 
 	it('appends a footer to the XML Document', function () {
-		underTest(xml, content);
+		underTest(contentDocument, content);
 
-		let el = xml.documentElement.lastChild;
+		let el = contentDocument.body.lastElementChild;
 
-		expect(el.tagName).to.equal('footer');
+		expect(el.tagName).to.equal('FOOTER');
 	});
 });
