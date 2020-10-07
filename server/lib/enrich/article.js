@@ -41,9 +41,9 @@ module.exports = exports = function article(content, format) {
 		content.embeds &&
 		content.embeds
 			.filter(
-				(embed) => embed && embed.type && embed.type.endsWith("Graphic")
+				(embed) => embed && embed.type && embed.type.endsWith('Graphic')
 			)
-			.some((item) => item.canBeSyndicated !== "yes");
+			.some((item) => item.canBeSyndicated !== 'yes');
 
 	content.canAllGraphicsBeSyndicated = !atLeastOneGraphicCantBeShared;
 
