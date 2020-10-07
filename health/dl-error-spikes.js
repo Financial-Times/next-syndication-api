@@ -15,7 +15,7 @@ module.exports = nHealth.runCheck({
 	businessImpact: 'Syndication may be experiencing issues downloading articles',
 	technicalSummary: `The count of 4xx responses for syndication download requests across all heroku dynos is higher than a threshold of ${threshold} over the last ${samplePeriod} minutes`,
 	panicGuide,
-	severity: 1, 
-	samplePeriod: `${samplePeriod}min`, 
+	severity: 1,
+	samplePeriod: `${samplePeriod}min`,
 	type: 'graphiteThreshold'
 });
