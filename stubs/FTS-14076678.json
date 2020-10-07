@@ -1,0 +1,30 @@
+{
+    "videoLimit": null,
+    "success": true,
+    "startDate": "2020-04-28",
+    "podcastLimit": null,
+    "ownerName": "Richard Pigden",
+    "ownerEmail": "richard.pigden@ft.com",
+    "licenceeName": "Syndication Project - Test Account",
+    "errorMessage": null,
+    "endDate": "2021-04-27",
+    "contributor": true,
+    "contractNumber": "FTS-14076678",
+    "clientWebsite": null,
+    "clientPublications": "graphics test opp",
+    "assets": [
+        {
+            "productName": "FT Article",
+            "maxPermittedPrintUsagePeriod": null,
+            "maxPermittedPrintUsage": 0,
+            "maxPermittedOnlineUsagePeriod": "Year",
+            "maxPermittedOnlineUsage": 100,
+            "embargoPeriod": null,
+            "contentSet": "FT.com",
+            "assetType": "New",
+            "assetName": "FT Article",
+            "assetId": "02i4G00000SfB5UQAV"
+        }
+    ],
+    "articleLimit": 100
+}
