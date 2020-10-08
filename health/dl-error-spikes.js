@@ -2,9 +2,7 @@ const nHealth = require('n-health');
 const samplePeriod = 30; // minutes
 const threshold = 5;
 
-// 3 and 5 are the positions of wildcards in the chain, 0 based
-// 6 is the node the count is based on, 0 based
-const metric = `summarize(sumSeries(next.heroku.syndication-dl.*.express.*.res.status.*.count), "${samplePeriod}min", "sum", true)`;
+const metric = `summarize(sumSeries(next.heroku.syndication-dl.*.express.*.res.status.4*.count), "${samplePeriod}min", "sum", true)`;
 const panicGuide = 'Check the heroku logs for the app for any error messages (`heroku logs --app ft-next-syndication-dl --tail --num 100` - num being the number of lines to retrieve)'
 
 module.exports = nHealth.runCheck({
