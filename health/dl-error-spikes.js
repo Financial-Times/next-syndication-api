@@ -4,7 +4,7 @@ const threshold = 5;
 
 // 3 and 5 are the positions of wildcards in the chain, 0 based
 // 6 is the node the count is based on, 0 based
-const metric = 'aliasByNode(sumSeriesWithWildcards(next.heroku.syndication-dl.*.express.* _{ GET, POST, PUT }.res.status_4xx.count, 3, 5), 6)';
+const metric = 'aliasByNode(sumSeriesWithWildcards(next.heroku.syndication-dl.*.express.*.res.status.4xx.count, 3, 5), 6)';
 const panicGuide = 'Check the heroku logs for the app for any error messages (`heroku logs --app ft-next-syndication-dl --tail --num 100` - num being the number of lines to retrieve)'
 
 module.exports = nHealth.runCheck({
