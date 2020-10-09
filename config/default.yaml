@@ -126,11 +126,9 @@
     - aside
     - figure
     - ft-related
+    - img
     - script
     - pull-quote
-
-  FORMAT_ARTICLE_STRIP_QUERY_SELECTOR:
-    - img
 
   HEALTH_CHECK_HISTORY:
     bloated_threshold: 70
