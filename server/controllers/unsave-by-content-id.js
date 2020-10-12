@@ -1,12 +1,15 @@
 'use strict';
 
+const esClient = require('@financial-times/n-es-client');
+
 const log = require('../lib/logger');
 
 const moment = require('moment');
 
 const MessageQueueEvent = require('../../queue/message-queue-event');
+const ContentBuilder = require('../lib/builders/content-builder');
 
-const getContentById = require('../lib/get-content-by-id');
+const pg = require('../../db/pg');
 
 const {
 	DEFAULT_DOWNLOAD_FORMAT,
@@ -19,14 +22,29 @@ module.exports = exports = async (req, res, next) => {
 
 		const lang = String(req.query.lang || (referrer.includes('/republishing/spanish') ? 'es' : DEFAULT_DOWNLOAD_LANGUAGE)).toLowerCase();
 
-		const content = await getContentById(req.params.content_id, DEFAULT_DOWNLOAD_FORMAT, lang);
+		const content_en = await esClient.get(contentId);
 
-		if (Object.prototype.toString.call(content) !== '[object Object]') {
+		const contentBuilder = new ContentBuilder(content_en)
+									.setDownloadFormat(DEFAULT_DOWNLOAD_FORMAT)
+		
+		if(lang == 'es'){
+			const db = await pg();
 
-			res.sendStatus(404);
+			[content_es] = await db.syndication.get_content_es_by_id([contentId]);
 
-			return;
+			contentBuilder.setSpanishContent(content_es);
 		}
+
+		const content = contentBuilder.getContent([
+			'id',
+			'content_type',
+			'webUrl',
+			'firstPublishedDate',
+			'publishedDate',
+			'canBeSyndicated',
+			'title'
+		]);
+
 
 		res.locals.__event = new MessageQueueEvent({
 			event: {
@@ -85,6 +103,6 @@ module.exports = exports = async (req, res, next) => {
 			error
 		});
 
-		res.sendStatus(500);
+		res.sendStatus(404);
 	}
 };

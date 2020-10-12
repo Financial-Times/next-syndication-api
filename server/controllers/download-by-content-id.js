@@ -1,16 +1,19 @@
 'use strict';
 
+const esClient = require('@financial-times/n-es-client');
+
 const log = require('../lib/logger');
 
-const getContentById = require('../lib/get-content-by-id');
-const prepareDownloadResponse = require('../lib/prepare-download-response');
+const ContentBuilder = require('../lib/builders/content-builder');
 
 const download = require('../lib/download');
+const pg = require('../../db/pg');
 const isDownloadDisabled = require('../helpers/is-download-disabled');
 
 const {
 	DEFAULT_DOWNLOAD_FORMAT,
-	DEFAULT_DOWNLOAD_LANGUAGE
+	DEFAULT_DOWNLOAD_LANGUAGE,
+	DOWNLOAD_ARTICLE_EXTENSION_OVERRIDES
 } = require('config');
 
 module.exports = exports = async (req, res, next) => {
@@ -31,76 +34,122 @@ module.exports = exports = async (req, res, next) => {
 
 	const lang = String(req.query.lang || (referrer.includes('/republishing/spanish') ? 'es' : DEFAULT_DOWNLOAD_LANGUAGE)).toLowerCase();
 
-	const content = await getContentById(req.params.content_id, format, lang);
+	const contentId = req.params.content_id;
 
-	if (Object.prototype.toString.call(content) !== '[object Object]') {
-		res.sendStatus(404);
-		return;
-	}
+	try{
 
-	if(isDownloadDisabled(content, contract)){
-		res.sendStatus(403);
-		return;
-	}
+		const content_en = await esClient.get(contentId);
 
-	const dl = download({
-		content,
-		contract: contract,
-		lang,
-		licence: licence,
-		req,
-		user: user
-	});
+		const contentBuilder = new ContentBuilder(content_en)
+									.setDownloadFormat(format)
 
-	res.locals.content = content;
-	res.locals.download = dl;
+		if(lang == 'es'){
+			const db = await pg();
 
-	req.on('abort', () => dl.cancel());
-	req.connection.on('close', () => dl.cancel());
+			[content_es] = await db.syndication.get_content_es_by_id([contentId]);
 
-	prepareDownloadResponse(res, content);
+			contentBuilder.setSpanishContent(content_es);
+		}
 
-	if (dl.downloadAsArchive) {
-		dl.on('error', (err, httpStatus) => {
-			log.error({
-				event: 'DOWNLOAD_ARCHIVE_ERROR',
-				error: err.stack || err
+		const content = contentBuilder.getContent([
+			// article /  video / podcasts
+			"id",
+			"content_id",
+        	"type",
+			"content_type",
+			"url",
+        	"webUrl",
+			'extension',
+			"lang",
+			"byline",
+        	"title",
+			"bodyHTML",
+        	"bodyHTML__CLEAN",
+			"bodyHTML__PLAIN",
+			"hasGraphics",
+			"canAllGraphicsBeSyndicated",
+			"canBeSyndicated",
+			"wordCount",
+			"fileName",
+			"publishedDate",
+        	"firstPublishedDate",
+
+			// video / podcasts
+			'hasTranscript',
+			'transcriptExtension',
+			'download',
+			'captions',
+
+		]);
+
+		if(isDownloadDisabled(content, contract)){
+			res.sendStatus(403);
+			return;
+		}
+
+		const dl = download({
+			content,
+			contract: contract,
+			lang,
+			licence: licence,
+			req,
+			user: user
+		});
+
+		res.locals.content = content;
+		res.locals.download = dl;
+
+		req.on('abort', () => dl.cancel());
+		req.connection.on('close', () => dl.cancel());
+
+		const extension = DOWNLOAD_ARTICLE_EXTENSION_OVERRIDES[content.extension] || content.extension;
+		res.attachment(`${content.fileName}.${extension}`);
+
+		if (dl.downloadAsArchive) {
+			dl.on('error', (err, httpStatus) => {
+				log.error({
+					event: 'DOWNLOAD_ARCHIVE_ERROR',
+					error: err.stack || err
+				});
+
+				res.status(httpStatus || 500).end();
 			});
 
-			res.status(httpStatus || 500).end();
-		});
+			dl.on('end', () => {
+				log.debug(`DownloadArchiveEnd => ${content.id} in ${Date.now() - dl.START}ms`);
 
-		dl.on('end', () => {
-			log.debug(`DownloadArchiveEnd => ${content.id} in ${Date.now() - dl.START}ms`);
+				if (dl.cancelled !== true) {
+					res.end();
 
-			if (dl.cancelled !== true) {
-				res.end();
+					next();
+				}
+			});
 
+			dl.on('complete', (state, status) => {
+				res.status(status);
+			});
+
+			dl.on('cancelled', () => {
 				next();
-			}
-		});
+			});
 
-		dl.on('complete', (state, status) => {
-			res.status(status);
-		});
+			dl.pipe(res);
 
-		dl.on('cancelled', () => {
+			await dl.appendAll();
+		}
+		else {
+			const file = await dl.convertArticle();
+
+			res.set('content-length', file.length);
+
+			res.status(200).send(file);
+
+			dl.complete('complete');
+
 			next();
-		});
-
-		dl.pipe(res);
-
-		await dl.appendAll();
-	}
-	else {
-		const file = await dl.convertArticle();
-
-		res.set('content-length', file.length);
-
-		res.status(200).send(file);
-
-		dl.complete('complete');
-
-		next();
+		}
+	} catch (err) {
+		console.log(err);
+		res.sendStatus(404);
 	}
 };

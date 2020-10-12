@@ -2,14 +2,13 @@
 
 const path = require('path');
 
-const log = require('../../../server/lib/logger');
-
 const AWS = require('aws-sdk');
 const Slack = require('node-slack');
 
+const esClient = require('@financial-times/n-es-client');
+
+const ContentBuilder = require('../../../server/lib/builders/content-builder');
 const pg = require('../../../db/pg');
-const enrich = require('../../../server/lib/enrich');
-const getContentById = require('../../../server/lib/get-content-by-id');
 
 const {
 	AWS_ACCESS_KEY,
@@ -60,37 +59,36 @@ module.exports = exports = async (event, message, response, subscriber) => {
 					Key: FILE_NAME
 				}).promise());
 
-				const item = JSON.parse(res.Body.toString('utf8'));
+				const content_es = JSON.parse(res.Body.toString('utf8'));
 
-				item.body = item.bodyHTML;
-				item.content_area = item.isWeekendContent === true ? 'Spanish weekend' : 'Spanish content';
-				item.content_id = item.id = item.uuid;
-				item.content_type = item.type = 'article';
-				item.state = CONTENT_STATE;
-				item.translated_date = item.translatedDate;
-
-				enrich(item);
-
-				delete item.document;
-
-				item.word_count = item.wordCount;
+				content_es.body = content_es.bodyHTML;
+				content_es.content_area = content_es.isWeekendContent === true ? 'Spanish weekend' : 'Spanish content';
+				content_es.content_id = content_es.id = content_es.uuid;
+				content_es.content_type = content_es.type = 'article';
+				content_es.state = CONTENT_STATE;
+				content_es.translated_date = content_es.translatedDate;
 
 				try {
-					const item_en = await getContentById(item.content_id);
 
-					if (!item_en) {
-						await notifyError({
-							error: { message: `ElasticSearch could not find content with ID: ${item.content_id}` },
-							file: FILE_NAME
-						});
+					const content_en = await esClient.get(contentId);
+
+					if (!content_en) {
+						throw new Error(`ElasticSearch could not find content with ID: ${content_es.content_id}`);
 					}
-					else {
-						item.published_date = new Date(item_en.firstPublishedDate || item_en.publishedDate);
 
-						await db.syndication.upsert_content_es([item]);
+					content_es.word_count = new ContentBuilder(content_en)
+												.setSpanishContent(content_es)
+												.getProperty(
+													'wordCount'
+												);
 
-						log.info(`${MODULE_ID} UPSERTING => `, JSON.stringify(item, null, 4));
-					}
+					
+					content_es.published_date = new Date(content_en.firstPublishedDate || content_en.publishedDate);
+
+					await db.syndication.upsert_content_es([content_es]);
+
+					log.info(`${MODULE_ID} UPSERTING => `, JSON.stringify(content_es, null, 4));
+					
 				}
 				catch (error) {
 					await notifyError({ error, file: FILE_NAME });

@@ -1,12 +1,17 @@
 'use strict';
 
+const esClient = require('@financial-times/n-es-client');
+
 const {
 	DEFAULT_DOWNLOAD_FORMAT,
 	DEFAULT_DOWNLOAD_LANGUAGE
 } = require('config');
+
 const log = require('../lib/logger');
-const syndicate = require('../lib/syndicate-content');
-const getContentById = require('../lib/get-content-by-id');
+const ContentBuilder = require('../lib/builders/content-builder');
+
+const pg = require('../../db/pg');
+
 
 module.exports = exports = async (req, res, next) => {
 	try {
@@ -21,30 +26,75 @@ module.exports = exports = async (req, res, next) => {
 
 		const lang = String(req.query.lang || DEFAULT_DOWNLOAD_LANGUAGE).toLowerCase();
 
-		let content = await getContentById(req.params.content_id, format, lang);
+		const contentId = req.params.content_id;
 
-		const [{get_content_state_for_contract: state}] = await db.syndication.get_content_state_for_contract([contract.contract_id, req.params.content_id]);
+		const content_en = await esClient.get(contentId);
 
-		if (content) {
-			content = syndicate({
-				contract,
-				item: content,
-				src: content,
-				state
-			});
+		const [{get_content_state_for_contract: state}] = await db.syndication.get_content_state_for_contract([contract.contract_id, contentId]);
 
-			res.status(200);
+		const contentBuilder = new ContentBuilder(content_en)
+									.setDownloadFormat(format)
+									.setUserContract(contract)
+									.setContentState(state)
+		
+		if(lang == 'es'){
+			const db = await pg();
 
-			res.json(content);
+			[content_es] = await db.syndication.get_content_es_by_id([contentId]);
 
-			next();
-		} else {
-			res.sendStatus(404);
+			contentBuilder.setSpanishContent(content_es);
 		}
+
+		const content = contentBuilder.getContent([
+			"id",
+			"content_id",
+        	"type",
+        	"content_type",
+        	"content_area",
+        	"byline",
+        	"title",
+        	"body",
+        	"translated_date",
+        	"state",
+        	"last_modified",
+			"word_count",
+        	"wordCount",
+        	"published_date",
+        	"publishedDate",
+        	"firstPublishedDate",
+        	"url",
+        	"webUrl",
+        	"lang",
+        	"extension",
+        	"bodyHTML",
+        	"bodyHTML__CLEAN",
+			"bodyHTML__PLAIN",
+			"previewText",
+        	"fileName",
+			"canDownload",
+			"canBeSyndicated",
+			"saved",
+        	"downloaded",
+        	"embargoPeriod",
+			"publishedDateDisplay",
+			"translatedDate",
+			"translatedDateDisplay",
+			"messageCode"
+		]);
+
+		res.status(200);
+
+		res.json(content);
+
+		next();
+
 	} catch (error) {
+
 		log.error({
 			event: 'FAILED_TO_GET_CONTENT_BY_ID',
 			error
-		})
+		});
+
+		res.sendStatus(404);
 	}
 };

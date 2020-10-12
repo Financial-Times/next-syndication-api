@@ -4,7 +4,6 @@ const log = require('../lib/logger');
 
 const getContent = require('../lib/get-content');
 const getHistoryByContractID  = require('../lib/get-history-by-contract-id');
-const syndicate = require('../lib/syndicate-content');
 
 module.exports = exports = async (req, res, next) => {
 	const START = Date.now();
@@ -44,12 +43,46 @@ module.exports = exports = async (req, res, next) => {
 
 		const contentItemsMap = await getContent(history.items.map(({ id }) => id), true);
 
-		history.items = history.items.map(item => syndicate({
-			contract: CONTRACT,
-			includeBody: false,
-			item,
-			src: contentItemsMap[item.id] || contentItemsMap[item.content_id]
-		}));
+		history.items = history.items.map(
+			item => 
+				new contentBuilder(contentItemsMap[item.content_id])
+					.setContentHistory(item)
+					.setUserContract(CONTRACT)
+					.getContent(
+						[
+							"id",
+							"content_id",
+							"contract_id",
+							"user_id",
+							"user_name",
+							"user_email",
+							"asset_type",
+							"type",
+							"content_type",
+							"content_url",
+							"time",
+							"state",
+							"title",
+							"published_date",
+							"syndication_state",
+							"last_modified",
+							"lang",
+							"iso_lang_code",
+							"downloaded",
+							"saved",
+							"date",
+							"published",
+							"canDownload",
+							"canBeSyndicated",
+							"embargoPeriod",
+							"publishedDate",
+							"publishedDateDisplay",
+							"wordCount",
+							"translatedDateDisplay",
+							"messageCode"
+						]
+					)
+			);
 
 		log.debug(`Retrieved ${history.items.length} items in ${Date.now() - START}ms`);
 

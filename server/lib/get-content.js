@@ -2,8 +2,6 @@
 
 const esClient = require('@financial-times/n-es-client');
 
-const enrich = require('./enrich');
-
 module.exports = exports = async (DISTINCT_ITEMS, asObject) => {
 
 	const DISTINCT_ITEMS_LENGTH = DISTINCT_ITEMS.length;
@@ -15,8 +13,6 @@ module.exports = exports = async (DISTINCT_ITEMS, asObject) => {
 	let items = await esClient.mget({
 		ids: DISTINCT_ITEMS
 	});
-
-	items = items.filter(item => enrich(item));
 
 	if (asObject === true) {
 		return items.reduce((acc, item) => {

@@ -4,8 +4,7 @@ const moment = require('moment');
 
 const getAllExistingItemsForContract = require('../lib/get-all-existing-items-for-contract');
 const getContent = require('../lib/get-content');
-const enrich = require('../lib/enrich');
-const syndicate = require('../lib/syndicate-content');
+const contentBuilder = require('../lib/builders/content-builder');
 
 const {
 	DB: { DATE_FORMAT: DB_DATE_FORMAT }
@@ -115,23 +114,46 @@ _limit => ${limit}::integer`;
 				const [{ search_content_total_es }] = await db.query(`SELECT * FROM syndication.search_content_total_es(${getTotalQuery})`);
 				const total = parseInt(search_content_total_es, 10);
 
-				items.forEach(item => {
-					enrich(item);
-
-					item.lang = lang;
-				});
-
-				const contentItemsMap = await getContent(items.map(({ content_id }) => content_id), true);
+				const contentItemsMap = await getContent(items.map(({ id }) => id), true);
 
 				const existing = await getAllExistingItemsForContract(contract.contract_id);
 
-				const response = items.map(item => syndicate({
-					contract,
-					existing: existing[item.content_id],
-					includeBody: false,
-					item,
-					src: contentItemsMap[item.content_id]
-				}));
+				const response = items.map(
+					item => 
+						new contentBuilder(contentItemsMap[item.content_id])
+							.setSpanishContent(item)
+							.setContentHistory(existing[item.content_id])
+							.setUserContract(contract)
+							.getContent(
+								[
+									'id',
+									'content_id',
+									'type',
+									'content_type',
+									'content_area',
+									'byline',
+									'title',
+									'state',
+									'word_count',
+									'wordCount',
+									'lang',
+									'canDownload',
+									'canBeSyndicated',
+									'downloaded',
+									'saved',
+									'previewText',
+									'embargoPeriod',
+									'published_date',
+									'publishedDate',
+									'publishedDateDisplay',
+									'translated_date',
+									'translatedDate',
+									'translatedDateDisplay',
+									'last_modified',
+									'messageCode'
+								]
+							)
+					);
 
 				res.json({ items: response, total });
 
