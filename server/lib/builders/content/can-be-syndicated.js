@@ -1,50 +1,48 @@
 'use strict';
 
-module.exports = exports = (contentBuilder) => {
+module.exports = exports = contentBuilder => {
+	if (!('canBeSyndicated' in contentBuilder)) {
+		const { content, content_es, contract, lang } = contentBuilder;
+		const type = contentBuilder.getProperty('type');
 
-    if (!('canBeSyndicated' in contentBuilder)) {
+		if (type === 'podcast') {
+			if (
+				content.canBeSyndicated === null ||
+				typeof content.canBeSyndicated === 'undefined'
+			) {
+				content.canBeSyndicated = 'yes';
+			}
 
-        const { content, content_es, contract, lang } = contentBuilder;
-        const type = contentBuilder.getProperty('type');
+			if (contract && contract.itemsMap) {
+				const asset = contract.itemsMap[type];
 
-        if (type === 'podcast') {
+				if (asset && asset.download_limit > 0) {
+					content.canBeSyndicated = 'yes';
+				}
+			}
+		}
 
-            if (canBeSyndicated === null || typeof canBeSyndicated === 'undefined'){
-                content.canBeSyndicated = 'yes'
-            }
+		if (lang === 'es') {
+			content.canBeSyndicated = 'verify';
 
-            if (contract && contract.itemsMap) {
-                const asset = contract.itemsMap[type];
-    
-                if (asset && asset.download_limit > 0) {
-                    content.canBeSyndicated = 'yes';
-                }
-            }
-        }
+			if (contract) {
+				const content_area =
+					content_es.content_area ||
+					content_es.content_area.toLowerCase();
 
-        if(lang === 'es'){
+				if (
+					(content_area === 'spanish content' &&
+						contract.allowed.spanish_content) ||
+					(content_area === 'spanish weekend' &&
+						contract.allowed.spanish_weekend)
+				) {
+					content.canBeSyndicated = 'yes';
+				}
+			}
+		}
 
-            content.canBeSyndicated = 'verify';
+		contentBuilder.canBeSyndicated = content.canBeSyndicated;
+	}
 
-            if(contract){
-
-                const content_area = content_es.content_area
-                                    || content_es.content_area.toLowerCase();
-        
-                if ((content_area === 'spanish content' && contract.allowed.spanish_content)
-                || (content_area === 'spanish weekend' && contract.allowed.spanish_weekend)) {
-                    
-                    content.canBeSyndicated = 'yes';
-                    
-                }
-            }
-
-        }
-    
-        contentBuilder.canBeSyndicated = content.canBeSyndicated;
-
-    }
-    
-    return contentBuilder.canBeSyndicated;
-
+	return contentBuilder.canBeSyndicated;
 };

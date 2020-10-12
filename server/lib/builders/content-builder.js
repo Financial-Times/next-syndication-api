@@ -30,16 +30,14 @@ const getSpanishItem = require('./content/helpers/spanish-item');
 
 const getMessageCode = require('./content/message-code');
 
-
 module.exports = exports = class ContentBuilder {
-
-	constructor(content){
+	constructor(content) {
 		this.content = content;
 		this.lang = 'en';
 	}
 
-	getProperty(attribute){
-		switch(attribute){
+	getProperty(attribute) {
+		switch (attribute) {
 			case 'id':
 			case 'content_id':
 				return getId(this);
@@ -51,12 +49,12 @@ module.exports = exports = class ContentBuilder {
 			case 'previewText':
 				return getPreviewText(this);
 
-			case "title":
+			case 'title':
 				return getTitle(this);
 
 			case 'bodyText':
 				return getBodyText(this);
-		
+
 			case 'body':
 			case 'bodyHTML':
 			case 'bodyHTML__CLEAN':
@@ -71,129 +69,121 @@ module.exports = exports = class ContentBuilder {
 			case 'transcriptExtension':
 				return getExtension(this, attribute);
 
-			case "fileName":
+			case 'fileName':
 				return getFileName(this);
 
-			case "embargoPeriod":
+			case 'embargoPeriod':
 				return getEmbargoPeriod(this);
 
-			case "lang":
-			case "iso_lang_code":
+			case 'lang':
+			case 'iso_lang_code':
 				return this.lang;
 
-
-			case "captions":
+			case 'captions':
 				return getCaptions(this);
 
-			case "canAllGraphicsBeSyndicated":
+			case 'canAllGraphicsBeSyndicated':
 				return getCanAllGraphicsBeSyndicated(this);
-	
-			case "hasGraphics":
+
+			case 'hasGraphics':
 				return getHasGraphics(this);
 
-			case "hasTranscript":
+			case 'hasTranscript':
 				return getHasTranscript(this);
 
-
-			case "download":
+			case 'download':
 				return getDownload(this);
 
-			case "canDownload":
+			case 'canDownload':
 				return getCanDownload(this);
 
-			case "canBeSyndicated":
+			case 'canBeSyndicated':
 				return getCanBeSynidicated(this);
 
-			case "saved":
+			case 'saved':
 				return getSaved(this);
 
-			case "downloaded":
+			case 'downloaded':
 				return getDownloaded(this);
 
-
-			case "url":
-			case "webUrl":
-			case "byline":
-			case "publishedDate":
-			case "firstPublishedDate":
+			case 'url':
+			case 'webUrl':
+			case 'byline':
+			case 'publishedDate':
+			case 'firstPublishedDate':
 				return getElasticSearchItem(this, attribute);
 
-			case "state":
-			case "last_modified":
-			case "content_area":
+			case 'state':
+			case 'last_modified':
+			case 'content_area':
 			case 'translated_date':
 				return getSpanishItem(this, attribute);
 
 			case 'published_date':
 				return this.getProperty('publishedDate');
 
-			case "publishedDateDisplay":
+			case 'publishedDateDisplay':
 				return getPublishedDateDisplay(this);
 
-			case "translatedDate":
+			case 'translatedDate':
 				return this.getProperty('translated_date');
 
-			case "translatedDateDisplay":
+			case 'translatedDateDisplay':
 				return getTranslateDateDisplay(this);
 
-			case "messageCode":
+			case 'messageCode':
 				return getMessageCode(this);
 
-			case "notAvailable":
+			case 'notAvailable':
 				return false;
-		
+
 			default:
-				throw new Error(`Attribute not found. -> ${attribute}`)
+				throw new Error(`Attribute not found. -> ${attribute}`);
 		}
 	}
 
-	getContent(attributes){
-
+	getContent(attributes) {
 		return attributes.reduce((content, attribute) => {
-
 			content[attribute] = this.getProperty(attribute);
 
-			return content
-
+			return content;
 		}, {});
-
 	}
 
-	setSpanishContent(content_es){
+	setSpanishContent(content_es) {
 		this.content_es = content_es;
 		this.lang = 'es';
 
 		return this;
 	}
 
-	setContentHistory(content_history){
+	setContentHistory(content_history) {
 		this.content_history = content_history;
 
 		return this;
 	}
 
-	setContentState(content_state){
+	setContentState(content_state) {
 		this.content_state = content_state;
 
 		return this;
 	}
 
-	setUserContract(contract){
+	setUserContract(contract) {
 		this.contract = contract;
 
 		return this;
 	}
 
-	setDownloadFormat(format){
-		this.format = format
+	setDownloadFormat(format) {
+		this.format = format;
 
 		return this;
 	}
 
-	setLanguage(lang){
-		this.lang = lang
+	setLanguage(lang) {
+		this.lang = lang;
 
 		return this;
 	}
-
-}
+};

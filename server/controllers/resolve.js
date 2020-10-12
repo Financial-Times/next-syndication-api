@@ -7,15 +7,18 @@ const getAllExistingItemsForContract = require('../lib/get-all-existing-items-fo
 const ContentBuilder = require('../lib/builders/content-builder');
 
 module.exports = exports = async (req, res, next) => {
-
 	const { body: contentIds } = req;
 
-	const { locals: { contract } } = res;
+	const {
+		locals: { contract },
+	} = res;
 
 	if (!Array.isArray(contentIds)) {
 		log.warn({
-			message: `Expected \`req.body\` to be [object Array] and got \`${Object.prototype.toString.call(contentIds)}\` instead`,
-			referer: req.headers.referer
+			message: `Expected \`req.body\` to be [object Array] and got \`${Object.prototype.toString.call(
+				contentIds
+			)}\` instead`,
+			referer: req.headers.referer,
 		});
 
 		return res.sendStatus(400);
@@ -24,7 +27,7 @@ module.exports = exports = async (req, res, next) => {
 	if (!contentIds.length) {
 		log.error({
 			message: '`req.body` does not contain any content IDs',
-			referer: req.headers.referer
+			referer: req.headers.referer,
 		});
 
 		return res.sendStatus(400);
@@ -36,32 +39,26 @@ module.exports = exports = async (req, res, next) => {
 
 	const existing = await getAllExistingItemsForContract(contract.contract_id);
 
-	const response = items
-		.filter(filterContentType)
-		.map(
-			item => 
-				 new ContentBuilder(item)
-					.setContentHistory(existing[item.id])
-					.setUserContract(contract)
-					.getContent(
-						[
-							'id',
-							'type',
-							'title',
-							'wordCount',
-							'lang',
-							'canDownload',
-							'canBeSyndicated',
-							'downloaded',
-							'saved',
-							'embargoPeriod',
-							'publishedDate',
-							'publishedDateDisplay',
-							'messageCode'
-						]
-					)
-			
-			);
+	const response = items.filter(filterContentType).map(item =>
+		new ContentBuilder(item)
+			.setContentHistory(existing[item.id])
+			.setUserContract(contract)
+			.getContent([
+				'id',
+				'type',
+				'title',
+				'wordCount',
+				'lang',
+				'canDownload',
+				'canBeSyndicated',
+				'downloaded',
+				'saved',
+				'embargoPeriod',
+				'publishedDate',
+				'publishedDateDisplay',
+				'messageCode',
+			])
+	);
 
 	res.json(response);
 
@@ -72,17 +69,20 @@ function filterContentType(item) {
 	let { type } = item;
 
 	// TODO: revisit if it's still needed
-	type = type.split('/').pop().toLowerCase();
+	type = type
+		.split('/')
+		.pop()
+		.toLowerCase();
 
 	if (
-		type === 'article' || 
-		type === 'package' || 
-		type === 'mediaresource' || 
-		type === 'video' || 
+		type === 'article' ||
+		type === 'package' ||
+		type === 'mediaresource' ||
+		type === 'video' ||
 		type === 'podcast'
 	) {
 		return true;
 	}
-	
+
 	return false;
 }

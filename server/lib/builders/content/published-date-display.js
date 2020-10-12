@@ -3,19 +3,17 @@
 const moment = require('moment');
 
 const {
-	MESSAGES: { DATE_FORMAT }
+	MESSAGES: { DATE_FORMAT },
 } = require('config');
 
-module.exports = exports = (contentBuilder) => {
+module.exports = exports = contentBuilder => {
+	if (!('publishedDateDisplay' in contentBuilder)) {
+		const { content } = contentBuilder;
 
-    if (!('publishedDateDisplay' in contentBuilder)) {
+		contentBuilder.publishedDateDisplay = moment(
+			content.firstPublishedDate || content.publishedDate
+		).format(DATE_FORMAT);
+	}
 
-        const { content } = contentBuilder;
-
-        contentBuilder.publishedDateDisplay = moment(content.firstPublishedDate || content.publishedDate).format(DATE_FORMAT);
-
-    }
-    
-    return contentBuilder.publishedDateDisplay;
-
+	return contentBuilder.publishedDateDisplay;
 };

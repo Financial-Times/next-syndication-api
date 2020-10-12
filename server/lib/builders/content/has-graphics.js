@@ -1,14 +1,13 @@
 'use strict';
 
-module.exports = exports = (contentBuilder) => {
+module.exports = exports = contentBuilder => {
+	if (!('hasGraphics' in contentBuilder)) {
+		const { content } = contentBuilder;
 
-    if (!('hasGraphics' in contentBuilder)) {
+		contentBuilder.hasGraphics = Boolean(
+			content.contentStats && content.contentStats.graphics
+		);
+	}
 
-        const { content } = contentBuilder;
-
-        contentBuilder.hasGraphics = Boolean(content.contentStats && content.contentStats.graphics);
-    }
-    
-    return contentBuilder.hasGraphics;
-
+	return contentBuilder.hasGraphics;
 };
