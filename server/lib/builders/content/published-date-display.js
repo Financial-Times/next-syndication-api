@@ -7,8 +7,9 @@ const {
 } = require('config');
 
 module.exports = exports = contentBuilder => {
-	if (!('publishedDateDisplay' in contentBuilder)) {
-		const { content } = contentBuilder;
+	const { content } = contentBuilder;
+
+	if (!('publishedDateDisplay' in contentBuilder) && content) {
 
 		contentBuilder.publishedDateDisplay = moment(
 			content.firstPublishedDate || content.publishedDate

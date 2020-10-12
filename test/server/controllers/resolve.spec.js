@@ -1,8 +1,8 @@
 'use strict';
 
-const { EventEmitter } = require('events');
+const {EventEmitter} = require('events');
 const path = require('path');
-const { Writable: WritableStream } = require('stream');
+const {Writable: WritableStream} = require('stream');
 
 const chai = require('chai');
 const proxyquire = require('proxyquire');
@@ -10,18 +10,18 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 
 const {
-	TEST: { FIXTURES_DIRECTORY }
+	TEST: {FIXTURES_DIRECTORY}
 } = require('config');
 
 const httpMocks = require(path.resolve(`${FIXTURES_DIRECTORY}/node-mocks-http`));
 
-const { expect } = chai;
+const {expect} = chai;
 chai.use(sinonChai);
 
 const MODULE_ID = path.relative(`${process.cwd()}/test`, module.id) || require(path.resolve('./package.json')).name;
 
 describe(MODULE_ID, function () {
-	const { initDB } = require(path.resolve(`${FIXTURES_DIRECTORY}/massive`))();
+	const {initDB} = require(path.resolve(`${FIXTURES_DIRECTORY}/massive`))();
 
 	const contractResponse = require(path.resolve(`${FIXTURES_DIRECTORY}/contractResponse.json`));
 	let req;
@@ -163,7 +163,7 @@ describe(MODULE_ID, function () {
 	beforeEach(function () {
 		underTest = proxyquire('../../../server/controllers/resolve', {
 			'../lib/get-all-existing-items-for-contract': sinon.stub().resolves(allItems),
-			'../lib/get-content': async function()  {
+			'../lib/get-content': async function () {
 				return Promise.resolve(require(path.resolve(`${FIXTURES_DIRECTORY}/content/items.json`)));
 			},
 			'@noCallThru': true
@@ -209,7 +209,7 @@ describe(MODULE_ID, function () {
 			$DB: initDB([]),
 			contract: contractResponse,
 			flags: {},
-			licence: { id: 'xyz' },
+			licence: {id: 'xyz'},
 			syndication_contract: {
 				id: 'lmno'
 			},
@@ -223,7 +223,8 @@ describe(MODULE_ID, function () {
 	it('return a 400 if the request body is not a JSON Array', async function () {
 		delete req.body;
 
-		await underTest(req, res, () => {});
+		await underTest(req, res, () => {
+		});
 
 		expect(res.sendStatus).to.have.been.calledWith(400);
 	});
@@ -231,102 +232,99 @@ describe(MODULE_ID, function () {
 	it('return a 400 if the request body is an empty JSON Array', async function () {
 		req.body.length = 0;
 
-		await underTest(req, res, () => {});
+		await underTest(req, res, () => {
+		});
 
 		expect(res.sendStatus).to.have.been.calledWith(400);
 	});
 
 	it('return an Array of distinct content items for every content ID it can find', async function () {
-		await underTest(req, res, () => {});
+		await underTest(req, res, () => {
+		});
 
 		expect(res.json).to.have.been.calledWith([{
-			canAllGraphicsBeSyndicated: false,
-			canBeSyndicated: 'yes',
-			canDownload: 1,
-			downloaded: true,
-			embargoPeriod: null,
-			hasGraphics: true,
-			id: '42ad255a-99f9-11e7-b83c-9588e51488a0',
-			lang: 'en',
-			messageCode: 'MSG_2100',
-			publishedDate: '2017-09-15T15:48:53.000Z',
-			publishedDateDisplay: '15th Sep 2017',
-			saved: false,
-			title: 'Pound leaps to highest level since Brexit vote',
-			type: 'article',
-			wordCount: undefined
-		}, {
-			canAllGraphicsBeSyndicated: false,
-			canBeSyndicated: 'yes',
-			canDownload: 1,
-			downloaded: true,
-			embargoPeriod: null,
-			hasGraphics: false,
-			id: 'ef4c49fe-980e-11e7-b83c-9588e51488a0',
-			lang: 'en',
-			messageCode: 'MSG_2100',
-			publishedDate: '2017-09-15T04:01:25.000Z',
-			publishedDateDisplay: '15th Sep 2017',
-			saved: false,
-			title: 'Tech companies in the city: the backlash',
-			type: 'article',
-			wordCount: undefined
-		}, {
-			canBeSyndicated: 'yes',
-			canDownload: 1,
-			downloaded: true,
-			embargoPeriod: null,
-			id: 'b16fce7e-3c92-48a3-ace0-d1af3fce71af',
-			lang: 'en',
-			messageCode: 'MSG_2100',
-			publishedDate: '2017-09-13T12:15:43.662Z',
-			publishedDateDisplay: '13th Sep 2017',
-			saved: true,
-			title: 'Mental health and the gig economy',
-			type: 'video',
-			wordCount: undefined
-		}, {
-			canBeSyndicated: 'yes',
-			canDownload: 1,
-			downloaded: false,
-			embargoPeriod: null,
-			id: 'a1af0574-eafb-41bd-aa4f-59aa2cd084c2',
-			lang: 'en',
-			messageCode: 'MSG_2000',
-			publishedDate: '2017-09-13T17:10:52.586Z',
-			publishedDateDisplay: '13th Sep 2017',
-			saved: true,
-			title: 'Is being authentic enough to be a leader?',
-			type: 'video',
-			wordCount: undefined
-		}, {
-			canBeSyndicated: 'yes',
-			canDownload: 1,
-			downloaded: false,
-			embargoPeriod: null,
-			id: '98b46b5f-17d3-40c2-8eaa-082df70c5f01',
-			lang: 'en',
-			messageCode: 'MSG_2000',
-			publishedDate: '2017-09-15T04:01:00.000Z',
-			publishedDateDisplay: '15th Sep 2017',
-			saved: false,
-			title: 'The economics of immigration',
-			type: 'podcast',
-			wordCount: undefined
-		}, {
-			canBeSyndicated: 'yes',
-			canDownload: 1,
-			downloaded: false,
-			embargoPeriod: null,
-			id: '93991a3c-0436-41bb-863e-61242e09859c',
-			lang: 'en',
-			messageCode: 'MSG_2000',
-			publishedDate: '2017-09-15T04:00:00.000Z',
-			publishedDateDisplay: '15th Sep 2017',
-			saved: false,
-			title: 'The Hits that Shook the World',
-			type: 'podcast',
-			wordCount: undefined
-		}]);
+				'id': '42ad255a-99f9-11e7-b83c-9588e51488a0',
+				'type': 'article',
+				'title': 'Pound leaps to highest level since Brexit vote',
+				'wordCount': 555,
+				'lang': 'en',
+				'canDownload': 1,
+				'canBeSyndicated': 'yes',
+				'downloaded': true,
+				'publishedDate': '2017-09-15T15:48:53.000Z',
+				'publishedDateDisplay': '15th Sep 2017',
+				'messageCode': 'MSG_2100',
+				'hasGraphics': true
+			}, {
+				'id': 'ef4c49fe-980e-11e7-b83c-9588e51488a0',
+				'type': 'article',
+				'title': 'Tech companies in the city: the backlash',
+				'wordCount': 655,
+				'lang': 'en',
+				'canDownload': 1,
+				'canBeSyndicated': 'yes',
+				'downloaded': true,
+				'publishedDate': '2017-09-15T04:01:25.000Z',
+				'publishedDateDisplay': '15th Sep 2017',
+				'messageCode': 'MSG_2100',
+				'hasGraphics': false,
+				'canAllGraphicsBeSyndicated': true
+			}, {
+				'id': 'b16fce7e-3c92-48a3-ace0-d1af3fce71af',
+				'type': 'video',
+				'title': 'Mental health and the gig economy',
+				'wordCount': 2932,
+				'lang': 'en',
+				'canDownload': 1,
+				'canBeSyndicated': 'yes',
+				'downloaded': true,
+				'saved': true,
+				'publishedDate': '2017-09-13T12:15:43.662Z',
+				'publishedDateDisplay': '13th Sep 2017',
+				'messageCode': 'MSG_2100',
+				'hasGraphics': false,
+				'canAllGraphicsBeSyndicated': true
+			}, {
+				'id': 'a1af0574-eafb-41bd-aa4f-59aa2cd084c2',
+				'type': 'video',
+				'title': 'Is being authentic enough to be a leader?',
+				'wordCount': 4687,
+				'lang': 'en',
+				'canDownload': 1,
+				'canBeSyndicated': 'yes',
+				'saved': true,
+				'publishedDate': '2017-09-13T17:10:52.586Z',
+				'publishedDateDisplay': '13th Sep 2017',
+				'messageCode': 'MSG_2000',
+				'hasGraphics': false,
+				'canAllGraphicsBeSyndicated': true
+			}, {
+				'id': '98b46b5f-17d3-40c2-8eaa-082df70c5f01',
+				'type': 'podcast',
+				'title': 'The economics of immigration',
+				'wordCount': 0,
+				'lang': 'en',
+				'canDownload': 1,
+				'canBeSyndicated': 'yes',
+				'publishedDate': '2017-09-15T04:01:00.000Z',
+				'publishedDateDisplay': '15th Sep 2017',
+				'messageCode': 'MSG_2000',
+				'hasGraphics': false,
+				'canAllGraphicsBeSyndicated': true
+			}, {
+				'id': '93991a3c-0436-41bb-863e-61242e09859c',
+				'type': 'podcast',
+				'title': 'The Hits that Shook the World',
+				'wordCount': 0,
+				'lang': 'en',
+				'canDownload': 1,
+				'canBeSyndicated': 'yes',
+				'publishedDate': '2017-09-15T04:00:00.000Z',
+				'publishedDateDisplay': '15th Sep 2017',
+				'messageCode': 'MSG_2000',
+				'hasGraphics': false,
+				'canAllGraphicsBeSyndicated': true
+			}]
+		);
 	});
 });

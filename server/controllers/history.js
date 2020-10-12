@@ -51,38 +51,7 @@ module.exports = exports = async (req, res, next) => {
 			new ContentBuilder(contentItemsMap[item.content_id])
 				.setContentHistory(item)
 				.setUserContract(CONTRACT)
-				.getContent([
-					'id',
-					'content_id',
-					'contract_id',
-					'user_id',
-					'user_name',
-					'user_email',
-					'asset_type',
-					'type',
-					'content_type',
-					'content_url',
-					'time',
-					'state',
-					'title',
-					'published_date',
-					'syndication_state',
-					'last_modified',
-					'lang',
-					'iso_lang_code',
-					'downloaded',
-					'saved',
-					'date',
-					'published',
-					'canDownload',
-					'canBeSyndicated',
-					'embargoPeriod',
-					'publishedDate',
-					'publishedDateDisplay',
-					'wordCount',
-					'translatedDateDisplay',
-					'messageCode',
-				])
+				.getContentHistory()
 		);
 
 		log.debug(

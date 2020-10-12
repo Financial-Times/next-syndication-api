@@ -57,6 +57,8 @@ module.exports = exports = async (req, res, next) => {
 				'publishedDate',
 				'publishedDateDisplay',
 				'messageCode',
+				'hasGraphics',
+				'canAllGraphicsBeSyndicated'
 			])
 	);
 

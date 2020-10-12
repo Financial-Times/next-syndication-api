@@ -1,6 +1,7 @@
 'use strict';
 
 const getId = require('./content/id');
+const getContractId = require('./content/contract-id');
 const getType = require('./content/type');
 const getTitle = require('./content/title');
 const getPreviewText = require('./content/preview-text');
@@ -27,6 +28,7 @@ const getPublishedDateDisplay = require('./content/published-date-display');
 
 const getElasticSearchItem = require('./content/helpers/elastic-search-item');
 const getSpanishItem = require('./content/helpers/spanish-item');
+const getContractItem = require('./content/helpers/contract-item');
 
 const getMessageCode = require('./content/message-code');
 
@@ -41,6 +43,9 @@ module.exports = exports = class ContentBuilder {
 			case 'id':
 			case 'content_id':
 				return getId(this);
+
+			case 'contract_id':
+				return getContractId(this);
 
 			case 'type':
 			case 'content_type':
@@ -135,19 +140,36 @@ module.exports = exports = class ContentBuilder {
 				return getMessageCode(this);
 
 			case 'notAvailable':
-				return false;
+				return !Boolean(this.content);
+
+			case 'licence_id':
+			case 'contributor_content':
+				return getContractItem(this, attribute);
 
 			default:
 				throw new Error(`Attribute not found. -> ${attribute}`);
 		}
 	}
 
-	getContent(attributes) {
+	getContent(attributes, base = {}) {
 		return attributes.reduce((content, attribute) => {
-			content[attribute] = this.getProperty(attribute);
+			const value = this.getProperty(attribute);
+
+			if(value !== undefined){
+				content[attribute] = value;
+			}
 
 			return content;
-		}, {});
+		}, Object.assign({}, base));
+	}
+
+	getContentHistory(){
+
+		return Object.assign(
+			{},
+			this.content_history,
+			this.getContent(['title', 'notAvailable', 'id', 'licence_id', 'contributor_content']));
+
 	}
 
 	setSpanishContent(content_es) {
@@ -177,12 +199,6 @@ module.exports = exports = class ContentBuilder {
 
 	setDownloadFormat(format) {
 		this.format = format;
-
-		return this;
-	}
-
-	setLanguage(lang) {
-		this.lang = lang;
 
 		return this;
 	}

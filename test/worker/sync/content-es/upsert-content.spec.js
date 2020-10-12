@@ -9,7 +9,7 @@ const proxyquire = require('proxyquire');
 
 const AWS = require('aws-sdk');
 
-const enrich = require('../../../../server/lib/enrich');
+const ContentBuilder = require('../../../../server/lib/builders/content-builder');
 
 const {
 	TEST: { FIXTURES_DIRECTORY }
@@ -64,7 +64,9 @@ describe(MODULE_ID, function () {
 				warn: () => {}
 			},
 			'../../../db/pg': sinon.stub().resolves(db),
-			'../../../server/lib/get-content-by-id': getContentStub
+			'@financial-times/n-es-client': {
+				'get': getContentStub
+			},
 		});
 	});
 
@@ -110,18 +112,15 @@ describe(MODULE_ID, function () {
 			S3Object.body = S3Object.bodyHTML;
 			S3Object.content_area = S3Object.isWeekendContent === true ? 'Spanish weekend' : 'Spanish content';
 			S3Object.content_id = S3Object.id = S3Object.uuid;
-			S3Object.content_type = 'article';
+			S3Object.content_type = S3Object.type ='article';
 			S3Object.state = 'created';
 			S3Object.translated_date = S3Object.translatedDate;
 
-			enrich(S3Object);
-
-			delete S3Object.document;
-
-			S3Object.word_count = S3Object.wordCount;
+			S3Object.word_count = new ContentBuilder(content)
+				.setSpanishContent(S3Object)
+				.getProperty('wordCount');
 
 			S3Object.published_date = new Date(content.firstPublishedDate || content.publishedDate);
-
 			expect(db.syndication.upsert_content_es).to.have.been.calledWith([S3Object]);
 		});
 	});

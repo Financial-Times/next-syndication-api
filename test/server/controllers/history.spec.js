@@ -25,61 +25,78 @@ describe(MODULE_ID, function () {
 
 	const contractResponse = require(path.resolve(`${FIXTURES_DIRECTORY}/contractResponse.json`));
 
-	const items = [{
-		'syndication_state': 'yes',
-		'state': 'complete',
-		'content_id': 'http://www.ft.com/thing/0c56a4f2-6bc5-11e7-bfeb-33fe0c5b7eaa',
-		'user_email': 'christos.constandinou@ft.com',
-		'user_name': 'christos constandinou',
-		'user_id': '8ef593a8-eef6-448c-8560-9ca8cdca80a5',
-		'contract_id': 'CA-00001558',
-		'licence_id': 'c3391af1-0d46-4ddc-a922-df7c49cf1552',
-		'download_format': 'docx',
-		'_id': '9807a4b6dcb3ce1188593759dd6818cd',
-		'time': '2017-07-19T15:08:50.786Z',
-		'version': 'v1',
-		'contributor_content': false
-	}, {
-		'syndication_state': 'yes',
-		'state': 'complete',
-		'content_id': 'http://www.ft.com/thing/0aaee458-6c6e-11e7-bfeb-33fe0c5b7eaa',
-		'user_email': 'christos.constandinou@ft.com',
-		'user_name': 'christos constandinou',
-		'user_id': '8ef593a8-eef6-448c-8560-9ca8cdca80a5',
-		'contract_id': 'CA-00001558',
-		'licence_id': 'c3391af1-0d46-4ddc-a922-df7c49cf1552',
-		'download_format': 'docx',
-		'_id': 'f55885427fa5f8c3e2b90204a6e6b0c7',
-		'time': '2017-07-19T15:08:45.881Z',
-		'version': 'v1',
-		'contributor_content': false
-	}, {
-		'syndication_state': 'yes',
-		'state': 'saved',
-		'content_id': 'http://www.ft.com/thing/74447ca2-6b0b-11e7-bfeb-33fe0c5b7eaa',
-		'user_email': 'christos.constandinou@ft.com',
-		'user_name': 'christos constandinou',
-		'user_id': '8ef593a8-eef6-448c-8560-9ca8cdca80a5',
-		'contract_id': 'CA-00001558',
-		'licence_id': 'c3391af1-0d46-4ddc-a922-df7c49cf1552',
-		'_id': '4eff4aba81093b44d2a71c36fc8e9898',
-		'time': '2017-07-19T15:08:43.075Z',
-		'version': 'v1',
-		'contributor_content': false
-	}, {
-		'syndication_state': 'yes',
-		'state': 'saved',
-		'content_id': 'http://www.ft.com/thing/eaef2e2c-6c61-11e7-b9c7-15af748b60d0',
-		'user_email': 'christos.constandinou@ft.com',
-		'user_name': 'christos constandinou',
-		'user_id': '8ef593a8-eef6-448c-8560-9ca8cdca80a5',
-		'contract_id': 'CA-00001558',
-		'licence_id': 'c3391af1-0d46-4ddc-a922-df7c49cf1552',
-		'_id': 'c71c4e6cf5183996a34235bf50bc0e1d',
-		'time': '2017-07-19T15:08:40.930Z',
-		'version': 'v1',
-		'contributor_content': false
-	}];
+	const items = [
+			{
+				'_id': '9807a4b6dcb3ce1188593759dd6818cd',
+				'content_id': 'http://www.ft.com/thing/0c56a4f2-6bc5-11e7-bfeb-33fe0c5b7eaa',
+				'contract_id': 'CA-00001558',
+				'contributor_content': true,
+				'download_format': 'docx',
+				'id': 'http://www.ft.com/thing/0c56a4f2-6bc5-11e7-bfeb-33fe0c5b7eaa',
+				'licence_id': 'xyz',
+				'notAvailable': false,
+				'state': 'complete',
+				'syndication_state': 'yes',
+				'time': '2017-07-19T15:08:50.786Z',
+				'title': 'UK issues coded warning to Brussels over nuclear waste',
+				'user_email': 'christos.constandinou@ft.com',
+				'user_id': '8ef593a8-eef6-448c-8560-9ca8cdca80a5',
+				'user_name': 'christos constandinou',
+				'version': 'v1'
+			},
+			{
+				'_id': 'f55885427fa5f8c3e2b90204a6e6b0c7',
+				'content_id': 'http://www.ft.com/thing/0aaee458-6c6e-11e7-bfeb-33fe0c5b7eaa',
+				'contract_id': 'CA-00001558',
+				'contributor_content': true,
+				'download_format': 'docx',
+				'id': 'http://www.ft.com/thing/0aaee458-6c6e-11e7-bfeb-33fe0c5b7eaa',
+				'licence_id': 'xyz',
+				'notAvailable': false,
+				'state': 'complete',
+				'syndication_state': 'yes',
+				'time': '2017-07-19T15:08:45.881Z',
+				'title': 'The tensions hiding behind a single inflation rate',
+				'user_email': 'christos.constandinou@ft.com',
+				'user_id': '8ef593a8-eef6-448c-8560-9ca8cdca80a5',
+				'user_name': 'christos constandinou',
+				'version': 'v1'
+			},
+			{
+				'_id': '4eff4aba81093b44d2a71c36fc8e9898',
+				'content_id': 'http://www.ft.com/thing/74447ca2-6b0b-11e7-bfeb-33fe0c5b7eaa',
+				'contract_id': 'CA-00001558',
+				'contributor_content': true,
+				'id': 'http://www.ft.com/thing/74447ca2-6b0b-11e7-bfeb-33fe0c5b7eaa',
+				'licence_id': 'xyz',
+				'notAvailable': false,
+				'state': 'saved',
+				'syndication_state': 'yes',
+				'time': '2017-07-19T15:08:43.075Z',
+				'title': 'Uber, Amazon and Microsoft braced for accounting shake-up',
+				'user_email': 'christos.constandinou@ft.com',
+				'user_id': '8ef593a8-eef6-448c-8560-9ca8cdca80a5',
+				'user_name': 'christos constandinou',
+				'version': 'v1'
+			},
+			{
+				'_id': 'c71c4e6cf5183996a34235bf50bc0e1d',
+				'content_id': 'http://www.ft.com/thing/eaef2e2c-6c61-11e7-b9c7-15af748b60d0',
+				'contract_id': 'CA-00001558',
+				'contributor_content': true,
+				'id': 'http://www.ft.com/thing/eaef2e2c-6c61-11e7-b9c7-15af748b60d0',
+				'licence_id': 'xyz',
+				'notAvailable': false,
+				'state': 'saved',
+				'syndication_state': 'yes',
+				'time': '2017-07-19T15:08:40.930Z',
+				'title': 'Theresa May criticises BBC as star salaries reveal gender gap',
+				'user_email': 'christos.constandinou@ft.com',
+				'user_id': '8ef593a8-eef6-448c-8560-9ca8cdca80a5',
+				'user_name': 'christos constandinou',
+				'version': 'v1'
+			}
+		];
 
 //	const itemsMap = items.reduce((acc, item) => {
 //		acc[item.content_id] = item;

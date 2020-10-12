@@ -5,7 +5,7 @@ module.exports = exports = contentBuilder => {
 		const { content, content_es, contract, lang } = contentBuilder;
 		const type = contentBuilder.getProperty('type');
 
-		if (type === 'podcast') {
+		if (type === 'podcast' && content) {
 			if (
 				content.canBeSyndicated === null ||
 				typeof content.canBeSyndicated === 'undefined'
@@ -22,7 +22,7 @@ module.exports = exports = contentBuilder => {
 			}
 		}
 
-		if (lang === 'es') {
+		if (lang === 'es' && content) {
 			content.canBeSyndicated = 'verify';
 
 			if (contract) {
@@ -41,8 +41,8 @@ module.exports = exports = contentBuilder => {
 			}
 		}
 
-		contentBuilder.canBeSyndicated = content.canBeSyndicated;
+		contentBuilder.canBeSyndicated = content && content.canBeSyndicated;
 	}
 
-	return contentBuilder.canBeSyndicated;
+	return contentBuilder.canBeSyndicated || undefined;
 };

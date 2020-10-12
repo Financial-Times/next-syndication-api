@@ -4,7 +4,7 @@ module.exports = exports = contentBuilder => {
 	if (!('wordCount' in contentBuilder)) {
 		const { content, content_es, lang } = contentBuilder;
 
-		if (lang === 'en' && content.contentStats) {
+		if (lang === 'en' && content && content.contentStats) {
 			contentBuilder.wordCount = content.contentStats.wordCount;
 		} else if (lang === 'es' && content_es && content_es.word_count) {
 			contentBuilder.wordCount = content_es.word_count;
