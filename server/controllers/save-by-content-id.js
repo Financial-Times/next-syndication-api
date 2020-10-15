@@ -18,6 +18,7 @@ module.exports = exports = async (req, res, next) => {
 		const {
 			licence,
 			syndication_contract,
+			hasGraphicSyndication,
 			user
 		} = res.locals;
 
@@ -44,7 +45,7 @@ module.exports = exports = async (req, res, next) => {
 			event: {
 				content_id: content.id,
 				content_type: content.content_type,
-				has_graphics: content.hasGraphics,
+				has_graphics: hasGraphicSyndication && content.hasGraphics,
 				content_url: content.webUrl,
 				contract_id: syndication_contract.id,
 				iso_lang_code: lang,

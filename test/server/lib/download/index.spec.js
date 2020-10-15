@@ -121,6 +121,21 @@ describe(MODULE_ID, function () {
 					.and.to.have.property('state')
 					.and.to.equal('started');
 			});
+
+			it('creates an event with has_graphics when content.hasGraphics and hasGraphicSyndication are both true', function() {
+				const dl = underTest({
+					content: Object.assign({}, content, {hasGraphics: true}),
+					contract: CONTRACT,
+					licence: LICENCE,
+					req,
+					user: USER,
+					hasGraphicSyndication: true
+				});
+
+				expect(dl.event).to.be.an.instanceOf(MessageQueueEvent)
+					.and.to.have.property('has_graphics')
+					.and.to.equal(true);
+			});
 		});
 	});
 

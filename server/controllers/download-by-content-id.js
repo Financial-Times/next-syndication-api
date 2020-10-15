@@ -17,7 +17,8 @@ module.exports = exports = async (req, res, next) => {
 	const {
 		contract,
 		licence,
-		user
+		user,
+		hasGraphicSyndication
 	} = res.locals;
 
 	const { download_format } = user;
@@ -45,11 +46,12 @@ module.exports = exports = async (req, res, next) => {
 
 	const dl = download({
 		content,
-		contract: contract,
+		contract,
 		lang,
-		licence: licence,
+		licence,
 		req,
-		user: user
+		user,
+		hasGraphicSyndication
 	});
 
 	res.locals.content = content;
