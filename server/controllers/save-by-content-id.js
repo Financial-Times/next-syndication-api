@@ -74,7 +74,6 @@ module.exports = exports = async (req, res, next) => {
 		await res.locals.__event.publish();
 
 		res.sendStatus(204);
-
 		next();
 	}
 	catch(error) {
