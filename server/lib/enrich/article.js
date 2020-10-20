@@ -31,6 +31,7 @@ module.exports = exports = function article(content, format) {
 		content.bodyHTML = content.body;
 	}
 
+	content.wordCount = content.contentStats && content.contentStats.wordCount;
 	content.hasGraphics = Boolean(content.contentStats && content.contentStats.graphics);
 
 	// Currently embeds can have more than one item for each picture - for different screen sizes
@@ -50,7 +51,8 @@ module.exports = exports = function article(content, format) {
 	if (content.bodyHTML) {
 		content.document = formatArticleXML(`<body>${content.bodyHTML}</body>`);
 
-		content.wordCount = getWordCount(content.document);
+		// videos and podcasts doesn't have contentStats, as such, we get the count from bodyHTML.
+		content.wordCount = content.wordCount || getWordCount(content.document);
 
 		content.document = decorateArticle(content.document, content);
 

@@ -4,13 +4,13 @@ const MessageQueueEvent = require('../../../queue/message-queue-event');
 const moment = require('moment');
 
 module.exports = exports = (config) => {
-	const { content, contract, lang, licence, req, user } = config;
-
+	const { content, contract, lang, licence, req, user, hasGraphicSyndication } = config;
 	if (content.content_type in exports) {
 		config.event = new MessageQueueEvent({
 			event: {
 				content_id: content.id,
 				content_type: content.content_type,
+				has_graphics: hasGraphicSyndication && content.hasGraphics,
 				content_url: content.webUrl,
 				contract_id: contract.contract_id,
 				download_format: content.extension,

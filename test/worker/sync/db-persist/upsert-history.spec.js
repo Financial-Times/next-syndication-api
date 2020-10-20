@@ -42,6 +42,7 @@ describe(MODULE_ID, function () {
 		const event = (new MessageQueueEvent({
 			event: {
 				content_id: 'http://www.ft.com/thing/abc',
+				has_graphics: false,
 				contract_id: 'syndication',
 				download_format: 'docx',
 				licence_id: 'foo',

@@ -42,6 +42,7 @@ describe(MODULE_ID, function () {
 		'user_id': '8ef593a8-eef6-448c-8560-9ca8cdca80a5',
 		'content_id': 'http://www.ft.com/thing/c7923fba-1d31-39fd-82f0-ba1822ef20d2',
 		'time': '2017-08-22T13:32:49.226Z',
+		'has_graphics': false,
 		'download_format': 'docx',
 		'state': 'complete',
 		'user_name': 'christos constandinou',
@@ -61,6 +62,7 @@ describe(MODULE_ID, function () {
 		'user_id': 'b2697f93-52d3-4d42-8409-bdf91b09e894',
 		'content_id': 'http://www.ft.com/thing/b59dff10-3f7e-11e7-9d56-25f963e998b2',
 		'time': '2017-08-22T12:35:10.751Z',
+		'has_graphics': true,
 		'download_format': 'plain',
 		'state': 'complete',
 		'user_name': 'James Wise',
@@ -81,6 +83,7 @@ describe(MODULE_ID, function () {
 		'content_id': 'http://www.ft.com/thing/c7923fba-1d31-39fd-82f0-ba1822ef20d2',
 		'download_format': 'docx',
 		'time': '2017-08-22T10:54:54.997Z',
+		'has_graphics': true,
 		'state': 'complete',
 		'user_name': 'James Wise',
 		'user_email': 'james.wise@ft.com',
@@ -101,6 +104,7 @@ describe(MODULE_ID, function () {
 		'user_id': 'b2697f93-52d3-4d42-8409-bdf91b09e894',
 		'content_id': 'http://www.ft.com/thing/c7923fba-1d31-39fd-82f0-ba1822ef20d2',
 		'time': '2017-08-22T10:54:54.997Z',
+		'has_graphics': true,
 		'state': 'saved',
 		'user_name': 'James Wise',
 		'user_email': 'james.wise@ft.com',
@@ -119,6 +123,7 @@ describe(MODULE_ID, function () {
 		'user_id': 'b2697f93-52d3-4d42-8409-bdf91b09e894',
 		'content_id': 'http://www.ft.com/thing/dbe4928a-5bec-11e7-b553-e2df1b0c3220',
 		'time': '2017-08-22T10:48:04.022Z',
+		'has_graphics': false,
 		'state': 'saved',
 		'user_name': 'James Wise',
 		'user_email': 'james.wise@ft.com',
@@ -199,7 +204,9 @@ describe(MODULE_ID, function () {
 
 			it('should send a buffer of the CSV', function () {
 				expect(res.send).to.have.been.calledWith(Buffer.from([DownloadsHeaders].concat(downloadedItems.map(item =>
-					Object.keys(EXPORT.downloads).map(key => item[key]).join(','))).join('\n'), 'utf8'));
+					Object.keys(EXPORT.downloads).map(
+						key => key === 'content_type' && item[key] === 'article' && item.has_graphics? 'rich_article':item[key]
+						).join(','))).join('\n'), 'utf8'));
 			});
 
 			it('should set the status to 200', function () {
@@ -277,7 +284,9 @@ describe(MODULE_ID, function () {
 
 			it('should send a buffer of the CSV', function () {
 				expect(res.send).to.have.been.calledWith(Buffer.from([SavedItemsHeaders].concat(savedItems.map(item =>
-					Object.keys(EXPORT.saved_items).map(key => item[key]).join(','))).join('\n'), 'utf8'));
+					Object.keys(EXPORT.saved_items).map(
+						key => key === 'content_type' && item[key] === 'article' && item.has_graphics? 'rich_article': item[key]
+						).join(','))).join('\n'), 'utf8'));
 			});
 
 			it('should set the status to 200', function () {

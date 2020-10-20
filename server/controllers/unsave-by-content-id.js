@@ -27,11 +27,12 @@ module.exports = exports = async (req, res, next) => {
 
 			return;
 		}
-
+		const {	hasGraphicSyndication  } = res.locals;
 		res.locals.__event = new MessageQueueEvent({
 			event: {
 				content_id: content.id,
 				content_type: content.content_type,
+				has_graphics: hasGraphicSyndication && content.hasGraphics,
 				content_url: content.webUrl,
 				contract_id: res.locals.syndication_contract.id,
 				iso_lang_code: lang,

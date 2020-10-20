@@ -28,6 +28,10 @@
       ],
       "type": "string"
     },
+    "has_graphics": {
+      "default": false,
+      "type": "boolean"
+    },
     "contract_id": {
       "type": "string"
     },
