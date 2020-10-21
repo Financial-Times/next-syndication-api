@@ -6,8 +6,7 @@ const log = require('../lib/logger');
 const fetch = require('n-eager-fetch');
 
 const {
-	SYNDICATION_PRODUCT_CODE,
-	GRAPHIC_SYNDICATION_PRODUCT_CODE
+	SYNDICATION_PRODUCT_CODE
 } = require('config');
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
@@ -59,7 +58,6 @@ module.exports = exports = async (req, res, next) => {
 
 			log.info('no-syndication-database-user-result', { uuid: userUuid, isSyndicationUser, maintenance: MAINTENANCE_MODE });
 			if (isSyndicationUser === true) {
-				res.locals.hasGraphicSyndication = products.includes(GRAPHIC_SYNDICATION_PRODUCT_CODE);
 				next();
 				return;
 			}
