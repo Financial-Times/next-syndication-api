@@ -134,9 +134,8 @@ describe(MODULE_ID, function () {
 
 	it('return an Object with the user\'s status that includes allowed.rich_article = TRUE if user has Graphics S2 code', async function() {
 
-		res.locals.licence.products =  [,
-			{ code: 'S2', name: 'Graphic' }
-		]
+		res.locals.hasGraphicSyndication = true;
+
 		await underTest(req, res, () => {});
 
 		expect(res.json).to.have.been.calledWith({

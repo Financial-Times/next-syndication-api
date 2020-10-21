@@ -1,6 +1,8 @@
 'use strict';
 
 const log = require('../lib/logger');
+const hasRichArticleAccess = require('../helpers/has-rich-article');
+
 const fetch = require('n-eager-fetch');
 
 const {
@@ -53,6 +55,11 @@ module.exports = exports = async (req, res, next) => {
 		}
 
 		res.locals.licence = syndicationLicence;
+
+		if(!res.locals.hasGraphicSyndication) {
+			res.locals.hasGraphicSyndication = hasRichArticleAccess(syndicationLicence.products);
+		}
+
 
 		if (res.locals.MASQUERADING !== true || !res.locals.syndication_contract) {
 			res.locals.syndication_contract = syndicationLicence.links[0];
