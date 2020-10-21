@@ -88,7 +88,7 @@ describe(MODULE_ID, function () {
 				syndication: true
 
 			},
-			licence: { id: 'xyz' },
+			licence: { id: 'xyz'},
 			isNewSyndicationUser: true,
 			syndication_contract: {
 				id: 'lmno'
@@ -132,9 +132,42 @@ describe(MODULE_ID, function () {
 		});
 	});
 
-	it('set the HTTP status to 200', async function() {
+	it('returns an Object with user\'s status that includes allowed.rich_articles set to TRUE for users with Graphics product code S2', async () => {
+		res.locals.licence.products =  [,
+			{ code: 'S2', name: 'Graphic' }
+		]
 		await underTest(req, res, () => {});
 
+		expect(res.json).to.have.been.calledWith({
+			app: {
+				env: process.env.NODE_ENV,
+				name: PACKAGE.name,
+				version: PACKAGE.version
+			},
+			features: {
+				syndication: true
+			},
+			allowed: {
+				contributor_content: true,
+				ft_com: true,
+				spanish_content: true,
+				spanish_weekend: false,
+				rich_articles: true
+			},
+			contract_id: 'lmno',
+			contributor_content: true,
+			licence_id: 'xyz',
+			email: 'foo@bar.com',
+			first_name: 'foo',
+			migrated: true,
+			user_id: 'abc',
+			surname: 'bar'
+		});
+
+	})
+
+	it('set the HTTP status to 200', async function() {
+		await underTest(req, res, () => {});
 		expect(res.status).to.have.been.calledWith(200);
 	});
 });
