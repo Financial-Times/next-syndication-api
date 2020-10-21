@@ -7,12 +7,15 @@ const log = require('../lib/logger');
 const { FEATURE_FLAGS } = require('config');
 
 const flagIsOn = require('../helpers/flag-is-on');
+const hasRichArticleAccess = require('../helpers/has-rich-article');
 
 const PACKAGE = require(path.resolve('./package.json'));
 
 module.exports = exports = async (req, res, next) => {
 	try {
 		res.status(200);
+		console.log('🤩');
+		console.log(res.locals.hasGraphicSyndication);
 
 		const { locals: {
 			allowed,
@@ -23,6 +26,13 @@ module.exports = exports = async (req, res, next) => {
 			syndication_contract,
 			user
 		} } = res;
+
+
+		const rich_articles = hasRichArticleAccess(licence.products);
+
+		if(allowed && rich_articles) {
+			allowed.rich_articles =  rich_articles;
+		}
 
 		const userStatus = Object.assign({
 			app: {
