@@ -1,7 +1,7 @@
 'use strict';
 
 const log = require('../lib/logger');
-const hasRichArticleAccess = require('../helpers/has-rich-article');
+const hasGraphicsAccess = require('../helpers/has-graphics-access');
 
 const fetch = require('n-eager-fetch');
 
@@ -57,7 +57,7 @@ module.exports = exports = async (req, res, next) => {
 		res.locals.licence = syndicationLicence;
 
 		if(!res.locals.hasGraphicSyndication) {
-			res.locals.hasGraphicSyndication = hasRichArticleAccess(syndicationLicence.products);
+			res.locals.hasGraphicSyndication = hasGraphicsAccess(syndicationLicence.products);
 		}
 
 
