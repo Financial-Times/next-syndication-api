@@ -14,8 +14,6 @@ const PACKAGE = require(path.resolve('./package.json'));
 module.exports = exports = async (req, res, next) => {
 	try {
 		res.status(200);
-		console.log('🤩');
-		console.log(res.locals.hasGraphicSyndication);
 
 		const { locals: {
 			allowed,
