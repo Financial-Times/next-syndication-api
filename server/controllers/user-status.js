@@ -7,7 +7,6 @@ const log = require('../lib/logger');
 const { FEATURE_FLAGS } = require('config');
 
 const flagIsOn = require('../helpers/flag-is-on');
-//const hasRichArticleAccess = require('../helpers/has-rich-article');
 
 const PACKAGE = require(path.resolve('./package.json'));
 
