@@ -13,6 +13,7 @@ module.exports = exports = async (req, res, next) => {
 		syndication_contract,
 		user,
 		licence,
+		hasGraphicSyndication,
 	} = locals;
 
 	try {
@@ -27,6 +28,10 @@ module.exports = exports = async (req, res, next) => {
 				].forEach(([content_area, property]) => {
 					acc[property] = acc[property] || assets.some(({ content }) => content.toLowerCase().includes(content_area));
 				});
+
+				if(hasGraphicSyndication) {
+					acc['rich_articles'] = hasGraphicSyndication;
+				}
 
 				return acc;
 			}, {

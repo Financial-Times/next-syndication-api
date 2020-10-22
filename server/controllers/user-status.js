@@ -21,13 +21,8 @@ module.exports = exports = async (req, res, next) => {
 			isNewSyndicationUser,
 			licence,
 			syndication_contract,
-			user,
-			hasGraphicSyndication,
+			user
 		} } = res;
-
-		if(hasGraphicSyndication) {
-			allowed.rich_articles = hasGraphicSyndication;
-		}
 
 		const userStatus = Object.assign({
 			app: {
