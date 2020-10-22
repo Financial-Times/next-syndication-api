@@ -23,6 +23,17 @@ module.exports = exports = async (req, res, next) => {
 
 		let isSyndicationUser = false;
 
+		const headers = { cookie: req.headers.cookie };
+		const sessionRes = await fetch('https://session-next.ft.com/products', { headers });
+		let session;
+		if (sessionRes.ok) {
+			session = await sessionRes.json();
+			const products = session.products.split(',');
+
+			isSyndicationUser = session.uuid === userUuid && products.includes(SYNDICATION_PRODUCT_CODE);
+			res.locals.hasGraphicSyndication = products.includes(GRAPHIC_SYNDICATION_PRODUCT_CODE);
+		} 
+
 		if (MAINTENANCE_MODE !== true) {
 			if (EXPEDITED_USER_AUTH === true) {
 				log.info('expediting-syndication-user-check', { uuid: userUuid });
@@ -34,32 +45,15 @@ module.exports = exports = async (req, res, next) => {
 			const [dbUser] = await db.syndication.get_user([userUuid]);
 
 			if (dbUser && dbUser.user_id === userUuid) {
-				isSyndicationUser = true;
-
-				if (isSyndicationUser === true) {
-					log.info(`${MODULE_ID} IsSyndicationUserSuccess`, {
-						isSyndicationUser
-					});
-
-					next();
-
-					return;
-				}
+				log.info(`${MODULE_ID} IsSyndicationUserSuccess`, { isSyndicationUser });
+				next();
+				return
 			}
 		}
 
-		const headers = { cookie: req.headers.cookie };
-		const sessionRes = await fetch('https://session-next.ft.com/products', { headers });
-
 		if (sessionRes.ok) {
-			const session = await sessionRes.json();
-
-			const products = session.products.split(',');
-			isSyndicationUser = session.uuid === userUuid && products.includes(SYNDICATION_PRODUCT_CODE);
-
 			log.info('no-syndication-database-user-result', { uuid: userUuid, isSyndicationUser, maintenance: MAINTENANCE_MODE });
 			if (isSyndicationUser === true) {
-				res.locals.hasGraphicSyndication = products.includes(GRAPHIC_SYNDICATION_PRODUCT_CODE);
 				next();
 				return;
 			}
@@ -72,14 +66,6 @@ module.exports = exports = async (req, res, next) => {
 
 				return;
 			}
-
-			const error = await sessionRes.text();
-
-			log.error(`${MODULE_ID} IsSyndicationUserFail =>`, {
-				isSyndicationUser,
-				error,
-				httpStatus: sessionRes.status
-			});
 		}
 
 		log.error('no-syndication-user', { uuid: userUuid });
