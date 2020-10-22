@@ -2,5 +2,5 @@
 
 const {GRAPHIC_SYNDICATION_PRODUCT_CODE} = require('config');
 module.exports = exports = (prodList= []) => {
-	return (prodList.length >= 1) ? prodList.some(product => product.code === GRAPHIC_SYNDICATION_PRODUCT_CODE): false;
+	return prodList.some(product => product.code === GRAPHIC_SYNDICATION_PRODUCT_CODE);
 };
