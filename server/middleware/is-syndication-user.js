@@ -32,7 +32,7 @@ module.exports = exports = async (req, res, next) => {
 
 			isSyndicationUser = session.uuid === userUuid && products.includes(SYNDICATION_PRODUCT_CODE);
 			res.locals.hasGraphicSyndication = products.includes(GRAPHIC_SYNDICATION_PRODUCT_CODE);
-		} 
+		}
 
 		if (MAINTENANCE_MODE !== true) {
 			if (EXPEDITED_USER_AUTH === true) {
