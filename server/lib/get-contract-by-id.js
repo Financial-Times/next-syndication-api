@@ -39,11 +39,9 @@ function decorateContract(contract, hasGraphics = false) {
 	contract.itemsMap = contract.items.reduce((acc, asset) => {
 
 		if (asset.download_limit > 0) {
-			let contentTypeLabel = asset.asset_type;
-			if(hasGraphics && asset.asset_type === 'FT Article') {
-				contentTypeLabel  = 'FT Rich Article';
-			}
-			contentAllowed.push(ASSET_TYPE_TO_DISPLAY_TYPE[contentTypeLabel]);
+			(hasGraphics && asset.asset_type === 'FT Article') ?
+			contentAllowed.push('Rich Articles') :
+			contentAllowed.push(ASSET_TYPE_TO_DISPLAY_TYPE[asset.asset_type]);
 		}
 
 		asset.hasAddendums = false;

@@ -10,7 +10,6 @@
     FT Article: Articles
     Podcast: Podcasts
     Video: Videos
-    FT Rich Article: Rich Articles
 
   BASE_URI_FT_API: https://api.ft.com
 
