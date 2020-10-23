@@ -29,12 +29,9 @@ module.exports = exports = async (req, res, next) => {
 					acc[property] = acc[property] || assets.some(({ content }) => content.toLowerCase().includes(content_area));
 				});
 
-				if(hasGraphicSyndication) {
-					acc['rich_articles'] = hasGraphicSyndication;
-				}
-
 				return acc;
 			}, {
+				rich_articles: hasGraphicSyndication,
 				contributor_content: contract.contributor_content
 			});
 

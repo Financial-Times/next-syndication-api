@@ -55,10 +55,8 @@ module.exports = exports = async (req, res, next) => {
 		}
 
 		res.locals.licence = syndicationLicence;
+		res.locals.hasGraphicSyndication = hasGraphicsAccess(syndicationLicence.products);
 
-		if(!res.locals.hasGraphicSyndication) {
-			res.locals.hasGraphicSyndication = hasGraphicsAccess(syndicationLicence.products);
-		}
 
 
 		if (res.locals.MASQUERADING !== true || !res.locals.syndication_contract) {
