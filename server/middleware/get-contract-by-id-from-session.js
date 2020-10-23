@@ -1,10 +1,11 @@
 'use strict';
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const getContractByID = require('../lib/get-contract-by-id');
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'middleware/get-contract-by-id-from-session'});
 	const { locals } = res;
 	const {
 		$DB: db,
@@ -43,7 +44,7 @@ module.exports = exports = async (req, res, next) => {
 		next();
 	}
 	catch (error) {
-		log.error({
+		log.error('getContractByID', {
 			error: error,
 			contractId: syndication_contract.id,
 			userId: user.user_id,

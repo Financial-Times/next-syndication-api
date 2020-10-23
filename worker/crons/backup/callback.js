@@ -5,7 +5,7 @@ const { createReadStream/*, stat*/ } = require('fs');
 const path = require('path');
 const util = require('util');
 
-const log = require('../../../server/lib/logger');
+const { Logger } = require('../../../server/lib/logger');
 
 const archiver = require('archiver');
 const AWS = require('aws-sdk');
@@ -33,6 +33,7 @@ const execAsync = util.promisify(exec);
 //const statAsync = util.promisify(stat);
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 module.exports = exports = async () => {
 	const START = Date.now();

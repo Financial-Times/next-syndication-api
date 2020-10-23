@@ -2,7 +2,8 @@
 
 const path = require('path');
 
-const log = require('./logger');
+const { Logger } = require('./logger');
+const log = new Logger({source: 'lib/get-salesforce-contract-by-id'});
 
 const nforce = require('nforce');
 
@@ -25,7 +26,7 @@ module.exports = exports = async (contractId, dontThrow) => {
 	try {
 
 		if (SALESFORCE_STUB_CONTRACTS.includes(contractId)) {
-			log.info({
+			log.info('SALESFORCE_DATA_STUBBED_FOR_CONTRACT', {
 				event: 'SALESFORCE_DATA_STUBBED_FOR_CONTRACT',
 				contractId
 			});

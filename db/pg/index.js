@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const log = require('../../server/lib/logger');
+const { Logger } = require('../../server/lib/logger');
 
 const massive = require('massive');
 const pgConn = require('pg-connection-string');
@@ -10,6 +10,7 @@ const pgConn = require('pg-connection-string');
 const { DB } = require('config');
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 let db;
 

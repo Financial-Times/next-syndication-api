@@ -1,10 +1,11 @@
 'use strict';
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const { DEFAULT_DOWNLOAD_FORMAT } = require('config');
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'controllers/contract-status'});
 	try {
 		const { locals: { contract, user } } = res;
 
@@ -18,7 +19,7 @@ module.exports = exports = async (req, res, next) => {
 		next();
 	}
 	catch (error) {
-		log.error({error});
+		log.error('DOWNLOAD_FORMAT', {error});
 
 		res.sendStatus(400);
 	}

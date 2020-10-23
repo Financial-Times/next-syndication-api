@@ -1,4 +1,4 @@
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const {
 	SALESFORCE: {
@@ -8,6 +8,7 @@ const {
 
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'middleware/expedite-user-auth'});
 	const { locals: {
 		$DB: db,
 		MAINTENANCE_MODE,

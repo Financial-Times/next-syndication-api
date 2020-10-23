@@ -1,12 +1,13 @@
 'use strict';
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 const Decoder = require('@financial-times/session-decoder-js');
 
 const decoder = new Decoder(process.env.SESSION_PUBLIC_KEY);
 
 
 module.exports = exports = (req, res, next) => {
+	const log = new Logger({req, res, source: 'middleware/decode-session'});
 	const sessionToken = req.cookies.FTSession;
 	const sessionSecureToken = req.cookies.FTSession_s;
 
@@ -20,7 +21,7 @@ module.exports = exports = (req, res, next) => {
 		next();
 	}
 	catch (err) {
-		log.error({
+		log.error('DECODE_SESSION_ERROR', {
 			event: 'DECODE_SESSION_ERROR',
 			error: err,
 		});

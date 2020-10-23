@@ -1,7 +1,7 @@
 'use strict';
 
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 const fetch = require('n-eager-fetch');
 
 const {
@@ -11,6 +11,7 @@ const {
 
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'middleware/get-users-for-licence'});
 	const URI = `${BASE_URI_FT_API}/licence-seat-holders/${res.locals.licence.id}`;
 
 	const headers = {
@@ -38,7 +39,7 @@ module.exports = exports = async (req, res, next) => {
 
 			}
 			else {
-				log.warn({
+				log.warn('NO_USERS_FOUND_FOR_LICENCE', {
 					event: 'NO_USERS_FOUND_FOR_LICENCE',
 					licenseId: res.locals.licence.id,
 					contractId: res.locals.syndication_contract.id
@@ -52,7 +53,7 @@ module.exports = exports = async (req, res, next) => {
 		}
 	}
 	catch (error) {
-		log.error({
+		log.error('LICENCE_FOUND_ERROR', {
 			event: 'LICENCE_FOUND_ERROR',
 			error: error,
 			URI,

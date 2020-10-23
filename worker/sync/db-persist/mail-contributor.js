@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const handlebars = require('../../../server/lib/handlebars');
-const log = require('../../../server/lib/logger');
+const { Logger } = require('../../../server/lib/logger');
 
 //const moment = require('moment');
 const moment = require('moment-timezone');
@@ -24,6 +24,7 @@ const HTML = Handlebars.compile(fs.readFileSync(path.resolve('./server/views/par
 const TXT = Handlebars.compile(fs.readFileSync(path.resolve('./server/views/partial/email_contributor_body.txt.hbs'), 'utf8'), { noEscape: true });
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 module.exports = exports = async (event) => {
 	if (event.syndication_state !== 'withContributorPayment' || event.state !== 'started') {

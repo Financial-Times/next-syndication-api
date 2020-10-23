@@ -1,12 +1,13 @@
 'use strict';
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const getContent = require('../lib/get-content');
 const getHistoryByContractID  = require('../lib/get-history-by-contract-id');
 const syndicate = require('../lib/syndicate-content');
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'controllers/history'});
 	const START = Date.now();
 
 	try {
@@ -65,7 +66,7 @@ module.exports = exports = async (req, res, next) => {
 		next();
 	}
 	catch(error) {
-		log.error({
+		log.error('HISTORY_ERROR', {
 			event: 'HISTORY_ERROR',
 			error
 		});

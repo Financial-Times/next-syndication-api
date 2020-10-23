@@ -4,7 +4,7 @@ const path = require('path');
 
 require('./promisify');
 
-const log = require('../server/lib/logger');
+const { Logger } = require('../server/lib/logger');
 
 const AWS = require('aws-sdk');
 
@@ -21,6 +21,7 @@ const sqs = new AWS.SQS({
 });
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 (async () => {
 	const attributes = await sqs.getQueueAttributesAsync({

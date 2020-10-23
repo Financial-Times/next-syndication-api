@@ -1,6 +1,6 @@
 'use strict';
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const getContentById = require('../lib/get-content-by-id');
 const prepareDownloadResponse = require('../lib/prepare-download-response');
@@ -15,6 +15,7 @@ const {
 } = require('config');
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'controllers/download-by-content-id'});
 	const {
 		contract,
 		licence,
@@ -66,7 +67,7 @@ module.exports = exports = async (req, res, next) => {
 
 	if (dl.downloadAsArchive) {
 		dl.on('error', (err, httpStatus) => {
-			log.error({
+			log.error('DOWNLOAD_ARCHIVE_ERROR', {
 				event: 'DOWNLOAD_ARCHIVE_ERROR',
 				error: err.stack || err
 			});

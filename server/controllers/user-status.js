@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const { FEATURE_FLAGS } = require('config');
 
@@ -11,6 +11,7 @@ const flagIsOn = require('../helpers/flag-is-on');
 const PACKAGE = require(path.resolve('./package.json'));
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'controllers/user-status'});
 	try {
 		res.status(200);
 
@@ -51,7 +52,7 @@ module.exports = exports = async (req, res, next) => {
 		next();
 	}
 	catch(error) {
-		log.error({
+		log.error('USER_STATUS_ERROR', {
 			event: 'USER_STATUS_ERROR',
 			error
 		});

@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const log = require('../../../server/lib/logger');
+const { Logger } = require('../../../server/lib/logger');
 
 const AWS = require('aws-sdk');
 const moment = require('moment');
@@ -21,6 +21,7 @@ const S3 = new AWS.S3({
 });
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 module.exports = exports = async () => {
 	try {

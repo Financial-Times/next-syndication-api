@@ -2,11 +2,12 @@
 
 const path = require('path');
 
-const log = require('../../../server/lib/logger');
+const { Logger } = require('../../../server/lib/logger');
 
 const pg = require('../../../db/pg');
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 module.exports = exports = async (event, message, response, subscriber) => {
 	try {

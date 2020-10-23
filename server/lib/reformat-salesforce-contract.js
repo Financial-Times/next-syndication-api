@@ -1,6 +1,7 @@
 'use strict';
 
-const log = require('./logger');
+const { Logger } = require('./logger');
+const log = new Logger({source: 'lib/reformat-salesforce-contract'});
 const {ASSET_TYPE_TO_CONTENT_TYPE} = require('config');
 
 module.exports = exports = SFContract => {
@@ -32,7 +33,7 @@ module.exports = exports = SFContract => {
 			const asset = findMatchingAsset(addendum, contract);
 
 			if (!asset) {
-				log.error({
+				log.error('Asset not found for Addendum', {
 					event: 'Asset not found for Addendum',
 					addendum
 				});

@@ -1,6 +1,6 @@
 'use strict';
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const { DOWNLOAD_ARTICLE_FORMATS } = require('config');
 
@@ -11,6 +11,7 @@ const ALLOWED_FORMATS = Object.values(DOWNLOAD_ARTICLE_FORMATS).reduce((acc, val
 }, {});
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'controllers/update-download-format'});
 	if (!(req.body.format in ALLOWED_FORMATS)) {
 		throw new TypeError(`Invalid format ${req.body.format}`);
 	}
@@ -41,7 +42,7 @@ module.exports = exports = async (req, res, next) => {
 		next();
 	}
 	catch(error) {
-		log.error({
+		log.error('UPDATE_DOWNLOAD_FORMAT_ERROR', {
 			event: 'UPDATE_DOWNLOAD_FORMAT_ERROR',
 			error
 		});

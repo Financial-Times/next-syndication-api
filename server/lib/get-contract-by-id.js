@@ -1,6 +1,7 @@
 'use strict';
 
-const log = require('./logger');
+const { Logger } = require('./logger');
+const log = new Logger({source: 'lib/get-contract-by-id'});
 const moment = require('moment');
 
 const {
@@ -97,7 +98,7 @@ module.exports = exports = async (contractId, locals = {}) => {
 		[contract_data] = await db.syndication.upsert_contract([contract]);
 		[contract_data] = await db.syndication.get_contract_data([contractId]);
 
-		log.info({
+		log.info('CONTRACT_PERSISTED_TO_DB', {
 			event: 'CONTRACT_PERSISTED_TO_DB',
 			contractID: contractId
 		});

@@ -1,6 +1,6 @@
 'use strict';
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const ACL = {
 	user: false,
@@ -9,6 +9,7 @@ const ACL = {
 };
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'controllers/backup'});
 	try {
 		const { locals: { user } } = res;
 
@@ -41,7 +42,7 @@ module.exports = exports = async (req, res, next) => {
 		});
 	}
 	catch(error) {
-		log.error({
+		log.error('BACKUP_ERROR', {
 			event: 'BACKUP_ERROR',
 			error
 		});

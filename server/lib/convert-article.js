@@ -2,7 +2,8 @@
 
 const { spawn } = require('child_process');
 
-const log = require('./logger');
+const { Logger } = require('./logger');
+const log = new Logger({source: 'lib/convert-article'});
 
 const { CONVERT_FORMAT_COMMAND } = require('config');
 
@@ -25,7 +26,7 @@ module.exports = exports = ({ source, sourceFormat = 'html', targetFormat = 'doc
 		let stderr = '';
 
 		cmd.on('error', error => {
-			log.error({
+			log.error('CONVERSION_ERROR', {
 				cmd: CONVERT_FORMAT_COMMAND,
 				event: 'CONVERSION_ERROR',
 				error
@@ -46,7 +47,7 @@ module.exports = exports = ({ source, sourceFormat = 'html', targetFormat = 'doc
 			if (code !== 0) {
 				const error = new Error(`Command '${CONVERT_FORMAT_COMMAND}' exited with code ${code}`);
 
-				log.error({
+				log.error('CONVERSION_COMPLETION_ERROR', {
 					event: 'CONVERSION_COMPLETION_ERROR',
 					cmd: CONVERT_FORMAT_COMMAND,
 					code,

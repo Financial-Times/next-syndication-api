@@ -1,6 +1,6 @@
 'use strict';
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const flagIsOn = require('../helpers/flag-is-on');
 
@@ -9,13 +9,14 @@ const getAllExistingItemsForContract = require('../lib/get-all-existing-items-fo
 const syndicate = require('../lib/syndicate-content');
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'controllers/resolve'});
 
 	const { body } = req;
 
 	const { locals: { contract, flags } } = res;
 
 	if (!Array.isArray(body)) {
-		log.warn({
+		log.warn(`Expected \`req.body\` to be [object Array] and got \`${Object.prototype.toString.call(body)}\` instead`, {
 			message: `Expected \`req.body\` to be [object Array] and got \`${Object.prototype.toString.call(body)}\` instead`,
 			referer: req.headers.referer
 		});
@@ -24,7 +25,7 @@ module.exports = exports = async (req, res, next) => {
 	}
 
 	if (!body.length) {
-		log.error({
+		log.error('`req.body` does not contain any content IDs', {
 			message: '`req.body` does not contain any content IDs',
 			referer: req.headers.referer
 		});

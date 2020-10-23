@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const log = require('../logger');
+const { Logger } = require('../logger');
 
 const { DOWNLOAD_ARCHIVE_EXTENSION } = require('config');
 
@@ -13,6 +13,7 @@ const DocumentBuilder = require('../builders/document-builder');
 const convertArticle = require('../convert-article');
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 module.exports = exports = class ArticleDownload extends Archiver {
 	constructor({ content, contract, event, licence, req, user }) {
@@ -112,7 +113,7 @@ module.exports = exports = class ArticleDownload extends Archiver {
 			return this.file;
 		}
 		catch (error) {
-			log.error({
+			log.error('convertArticle', {
 				contentId: content.id,
 				error
 			});

@@ -1,6 +1,6 @@
 'use strict';
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const backup = require('../../worker/crons/redshift/callback');
 
@@ -11,6 +11,7 @@ const ACL = {
 };
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'controllers/redshift'});
 	try {
 		const { locals: { user } } = res;
 
@@ -28,7 +29,7 @@ module.exports = exports = async (req, res, next) => {
 	}
 	catch(error) {
 
-		log.error({
+		log.error('REDSHIFT_ENDPOINT_ERROR', {
 			event: 'REDSHIFT_ENDPOINT_ERROR',
 			error
 		});

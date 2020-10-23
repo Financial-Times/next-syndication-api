@@ -1,6 +1,7 @@
 'use strict';
 
-const log = require('../logger');
+const { Logger } = require('../logger');
+const log = new Logger({source: 'lib/enrich/index'});
 
 module.exports = exports = function enrich(content, contract, graphicSyndicationFlag) {
 	if (!content.type && content.content_type) {
