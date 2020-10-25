@@ -13,6 +13,9 @@ const {
 	FORMAT_ARTICLE_STRIP_ELEMENTS,
 } = require('config');
 
+const RE_PARAGRAPHS = /<(p|h1)\s*[^>]*>(.*?)<\/\1>/gim;
+const RE_REMOVE_TAGS = /<\/?[^>]*>/gm;
+
 module.exports = exports = class DocumentBuilder {
 	constructor(content) {
 		this.content = content;
@@ -77,6 +80,16 @@ module.exports = exports = class DocumentBuilder {
 	}
 
 	removeNonSyndicatableImages() {
+
+		const embedsMap = this.content.embeds.reduce((map, embed) => {
+			const id = embed.id.split('/').pop();
+
+			return {
+				...map,
+				[id]: embed
+			};
+		}, {});
+
 		Array.from(this.contentDocument.getElementsByTagName('img'))
 			.forEach(el => {
 				const imageType = el.getAttribute('data-image-type');
@@ -85,7 +98,6 @@ module.exports = exports = class DocumentBuilder {
 					el.parentNode.removeChild(el);
 				}
 
-				const { content } = this.contentBuilder;
 				let imageId = el.getAttribute('data-id') || el.getAttribute('data-content-id');
 
 				// to handle ids in this format (https://api.ft.com/content/{content_id}})
@@ -93,7 +105,7 @@ module.exports = exports = class DocumentBuilder {
 					.split('/')
 					.pop();
 
-				const imageDetails = content.embeds && content.embeds.find(embed => embed.id === imageId);
+				const imageDetails = embedsMap[imageId];
 
 				if(!imageDetails || imageDetails.canBeSyndicated !== 'yes'){
 					el.parentNode.removeChild(el);
@@ -116,18 +128,7 @@ module.exports = exports = class DocumentBuilder {
 			lang,
 			translated_date,
 			content_id,
-		} = this.contentBuilder.getContent([
-			'byline',
-			'publishedDate',
-			'extension',
-			'title',
-			'url',
-			'webUrl',
-			'wordCount',
-			'lang',
-			'translated_date',
-			'content_id',
-		]);
+		} = this.content;
 
 		const Handlebars = handlebars();
 
@@ -190,6 +191,21 @@ module.exports = exports = class DocumentBuilder {
 	}
 
 	getHTMLString() {
-		return this.contentDocument && this.contentDocument.toString();
+		return this.contentDocument.toString();
+	}
+
+
+	getPlainText(){
+		return '<p>'
+			+ this.getHTMLString().trim()
+				.split('\n')
+				.map(line => line.trim())
+				.join('')
+				.replace(RE_PARAGRAPHS, '$2\n\n')
+				.replace(RE_REMOVE_TAGS, '')
+				.trim()
+				.split('\n\n')
+				.join('</p><p>')
+			+ '</p>';
 	}
 };

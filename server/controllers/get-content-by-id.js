@@ -21,7 +21,7 @@ module.exports = exports = async (req, res, next) => {
 
 		const lang = String(req.query.lang || DEFAULT_DOWNLOAD_LANGUAGE).toLowerCase();
 
-		let content = await getContentById(req.params.content_id, format, lang);
+		let content = await getContentById(req.params.content_id, format, lang, contract);
 
 		const [{get_content_state_for_contract: state}] = await db.syndication.get_content_state_for_contract([contract.contract_id, req.params.content_id]);
 

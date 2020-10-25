@@ -32,7 +32,7 @@ module.exports = exports = async (req, res, next) => {
 
 	const lang = String(req.query.lang || (referrer.includes('/republishing/spanish') ? 'es' : DEFAULT_DOWNLOAD_LANGUAGE)).toLowerCase();
 
-	const content = await getContentById(req.params.content_id, format, lang);
+	const content = await getContentById(req.params.content_id, format, lang, contract);
 
 	if (Object.prototype.toString.call(content) !== '[object Object]') {
 		res.sendStatus(404);

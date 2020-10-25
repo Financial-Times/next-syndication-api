@@ -2,21 +2,18 @@
 
 const path = require('path');
 
-const formatArticleXML = require('../format-article-xml');
+const DocumentBuilder = require('../builders/document-builder');
 const getWordCount = require('../get-word-count');
-const decorateArticle = require('../decorate-article');
-const toPlainText = require('../to-plain-text');
 
 const {
 	CONTENT_TYPE_ALIAS,
-	DOWNLOAD_ARTICLE_FORMATS,
 	DOWNLOAD_FILENAME_PREFIX
 } = require('config');
 
 const RE_BAD_CHARS = /[^A-Za-z0-9_]/gm;
 const RE_SPACE = /\s/gm;
 
-module.exports = exports = function article(content, format) {
+module.exports = exports = function article(content, contract) {
 	if (!content.content_id) {
 		content.content_id = path.basename(content.id);
 	}
@@ -25,7 +22,7 @@ module.exports = exports = function article(content, format) {
 		content.content_type = CONTENT_TYPE_ALIAS[content.type] || content.type;
 	}
 
-	content.extension = DOWNLOAD_ARTICLE_FORMATS[format] || 'docx';
+	content.extension = content.extension || 'docx';
 
 	if (content.body && !content.bodyHTML) {
 		content.bodyHTML = content.body;
@@ -48,17 +45,29 @@ module.exports = exports = function article(content, format) {
 
 	content.canAllGraphicsBeSyndicated = !atLeastOneGraphicCantBeShared;
 
-	if (content.bodyHTML) {
-		content.document = formatArticleXML(`<body>${content.bodyHTML}</body>`);
+	if (content.bodyHTML && contract) {
 
-		content.document = decorateArticle(content.document, content);
+		const documentBuilder = new DocumentBuilder(content)
+			.removeElementsByTagName()
+			.removeProprietaryXML();
 
-		content.bodyHTML__CLEAN = content.document.toString();
+		if (content.extension  === 'docx' && contract.allowed.rich_articles){
+			documentBuilder.removeNonSyndicatableImages();
+		} else {
+			documentBuilder.removeElementsByTagName(['img']);
+		}
+
+		documentBuilder
+			.removeWhiteSpace()
+			.decorateArticle();
+
+		content.bodyHTML__CLEAN = documentBuilder.getHTMLString();
 
 		// we need to strip all formatting — leaving only paragraphs — and pass this to pandoc for plain text
 		// otherwise it will uppercase the whole article title and anything bold, as well as leave other weird
 		// formatting in the text file
-		content.bodyHTML__PLAIN = toPlainText(content.document.toString());
+		content.bodyHTML__PLAIN = documentBuilder.getPlainText(); 
+
 	}
 
 	content.fileName = DOWNLOAD_FILENAME_PREFIX + content.title.replace(RE_SPACE, '_').replace(RE_BAD_CHARS, '').substring(0, 12);
