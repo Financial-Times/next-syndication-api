@@ -63,6 +63,7 @@ module.exports = exports = async (event, message, response, subscriber) => {
 				const item = JSON.parse(res.Body.toString('utf8'));
 
 				item.body = item.bodyHTML;
+				item.lang = item.language;
 				item.content_area = item.isWeekendContent === true ? 'Spanish weekend' : 'Spanish content';
 				item.content_id = item.id = item.uuid;
 				item.content_type = item.type = 'article';

@@ -1,25 +1,24 @@
 'use strict';
 
-const RE_VALID_ONE_CHARS = /^[IAa0-9]$/;
+module.exports = exports = (content) => {
+	if (content.lang === 'en') {
 
-module.exports = exports = doc => {
-	let textContent = walk(doc.documentElement, []);
+		// content.contentStats.wordCount is returned by elasticsearch for articles
+		if (content.contentStats && content.contentStats.wordCount){
+			return content.contentStats.wordCount;
+		}
 
-	textContent = textContent.join(' ').trim().split(/[\u{32}\u{160}\s]/u)
-		.filter(item => !!item && (item.length > 1 || RE_VALID_ONE_CHARS.test(item)));
+		// videos and podcast don't have contentStats
+		return content.bodyText.trim().split(' ').length
 
-	return textContent.length;
+	} else if (content.lang === 'es') {
+
+		if(content_es.word_count){
+			return content_es.word_count;
+		}
+		
+		return content.bodyHTML.replace(/<(.|\n)*?>/g, '').trim().split(' ').length;
+	} 
+	
+	return 0;
 };
-
-function walk(el, textContent) {
-	Array.from(el.childNodes).forEach(el => {
-		if (el.nodeType === 3) {
-			textContent.push(el.data);
-		}
-		else {
-			walk(el, textContent);
-		}
-	});
-
-	return textContent;
-}
