@@ -104,6 +104,8 @@ describe(MODULE_ID, function () {
 	});
 
 	it('return an Object of with the user\'s status', async function() {
+
+		res.locals.allowed.rich_articles = false;
 		await underTest(req, res, () => {});
 
 		expect(res.json).to.have.been.calledWith({
@@ -118,8 +120,42 @@ describe(MODULE_ID, function () {
 			allowed: {
 				contributor_content: true,
 				ft_com: true,
+				rich_articles: false,
 				spanish_content: true,
 				spanish_weekend: false
+			},
+			contract_id: 'lmno',
+			contributor_content: true,
+			licence_id: 'xyz',
+			email: 'foo@bar.com',
+			first_name: 'foo',
+			migrated: true,
+			user_id: 'abc',
+			surname: 'bar'
+		});
+	});
+
+	it('return an Object with the user\'s status that includes allowed.rich_article = TRUE if user has Graphics S2 code', async function() {
+
+		res.locals.allowed.rich_articles = true;
+
+		await underTest(req, res, () => {});
+		expect(res.json).to.have.been.calledWith({
+			app: {
+				env: process.env.NODE_ENV,
+				name: PACKAGE.name,
+				version: PACKAGE.version
+			},
+			features: {
+				syndication: true
+			},
+			allowed: {
+				contributor_content: true,
+				ft_com: true,
+				rich_articles: true,
+				spanish_content: true,
+				spanish_weekend: false,
+
 			},
 			contract_id: 'lmno',
 			contributor_content: true,

@@ -13,6 +13,7 @@ module.exports = exports = async (req, res, next) => {
 		syndication_contract,
 		user,
 		licence,
+		hasGraphicSyndication,
 	} = locals;
 
 	try {
@@ -30,6 +31,7 @@ module.exports = exports = async (req, res, next) => {
 
 				return acc;
 			}, {
+				rich_articles: hasGraphicSyndication,
 				contributor_content: contract.contributor_content
 			});
 

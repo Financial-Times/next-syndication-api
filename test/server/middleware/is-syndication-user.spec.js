@@ -13,7 +13,6 @@ chai.use(sinonChai);
 
 const {
 	SYNDICATION_PRODUCT_CODE,
-	GRAPHIC_SYNDICATION_PRODUCT_CODE,
 	TEST: { FIXTURES_DIRECTORY }
 } = require('config');
 
@@ -34,7 +33,7 @@ describe(MODULE_ID, function () {
 			nock.cleanAll()
 			db = initDB();
 			db.syndication.get_user.resolves([userResponse]);
-			sandbox = sinon.sandbox.create();
+			sandbox = sinon.createSandbox();
 			mocks = {
 				req: {
 					cookies: {
@@ -95,28 +94,13 @@ describe(MODULE_ID, function () {
 			expect(mocks.res.sendStatus).to.not.have.been.called;
 			expect(stubs.next).to.have.been.called;
 		});
-
-		it(`should continue on if the session service products does contain ${GRAPHIC_SYNDICATION_PRODUCT_CODE} and the session service UUID matches the session UUID`, async function () {
-			mocks.res.locals.userUuid = 'abc';
-
-			nock('https://session-next.ft.com')
-				.get('/products')
-				.reply(200, { uuid: 'abc', products: 'Tools,S1,S2,P0,P1,P2' }, {});
-
-			await underTest(mocks.req, mocks.res, stubs.next);
-
-			expect(mocks.res.sendStatus).to.not.have.been.called;
-			const { hasGraphicSyndication } = mocks.res.locals;
-			expect(hasGraphicSyndication).to.be.equal(true);
-			expect(stubs.next).to.have.been.called;
-		});
 	});
 
 	describe('MAINTENANCE_MODE: true', function() {
 		beforeEach(function () {
 			db = initDB();
 			db.syndication.get_user.resolves([userResponse]);
-			sandbox = sinon.sandbox.create();
+			sandbox = sinon.createSandbox();
 			mocks = {
 				req: {
 					cookies: {

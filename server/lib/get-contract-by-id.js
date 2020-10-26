@@ -16,7 +16,8 @@ const pg = require('../../db/pg');
 const getSalesforceContractByID = require('./get-salesforce-contract-by-id');
 const reformatSalesforceContract = require('./reformat-salesforce-contract');
 
-function decorateContract(contract) {
+function decorateContract(contract, hasGraphics = false) {
+
 	contract.contract_date = `${moment(contract.start_date).format('DD/MM/YY')} - ${moment(contract.end_date).format('DD/MM/YY')}`;
 
 	const contentAllowed = [];
@@ -36,7 +37,10 @@ function decorateContract(contract) {
 	}
 
 	contract.itemsMap = contract.items.reduce((acc, asset) => {
+
 		if (asset.download_limit > 0) {
+			(hasGraphics && asset.asset_type === 'FT Article') ?
+			contentAllowed.push('Rich Articles') :
 			contentAllowed.push(ASSET_TYPE_TO_DISPLAY_TYPE[asset.asset_type]);
 		}
 
@@ -68,6 +72,7 @@ function decorateContract(contract) {
 }
 
 module.exports = exports = async (contractId, locals = {}) => {
+
 	const db = await pg();
 
 	let [contract_data] = await db.syndication.get_contract_data([contractId]);
@@ -75,7 +80,7 @@ module.exports = exports = async (contractId, locals = {}) => {
 	if (locals.MASQUERADING !== true && contract_data && contract_data.contract_id !== null) {
 		let last_updated = Date.now() - +contract_data.last_updated;
 		if (last_updated < SALESFORCE_REFRESH_CONTRACT_PERIOD) {
-			return decorateContract(contract_data);
+			return decorateContract(contract_data, locals.hasGraphicSyndication);
 		}
 	}
 	let contract = await getSalesforceContractByID(contractId);
@@ -97,7 +102,7 @@ module.exports = exports = async (contractId, locals = {}) => {
 			contractID: contractId
 		});
 
-		return decorateContract(contract_data);
+		return decorateContract(contract_data, locals.hasGraphicSyndication);
 	}
 	else {
 		throw new Error(contract.errorMessage);
