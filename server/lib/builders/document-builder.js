@@ -31,10 +31,10 @@ module.exports = exports = class DocumentBuilder {
 
 	removeElementsByTagName(...tagNames) {
 		// Defaults to FORMAT_ARTICLE_STRIP_ELEMENTS if tagNames is empty
-		(tagNames || FORMAT_ARTICLE_STRIP_ELEMENTS).forEach(tagName =>
+		(tagNames || FORMAT_ARTICLE_STRIP_ELEMENTS).forEach((tagName) =>
 			Array.from(
 				this.contentDocument.getElementsByTagName(tagName)
-			).forEach(el => el.parentNode.removeChild(el))
+			).forEach((el) => el.parentNode.removeChild(el))
 		);
 
 		return this;
@@ -43,10 +43,10 @@ module.exports = exports = class DocumentBuilder {
 	// Striping inline elements without deleting the content
 	removeProprietaryElement(...tagNames) {
 		// Defaults to FORMAT_ARTICLE_CLEAN_ELEMENTS if tagNames is empty
-		(tagNames || FORMAT_ARTICLE_CLEAN_ELEMENTS).forEach(tagName => {
+		(tagNames || FORMAT_ARTICLE_CLEAN_ELEMENTS).forEach((tagName) => {
 			Array.from(
 				this.contentDocument.getElementsByTagName(tagName)
-			).forEach(el => {
+			).forEach((el) => {
 				if (el.parentNode.nodeName === 'p') {
 					if (el.firstChild && el.firstChild.data) {
 						let text = this.contentDocument.createTextNode(
@@ -60,7 +60,7 @@ module.exports = exports = class DocumentBuilder {
 				} else {
 					Array.from(el.childNodes)
 						.reverse()
-						.forEach(child =>
+						.forEach((child) =>
 							el.parentNode.insertBefore(child, el)
 						);
 
@@ -74,7 +74,7 @@ module.exports = exports = class DocumentBuilder {
 
 	removeWhiteSpace() {
 		Array.from(this.contentDocument.documentElement.childNodes).forEach(
-			el => {
+			(el) => {
 				if (el.nodeType !== 1) {
 					el.parentNode.removeChild(el);
 				}
@@ -85,7 +85,6 @@ module.exports = exports = class DocumentBuilder {
 	}
 
 	removeNonSyndicatableImages() {
-
 		const embedsMap = this.content.embeds.reduce((map, embed) => {
 			const id = embed.id.split('/').pop();
 
@@ -93,34 +92,33 @@ module.exports = exports = class DocumentBuilder {
 			return map;
 		}, {});
 
-		Array.from(this.contentDocument.getElementsByTagName('img'))
-			.forEach(el => {
+		Array.from(this.contentDocument.getElementsByTagName('img')).forEach(
+			(el) => {
 				const imageType = el.getAttribute('data-image-type');
 
-				if(imageType !== 'graphic'){
+				if (imageType !== 'graphic') {
 					el.parentNode.removeChild(el);
 				}
 
-				let imageId = el.getAttribute('data-id') || el.getAttribute('data-content-id');
+				let imageId =
+					el.getAttribute('data-id') ||
+					el.getAttribute('data-content-id');
 
 				// to handle ids in this format (https://api.ft.com/content/{content_id}})
-				imageId = imageId
-					.split('/')
-					.pop();
+				imageId = imageId.split('/').pop();
 
 				const imageDetails = embedsMap[imageId];
 
-				if(!imageDetails || imageDetails.canBeSyndicated !== 'yes'){
+				if (!imageDetails || imageDetails.canBeSyndicated !== 'yes') {
 					el.parentNode.removeChild(el);
 				}
-			});
-
+			}
+		);
 
 		return this;
 	}
 
 	decorateArticle(graphicsAllowed = false) {
-
 		const {
 			byline,
 			publishedDate,
@@ -166,8 +164,10 @@ module.exports = exports = class DocumentBuilder {
 			title,
 			webUrl: url || webUrl,
 			wordCount,
-			syndicatableGraphicsAvaliableMsg: !graphicsAllowed && canAtLeastOneGraphicBeSyndicated,
-			notAllGraphicsCanBeSyndicatedMsg: graphicsAllowed && hasGraphics && !canAllGraphicsBeSyndicated
+			syndicatableGraphicsAvaliableMsg:
+				!graphicsAllowed && canAtLeastOneGraphicBeSyndicated,
+			notAllGraphicsCanBeSyndicatedMsg:
+				graphicsAllowed && hasGraphics && !canAllGraphicsBeSyndicated,
 		};
 
 		if (lang && lang === 'es') {
@@ -204,44 +204,41 @@ module.exports = exports = class DocumentBuilder {
 		return this.contentDocument.toString();
 	}
 
-	getPlainText(){
-		return '<p>'
-			+ this.getHTMLString().trim()
+	getPlainText() {
+		return (
+			'<p>' +
+			this.getHTMLString()
+				.trim()
 				.split('\n')
-				.map(line => line.trim())
+				.map((line) => line.trim())
 				.join('')
 				.replace(RE_PARAGRAPHS, '$2\n\n')
 				.replace(RE_REMOVE_TAGS, '')
 				.trim()
 				.split('\n\n')
-				.join('</p><p>')
-			+ '</p>';
+				.join('</p><p>') +
+			'</p>'
+		);
 	}
 
-	getXMLString(){
-
-		const bodyXML = this.contentDocument.getElementsByTagName('body')[0].toString();
-		return bodyXML.substring(bodyXML.indexOf('>') + 1, bodyXML.lastIndexOf('<')); // Removes root element (innerXML)
+	getXMLString() {
+		const bodyXML = this.contentDocument
+			.getElementsByTagName('body')[0]
+			.toString();
+		return bodyXML.substring(
+			bodyXML.indexOf('>') + 1,
+			bodyXML.lastIndexOf('<')
+		); // Removes root element (innerXML)
 	}
 
-	getXMLFile(){
-
-		const {
-			title,
-			byline,
-			publishedDate,
-			id,
-			webUrl
-		} = this.content;
+	getXMLFile() {
+		const { title, byline, publishedDate, id, webUrl } = this.content;
 
 		const bodyXML = this.getXMLString();
 
 		const articleTemplate = Handlebars.compile(
 			fs.readFileSync(
-				path.resolve(
-					BASE_PATH,
-					'../views/article.xml.hbs'
-				),
+				path.resolve(BASE_PATH, '../views/article.xml.hbs'),
 				'utf8'
 			),
 			{ noEscape: true }
@@ -251,7 +248,7 @@ module.exports = exports = class DocumentBuilder {
 			title,
 			byline,
 			bodyXML,
-			year: (new Date(publishedDate)).getFullYear(),
+			year: new Date(publishedDate).getFullYear(),
 			id,
 			publishedDate,
 			webUrl,
@@ -259,5 +256,4 @@ module.exports = exports = class DocumentBuilder {
 
 		return Buffer.from(articleTemplate(dict), 'utf8');
 	}
-
 };
