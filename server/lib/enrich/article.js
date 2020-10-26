@@ -61,7 +61,7 @@ module.exports = exports = function article(content, contract) {
 		if (content.extension  === 'docx' && contract.allowed.rich_articles){
 			documentBuilder.removeNonSyndicatableImages();
 		} else {
-			documentBuilder.removeElementsByTagName('img');
+			documentBuilder.removeElementsByTagName(['img']);
 		}
 
 		documentBuilder

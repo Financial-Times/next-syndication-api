@@ -29,9 +29,9 @@ module.exports = exports = class DocumentBuilder {
 		);
 	}
 
-	removeElementsByTagName(...tagNames) {
+	removeElementsByTagName(tagNames = FORMAT_ARTICLE_STRIP_ELEMENTS) {
 		// Defaults to FORMAT_ARTICLE_STRIP_ELEMENTS if tagNames is empty
-		(tagNames || FORMAT_ARTICLE_STRIP_ELEMENTS).forEach((tagName) =>
+		tagNames.forEach((tagName) =>
 			Array.from(
 				this.contentDocument.getElementsByTagName(tagName)
 			).forEach((el) => el.parentNode.removeChild(el))
@@ -41,9 +41,9 @@ module.exports = exports = class DocumentBuilder {
 	}
 
 	// Striping inline elements without deleting the content
-	removeProprietaryElement(...tagNames) {
+	removeProprietaryElement(tagNames = FORMAT_ARTICLE_CLEAN_ELEMENTS) {
 		// Defaults to FORMAT_ARTICLE_CLEAN_ELEMENTS if tagNames is empty
-		(tagNames || FORMAT_ARTICLE_CLEAN_ELEMENTS).forEach((tagName) => {
+		tagNames.forEach((tagName) => {
 			Array.from(
 				this.contentDocument.getElementsByTagName(tagName)
 			).forEach((el) => {
@@ -85,7 +85,7 @@ module.exports = exports = class DocumentBuilder {
 	}
 
 	removeNonSyndicatableImages() {
-		const embedsMap = this.content.embeds.reduce((map, embed) => {
+		const embedsMap = (this.content.embeds || []).reduce((map, embed) => {
 			const id = embed.id.split('/').pop();
 
 			map[id] = embed;
