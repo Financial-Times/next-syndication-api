@@ -46,7 +46,17 @@ describe(MODULE_ID, function () {
 
 	const CONTENT_ID = '42ad255a-99f9-11e7-b83c-9588e51488a0';
 
-	const content = enrich(require(path.resolve(`${FIXTURES_DIRECTORY}/content/${CONTENT_ID}.json`)), DEFAULT_FORMAT);
+	const contentJSON = require(path.resolve(`${FIXTURES_DIRECTORY}/content/${CONTENT_ID}.json`));
+	contentJSON.lang = 'en';
+	contentJSON.extension = DEFAULT_FORMAT;
+
+	const contract = {
+		allowed: {
+			rich_articles: false
+		}
+	};
+
+	const content = enrich(contentJSON, contract);
 
 	const className = `${content.type.charAt(0).toUpperCase()}${content.type.substring(1)}Download`;
 

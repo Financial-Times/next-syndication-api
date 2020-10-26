@@ -5,13 +5,16 @@ const path = require('path');
 const moment = require('moment');
 const { DOMParser } = require('xmldom');
 
-const handlebars = require('../handlebars');
-
 const {
 	FORMAT_ARTICLE_CLEAN_ELEMENTS,
 	FORMAT_ARTICLE_CONTENT_TYPE,
 	FORMAT_ARTICLE_STRIP_ELEMENTS,
 } = require('config');
+
+const handlebars = require('../handlebars');
+const Handlebars = handlebars();
+
+const BASE_PATH = path.dirname(path.relative(process.cwd(), __dirname));
 
 const RE_PARAGRAPHS = /<(p|h1)\s*[^>]*>(.*?)<\/\1>/gim;
 const RE_REMOVE_TAGS = /<\/?[^>]*>/gm;
@@ -26,8 +29,9 @@ module.exports = exports = class DocumentBuilder {
 		);
 	}
 
-	removeElementsByTagName(tagNames = FORMAT_ARTICLE_STRIP_ELEMENTS) {
-		tagNames.forEach(tagName =>
+	removeElementsByTagName(...tagNames) {
+		// Defaults to FORMAT_ARTICLE_STRIP_ELEMENTS if tagNames is empty
+		(tagNames || FORMAT_ARTICLE_STRIP_ELEMENTS).forEach(tagName =>
 			Array.from(
 				this.contentDocument.getElementsByTagName(tagName)
 			).forEach(el => el.parentNode.removeChild(el))
@@ -36,9 +40,10 @@ module.exports = exports = class DocumentBuilder {
 		return this;
 	}
 
-	// first sanitize content by striping inline XML elements without deleting the content
-	removeProprietaryXML(tagNames = FORMAT_ARTICLE_CLEAN_ELEMENTS) {
-		tagNames.forEach(tagName => {
+	// Striping inline elements without deleting the content
+	removeProprietaryElement(...tagNames) {
+		// Defaults to FORMAT_ARTICLE_CLEAN_ELEMENTS if tagNames is empty
+		(tagNames || FORMAT_ARTICLE_CLEAN_ELEMENTS).forEach(tagName => {
 			Array.from(
 				this.contentDocument.getElementsByTagName(tagName)
 			).forEach(el => {
@@ -84,10 +89,8 @@ module.exports = exports = class DocumentBuilder {
 		const embedsMap = this.content.embeds.reduce((map, embed) => {
 			const id = embed.id.split('/').pop();
 
-			return {
-				...map,
-				[id]: embed
-			};
+			map[id] = embed;
+			return map;
 		}, {});
 
 		Array.from(this.contentDocument.getElementsByTagName('img'))
@@ -116,7 +119,8 @@ module.exports = exports = class DocumentBuilder {
 		return this;
 	}
 
-	decorateArticle() {
+	decorateArticle(graphicsAllowed = false) {
+
 		const {
 			byline,
 			publishedDate,
@@ -128,16 +132,16 @@ module.exports = exports = class DocumentBuilder {
 			lang,
 			translated_date,
 			content_id,
+			hasGraphics,
+			canAtLeastOneGraphicBeSyndicated,
+			canAllGraphicsBeSyndicated,
 		} = this.content;
 
-		const Handlebars = handlebars();
-
-		const BASE_PATH = path.dirname(path.relative(process.cwd(), __dirname));
 		const headerTemplate = Handlebars.compile(
 			fs.readFileSync(
 				path.resolve(
 					BASE_PATH,
-					'./views/partial/article_metadata_hd.html.hbs'
+					'../views/partial/article_metadata_hd.html.hbs'
 				),
 				'utf8'
 			),
@@ -147,7 +151,7 @@ module.exports = exports = class DocumentBuilder {
 			fs.readFileSync(
 				path.resolve(
 					BASE_PATH,
-					'./views/partial/article_metadata_ft.html.hbs'
+					'../views/partial/article_metadata_ft.html.hbs'
 				),
 				'utf8'
 			),
@@ -162,6 +166,8 @@ module.exports = exports = class DocumentBuilder {
 			title,
 			webUrl: url || webUrl,
 			wordCount,
+			syndicatableGraphicsAvaliableMsg: !graphicsAllowed && canAtLeastOneGraphicBeSyndicated,
+			notAllGraphicsCanBeSyndicatedMsg: graphicsAllowed && hasGraphics && !canAllGraphicsBeSyndicated
 		};
 
 		if (lang && lang === 'es') {
@@ -190,10 +196,13 @@ module.exports = exports = class DocumentBuilder {
 		return this;
 	}
 
+	getDocument() {
+		return this.contentDocument;
+	}
+
 	getHTMLString() {
 		return this.contentDocument.toString();
 	}
-
 
 	getPlainText(){
 		return '<p>'
@@ -208,4 +217,47 @@ module.exports = exports = class DocumentBuilder {
 				.join('</p><p>')
 			+ '</p>';
 	}
+
+	getXMLString(){
+
+		const bodyXML = this.contentDocument.getElementsByTagName('body')[0].toString();
+		return bodyXML.substring(bodyXML.indexOf('>') + 1, bodyXML.lastIndexOf('<')); // Removes root element (innerXML)
+	}
+
+	getXMLFile(){
+
+		const {
+			title,
+			byline,
+			publishedDate,
+			id,
+			webUrl
+		} = this.content;
+
+		const bodyXML = this.getXMLString();
+
+		const articleTemplate = Handlebars.compile(
+			fs.readFileSync(
+				path.resolve(
+					BASE_PATH,
+					'../views/article.xml.hbs'
+				),
+				'utf8'
+			),
+			{ noEscape: true }
+		);
+
+		const dict = {
+			title,
+			byline,
+			bodyXML,
+			year: (new Date(publishedDate)).getFullYear(),
+			id,
+			publishedDate,
+			webUrl,
+		};
+
+		return Buffer.from(articleTemplate(dict), 'utf8');
+	}
+
 };

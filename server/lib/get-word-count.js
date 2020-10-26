@@ -9,16 +9,17 @@ module.exports = exports = (content) => {
 		}
 
 		// videos and podcast don't have contentStats
-		return content.bodyText.trim().split(' ').length
+		if (content.bodyText){
+			return content.bodyText.replace((/  |\r\n|\n|\r/gm),'').trim().split(/\s+/).length
+		}
 
 	} else if (content.lang === 'es') {
 
-		if(content_es.word_count){
-			return content_es.word_count;
+		if(content.word_count){
+			return content.word_count;
 		}
-		
-		return content.bodyHTML.replace(/<(.|\n)*?>/g, '').trim().split(' ').length;
-	} 
-	
-	return 0;
+
+	}
+
+	return content.bodyHTML.replace(/<(.|\n)*?>/g, '').trim().split(/\s+/).length;
 };

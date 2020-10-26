@@ -25,7 +25,19 @@ describe(MODULE_ID, function () {
 	].forEach(content_id => {
 		const item = require(path.resolve(`${FIXTURES_DIRECTORY}/content/${content_id}.json`));
 
-		underTest(item, DEFAULT_FORMAT);
+		beforeEach(function(){
+
+			item.lang = 'en';
+			item.extension = DEFAULT_FORMAT;
+
+			const contract = {
+				allowed: {
+					rich_articles: false
+				}
+			}
+
+			underTest(item, contract);
+		});
 
 		describe(`${item.type}: ${item.id}`, function() {
 			it('content_id', function() {

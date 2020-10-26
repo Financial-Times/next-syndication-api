@@ -9,9 +9,8 @@ const { DOWNLOAD_ARCHIVE_EXTENSION } = require('config');
 const Archiver = require('archiver/lib/core');
 const ArchiveType = require(`archiver/lib/plugins/${DOWNLOAD_ARCHIVE_EXTENSION}`);
 
-const articleToXML = require('../../views/article-to-xml');
+const DocumentBuilder = require('../builders/document-builder');
 const convertArticle = require('../convert-article');
-const formatArticleXML = require('../format-article-xml');
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
 
@@ -95,12 +94,12 @@ module.exports = exports = class ArticleDownload extends Archiver {
 
 		try {
 			if (format === 'xml') {
-				const xmlDoc = formatArticleXML(`<body>${content.bodyHTML}</body>`);
-
-				content.bodyXML__CLEAN = xmlDoc.getElementsByTagName('body')[0].toString();
-				content.bodyXML__CLEAN = content.bodyXML__CLEAN.substring(content.bodyXML__CLEAN.indexOf('>') + 1, content.bodyXML__CLEAN.lastIndexOf('<'));
-
-				this.file = articleToXML(content);
+				this.file = new DocumentBuilder(content)
+								.removeElementsByTagName() // Remove elements defined in FORMAT_ARTICLE_STRIP_ELEMENTS
+								.removeElementsByTagName('img')
+								.removeProprietaryElement()
+								.removeWhiteSpace()
+								.getXMLFile();
 			}
 			else {
 				this.file = await convertArticle({

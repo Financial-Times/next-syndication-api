@@ -31,42 +31,50 @@ module.exports = exports = function article(content, contract) {
 	content.wordCount = getWordCount(content);
 	content.hasGraphics = Boolean(content.contentStats && content.contentStats.graphics);
 
-	// Currently embeds can have more than one item for each picture - for different screen sizes
-	// We are assuming that canBeSyndicated is the same for all sizes of a picture
-	// We are asking if ALL Graphics can be syndicated, which means as long as at least one item
-	// can't be, the answer to this is 'no'
-	const atLeastOneGraphicCantBeShared =
+	const graphicEmbeds =
 		content.embeds &&
 		content.embeds
 			.filter(
 				(embed) => embed && embed.type && embed.type.endsWith('Graphic')
 			)
-			.some((item) => item.canBeSyndicated !== 'yes');
 
-	content.canAllGraphicsBeSyndicated = !atLeastOneGraphicCantBeShared;
+	content.canAllGraphicsBeSyndicated =
+		graphicEmbeds &&
+		graphicEmbeds
+			.every((item) => item.canBeSyndicated === 'yes');
+
+
+	content.canAtLeastOneGraphicBeSyndicated =
+		content.canAllGraphicsBeSyndicated || // If all graphics can be syndicated then atleast one can be syndicated.
+		(
+			graphicEmbeds &&
+			graphicEmbeds
+				.some((item) => item.canBeSyndicated === 'yes')
+		);
 
 	if (content.bodyHTML && contract) {
 
 		const documentBuilder = new DocumentBuilder(content)
 			.removeElementsByTagName()
-			.removeProprietaryXML();
+			.removeProprietaryElement();
 
 		if (content.extension  === 'docx' && contract.allowed.rich_articles){
 			documentBuilder.removeNonSyndicatableImages();
 		} else {
-			documentBuilder.removeElementsByTagName(['img']);
+			documentBuilder.removeElementsByTagName('img');
 		}
 
 		documentBuilder
 			.removeWhiteSpace()
-			.decorateArticle();
+			.decorateArticle(contract.allowed.rich_articles);
 
+		content.document = documentBuilder.getDocument();
 		content.bodyHTML__CLEAN = documentBuilder.getHTMLString();
 
 		// we need to strip all formatting — leaving only paragraphs — and pass this to pandoc for plain text
 		// otherwise it will uppercase the whole article title and anything bold, as well as leave other weird
 		// formatting in the text file
-		content.bodyHTML__PLAIN = documentBuilder.getPlainText(); 
+		content.bodyHTML__PLAIN = documentBuilder.getPlainText();
 
 	}
 
