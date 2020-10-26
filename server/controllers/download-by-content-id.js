@@ -43,6 +43,7 @@ module.exports = exports = async (req, res, next) => {
 	}
 
 	if(isDownloadDisabled(content, contract)){
+		log.error('DOWNLOAD_DISABLED_ERROR',contract );
 		res.sendStatus(403);
 		return;
 	}
