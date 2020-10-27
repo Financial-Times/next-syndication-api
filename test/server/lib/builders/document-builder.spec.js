@@ -12,6 +12,7 @@ const {
 } = require('config');
 
 const enrich = require('../../../../server/lib/enrich');
+const arrayToMap = require('../../../../server/helpers/array-to-map');
 const DocumentBuilder = require('../../../../server/lib/builders/document-builder');
 
 const MODULE_ID =
@@ -100,12 +101,7 @@ describe(MODULE_ID, function () {
 		let embedsMap;
 
 		before(function(){
-			embedsMap = (content.embeds || []).reduce((map, embed) => {
-				const id = embed.id.split('/').pop();
-
-				map[id] = embed;
-				return map;
-			}, {});
+			embedsMap = arrayToMap(content.embeds);
 		})
 
 		it('contentDocument should not contain non syndicatable image', function(){

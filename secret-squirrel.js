@@ -150,7 +150,11 @@ module.exports = {
 			'fakenews-fa2b-46b5-886f-1418c6445182', // test/server/lib/get-content-by-id.spec.js:217
 			'fakenews-3f7e-11e7-9d56-25f963e998b2', // test/server/lib/get-content-by-id.spec.js:218
 			'fakenews-1d31-39fd-82f0-ba1822ef20d2', // test/server/lib/get-content-by-id.spec.js:219
-			'fakenews-ec58-4a8e-a669-5cbcc0d6a1b2' // test/server/lib/get-content-by-id.spec.js:220
+			'fakenews-ec58-4a8e-a669-5cbcc0d6a1b2', // test/server/lib/get-content-by-id.spec.js:220
+			'7324539d-cf00-4164-b0b2-e6ffb9a6b791', // test/server/helper/array-to-map.spec.js:17|19|22|26|30
+			'066a1263-bdc6-41ee-867d-7d0bad397b14', // test/server/helper/array-to-map.spec.js:38|43|47|51
+			'71f15834-c2f3-474b-846d-5779bcaf9753', // test/server/helper/array-to-map.spec.js:57|62|66|70
+			'1c256020-155f-11eb-b7ab-a19117874c53' // test/server/helper/array-to-map.spec.js:40|59
 		]
 	}
 };

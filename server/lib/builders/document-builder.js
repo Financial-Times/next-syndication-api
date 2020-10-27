@@ -11,6 +11,7 @@ const {
 	FORMAT_ARTICLE_STRIP_ELEMENTS,
 } = require('config');
 
+const arrayToMap = require('../../helpers/array-to-map');
 const handlebars = require('../handlebars');
 const Handlebars = handlebars();
 
@@ -85,12 +86,8 @@ module.exports = exports = class DocumentBuilder {
 	}
 
 	removeNonSyndicatableImages() {
-		const embedsMap = (this.content.embeds || []).reduce((map, embed) => {
-			const id = embed.id.split('/').pop();
 
-			map[id] = embed;
-			return map;
-		}, {});
+		const embedsMap = arrayToMap(this.content.embeds);
 
 		Array.from(this.contentDocument.getElementsByTagName('img')).forEach(
 			(el) => {
