@@ -33,7 +33,7 @@ module.exports = exports = SFContract => {
 			const asset = findMatchingAsset(addendum, contract);
 
 			if (!asset) {
-				log.error('Asset not found for Addendum', {
+				log.error('ASSET_NOT_FOUND_FOR_ADDENDUM', {
 					event: 'Asset not found for Addendum',
 					addendum
 				});

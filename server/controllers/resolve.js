@@ -16,7 +16,7 @@ module.exports = exports = async (req, res, next) => {
 	const { locals: { contract, flags } } = res;
 
 	if (!Array.isArray(body)) {
-		log.warn(`Expected \`req.body\` to be [object Array] and got \`${Object.prototype.toString.call(body)}\` instead`, {
+		log.warn('RESOLVE_INVALID_REQUEST_BODY', {
 			message: `Expected \`req.body\` to be [object Array] and got \`${Object.prototype.toString.call(body)}\` instead`,
 			referer: req.headers.referer
 		});
@@ -25,7 +25,7 @@ module.exports = exports = async (req, res, next) => {
 	}
 
 	if (!body.length) {
-		log.error('`req.body` does not contain any content IDs', {
+		log.error('RESOLVE_BODY_NO_CONTENT_ID', {
 			message: '`req.body` does not contain any content IDs',
 			referer: req.headers.referer
 		});

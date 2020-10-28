@@ -19,8 +19,6 @@ class Logger {
 	 * @param {string} source Where the log will be called from.
 	 */
 	constructor ({req, res, source}) {
-		// this.isTest = isTest(req);
-		// this.metricEnvironment = this.isTest ? 'test' : 'prod';
 
 		const userId = (res && res.locals && res.locals.userUuid) || '-';
 
