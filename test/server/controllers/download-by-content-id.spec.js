@@ -100,6 +100,9 @@ describe(MODULE_ID, function () {
 				syndication_contract: {
 					id: 'lmno'
 				},
+				flags: {
+					graphicSyndication: false
+				},
 				user: {
 					email: 'foo@bar.com',
 					first_name: 'foo',
@@ -185,6 +188,9 @@ describe(MODULE_ID, function () {
 					download_formats: {
 						abc: 'docx'
 					}
+				},
+				flags: {
+					graphicSyndication: false
 				},
 				licence: { id: 'xyz' },
 				syndication_contract: {
