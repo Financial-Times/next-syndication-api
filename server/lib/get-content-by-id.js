@@ -14,7 +14,7 @@ const pg = require('../../db/pg');
 const enrich = require('./enrich');
 
 
-module.exports = exports = async (contentId, format, lang, contract) => {
+module.exports = exports = async (contentId, format, lang, contract, graphicSyndicationFlag = false) => {
 
 	let content;
 
@@ -52,7 +52,7 @@ module.exports = exports = async (contentId, format, lang, contract) => {
 
 	if (content) {
 		try {
-			content = enrich(content, contract);
+			content = enrich(content, contract, graphicSyndicationFlag);
 
 			log.info({
 				event: 'GET_CONTENT_SUCCESS',

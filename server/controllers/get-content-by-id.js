@@ -7,12 +7,14 @@ const {
 const log = require('../lib/logger');
 const syndicate = require('../lib/syndicate-content');
 const getContentById = require('../lib/get-content-by-id');
+const flagIsOn = require('../helpers/flag-is-on');
+
 
 module.exports = exports = async (req, res, next) => {
 	try {
 
 
-		const {locals: {$DB: db, /*allowed,*/ contract, user}} = res;
+		const {locals: {$DB: db, /*allowed,*/ contract, user, flags}} = res;
 		const {download_format} = user;
 
 		const format = req.query.format
@@ -21,7 +23,7 @@ module.exports = exports = async (req, res, next) => {
 
 		const lang = String(req.query.lang || DEFAULT_DOWNLOAD_LANGUAGE).toLowerCase();
 
-		let content = await getContentById(req.params.content_id, format, lang, contract);
+		let content = await getContentById(req.params.content_id, format, lang, contract, flags.graphicSyndication && flagIsOn(flags.graphicSyndication));
 
 		const [{get_content_state_for_contract: state}] = await db.syndication.get_content_state_for_contract([contract.contract_id, req.params.content_id]);
 

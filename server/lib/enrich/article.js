@@ -13,7 +13,7 @@ const {
 const RE_BAD_CHARS = /[^A-Za-z0-9_]/gm;
 const RE_SPACE = /\s/gm;
 
-module.exports = exports = function article(content, contract) {
+module.exports = exports = function article(content, contract, graphicSyndicationFlag) {
 	if (!content.content_id) {
 		content.content_id = path.basename(content.id);
 	}
@@ -58,15 +58,15 @@ module.exports = exports = function article(content, contract) {
 			.removeElementsByTagName()
 			.removeProprietaryElement();
 
-		if (content.extension  === 'docx' && contract.allowed.rich_articles){
+		if (graphicSyndicationFlag && content.extension  === 'docx' && contract.allowed.rich_articles){
 			documentBuilder.removeNonSyndicatableImages();
 		} else {
-			documentBuilder.removeElementsByTagName(['img']);
+			documentBuilder.removeElementsByTagName(['img', 'figure']);
 		}
 
 		documentBuilder
 			.removeWhiteSpace()
-			.decorateArticle(contract.allowed.rich_articles);
+			.decorateArticle(contract.allowed.rich_articles, graphicSyndicationFlag);
 
 		content.document = documentBuilder.getDocument();
 		content.bodyHTML__CLEAN = documentBuilder.getHTMLString();

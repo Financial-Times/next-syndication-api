@@ -93,10 +93,6 @@ module.exports = exports = class DocumentBuilder {
 			(el) => {
 				const imageType = el.getAttribute('data-image-type');
 
-				if (imageType !== 'graphic') {
-					el.parentNode.removeChild(el);
-				}
-
 				let imageId =
 					el.getAttribute('data-id') ||
 					el.getAttribute('data-content-id');
@@ -106,16 +102,45 @@ module.exports = exports = class DocumentBuilder {
 
 				const imageDetails = embedsMap[imageId];
 
-				if (!imageDetails || imageDetails.canBeSyndicated !== 'yes') {
-					el.parentNode.removeChild(el);
+				if (imageType !== 'graphic' || !imageDetails || imageDetails.canBeSyndicated !== 'yes') {
+					/*
+						Checks if figure tags is in this format and removes them (images embeded in article)
+
+						<figure>
+							<picture>
+								<img />
+							<picture>
+						</figure>
+
+					*/
+					if(el.parentNode.tagName === 'picture' && el.parentNode.parentNode.tagName === 'figure'){
+						el.parentNode.parentNode.parentNode.removeChild(el.parentNode.parentNode);
+
+					/*
+
+						Checks if figure tags is in this format and removes them (mainImage)
+
+						<figure>
+							<img />
+						</figure>
+
+					*/
+					} else if(el.parentNode.tagName === 'figure'){
+						el.parentNode.parentNode.removeChild(el.parentNode);
+
+					// Removes image tag.
+					} else {
+						el.parentNode.removeChild(el);
+					}
 				}
+
 			}
 		);
 
 		return this;
 	}
 
-	decorateArticle(graphicsAllowed = false) {
+	decorateArticle(graphicsAllowed = false, graphicSyndicationFlag = false) {
 		const {
 			byline,
 			publishedDate,
@@ -162,9 +187,9 @@ module.exports = exports = class DocumentBuilder {
 			webUrl: url || webUrl,
 			wordCount,
 			syndicatableGraphicsAvaliableMsg:
-				!graphicsAllowed && canAtLeastOneGraphicBeSyndicated,
+				graphicSyndicationFlag && !graphicsAllowed && canAtLeastOneGraphicBeSyndicated,
 			notAllGraphicsCanBeSyndicatedMsg:
-				graphicsAllowed && hasGraphics && !canAllGraphicsBeSyndicated,
+				graphicSyndicationFlag && graphicsAllowed && hasGraphics && !canAllGraphicsBeSyndicated,
 		};
 
 		if (lang && lang === 'es') {

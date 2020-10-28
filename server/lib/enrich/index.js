@@ -2,7 +2,7 @@
 
 const log = require('../logger');
 
-module.exports = exports = function enrich(content, contract) {
+module.exports = exports = function enrich(content, contract, graphicSyndicationFlag) {
 	if (!content.type && content.content_type) {
 		content.type = content.content_type;
 	}
@@ -10,7 +10,7 @@ module.exports = exports = function enrich(content, contract) {
 	if (Object.prototype.toString.call(content) === '[object Object]' && !(content instanceof Error) && content.type in exports) {
 		const START = Date.now();
 
-		content = exports[content.type](content, contract);
+		content = exports[content.type](content, contract, graphicSyndicationFlag);
 
 		log.debug(`Enrich ${content.type} in ${Date.now() - START}ms`);
 

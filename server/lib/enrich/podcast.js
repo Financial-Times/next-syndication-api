@@ -6,8 +6,8 @@ const article = require('./article');
 
 const { DOWNLOAD_ARCHIVE_EXTENSION, DOWNLOAD_MEDIA_TYPES } = require('config');
 
-module.exports = exports = function podcast(content, contract) {
-	content = article(content, contract);
+module.exports = exports = function podcast(content, contract, graphicSyndicationFlag) {
+	content = article(content, contract, graphicSyndicationFlag);
 
 	content.hasTranscript = !!(content.bodyHTML__CLEAN && content.bodyHTML__CLEAN.length);
 	content.transcriptExtension = content.extension;

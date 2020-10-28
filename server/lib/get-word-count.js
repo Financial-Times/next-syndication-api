@@ -21,5 +21,5 @@ module.exports = exports = (content) => {
 
 	}
 
-	return content.bodyHTML.replace(/<(.|\n)*?>/g, '').trim().split(/\s+/).length;
+	return content.bodyHTML? content.bodyHTML.replace(/<(.|\n)*?>/g, '').trim().split(/\s+/).length: 0;
 };

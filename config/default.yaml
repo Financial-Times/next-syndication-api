@@ -124,8 +124,8 @@
 
   FORMAT_ARTICLE_STRIP_ELEMENTS:
     - aside
-    - figure
     - ft-related
+    - source
     - script
     - pull-quote
 

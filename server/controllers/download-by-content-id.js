@@ -7,6 +7,7 @@ const prepareDownloadResponse = require('../lib/prepare-download-response');
 
 const download = require('../lib/download');
 const isDownloadDisabled = require('../helpers/is-download-disabled');
+const flagIsOn = require('../helpers/flag-is-on');
 
 const {
 	DEFAULT_DOWNLOAD_FORMAT,
@@ -18,7 +19,8 @@ module.exports = exports = async (req, res, next) => {
 		contract,
 		licence,
 		user,
-		hasGraphicSyndication
+		hasGraphicSyndication,
+		flags
 	} = res.locals;
 
 	const { download_format } = user;
@@ -32,7 +34,7 @@ module.exports = exports = async (req, res, next) => {
 
 	const lang = String(req.query.lang || (referrer.includes('/republishing/spanish') ? 'es' : DEFAULT_DOWNLOAD_LANGUAGE)).toLowerCase();
 
-	const content = await getContentById(req.params.content_id, format, lang, contract);
+	const content = await getContentById(req.params.content_id, format, lang, contract, flags.graphicSyndication && flagIsOn(flags.graphicSyndication));
 
 	if (Object.prototype.toString.call(content) !== '[object Object]') {
 		res.sendStatus(404);
