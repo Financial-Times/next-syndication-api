@@ -2,6 +2,11 @@
 
 
 const esClient = require('@financial-times/n-es-client');
+
+const {
+	DOWNLOAD_ARTICLE_FORMATS,
+} = require('config');
+
 const log = require('./logger');
 
 const pg = require('../../db/pg');
@@ -9,7 +14,7 @@ const pg = require('../../db/pg');
 const enrich = require('./enrich');
 
 
-module.exports = exports = async (contentId, format, lang) => {
+module.exports = exports = async (contentId, format, lang, contract, graphicSyndicationFlag = false) => {
 
 	let content;
 
@@ -32,6 +37,8 @@ module.exports = exports = async (contentId, format, lang) => {
 		else {
 			content = await esClient.get(contentId);
 		}
+
+		content.extension = DOWNLOAD_ARTICLE_FORMATS[format] || 'docx';
 	}
 	catch (error) {
 		log.error({
@@ -45,7 +52,7 @@ module.exports = exports = async (contentId, format, lang) => {
 
 	if (content) {
 		try {
-			content = enrich(content, format);
+			content = enrich(content, contract, graphicSyndicationFlag);
 
 			log.info({
 				event: 'GET_CONTENT_SUCCESS',

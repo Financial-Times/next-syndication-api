@@ -75,7 +75,6 @@
       "server/controllers/get-contract-by-id.js",
       "server/controllers/redshift.js",
       "server/controllers/reload.js",
-      "server/lib/bundle-content.js",
       "server/lib/resolve/index.js",
       "server/lib/resolve/lang/es/index.js",
       "server/middleware/masquerade.js",

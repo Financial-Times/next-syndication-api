@@ -1,8 +1,8 @@
 {
-    "videoLimit": null,
+    "videoLimit": 40,
     "success": true,
     "startDate": "2020-04-28",
-    "podcastLimit": null,
+    "podcastLimit": 40,
     "ownerName": "Richard Pigden",
     "ownerEmail": "richard.pigden@ft.com",
     "licenceeName": "Syndication Project - Test Account",
@@ -20,10 +20,31 @@
             "maxPermittedOnlineUsagePeriod": "Year",
             "maxPermittedOnlineUsage": 100,
             "embargoPeriod": null,
-            "contentSet": "FT.com",
-            "assetType": "New",
+            "contentSet": "FT.com;Spanish content;Spanish Weekend",
             "assetName": "FT Article",
             "assetId": "02i4G00000SfB5UQAV"
+        },
+        {
+            "productName": "Video",
+            "maxPermittedPrintUsagePeriod": null,
+            "maxPermittedPrintUsage": 0,
+            "maxPermittedOnlineUsagePeriod": "Year",
+            "maxPermittedOnlineUsage": 20,
+            "embargoPeriod": null,
+            "contentSet": "FT.com;Spanish content;Spanish Weekend",
+            "assetName": "Video",
+            "assetId": "02i4G00000SfEHiQAN"
+        },
+        {
+            "productName": "Podcast",
+            "maxPermittedPrintUsagePeriod": null,
+            "maxPermittedPrintUsage": 0,
+            "maxPermittedOnlineUsagePeriod": "Year",
+            "maxPermittedOnlineUsage": 20,
+            "embargoPeriod": null,
+            "contentSet": "FT.com;Spanish content;Spanish Weekend",
+            "assetName": "Podcast",
+            "assetId": "02i4G00000SfEHjQAN"
         }
     ],
     "articleLimit": 100

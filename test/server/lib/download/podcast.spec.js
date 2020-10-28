@@ -51,7 +51,17 @@ describe(MODULE_ID, function () {
 
 	const CONTENT_ID = '98b46b5f-17d3-40c2-8eaa-082df70c5f01';
 
-	const content = enrich(require(path.resolve(`${FIXTURES_DIRECTORY}/content/${CONTENT_ID}.json`)), DEFAULT_FORMAT);
+	const contentJSON = require(path.resolve(`${FIXTURES_DIRECTORY}/content/${CONTENT_ID}.json`));
+	contentJSON.lang = 'en';
+	contentJSON.extension = DEFAULT_FORMAT;
+
+	const contract = {
+		allowed: {
+			rich_articles: false
+		}
+	};
+
+	const content = enrich(contentJSON, contract);
 
 	const className = `${content.type.charAt(0).toUpperCase()}${content.type.substring(1)}Download`;
 

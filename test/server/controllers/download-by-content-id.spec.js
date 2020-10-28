@@ -37,12 +37,23 @@ describe(MODULE_ID, function () {
 	describe('download article', function () {
 		const CONTENT_ID = '42ad255a-99f9-11e7-b83c-9588e51488a0';
 		let getContentStub = sinon.stub();
+		let contract = {
+			download_formats: {
+				abc: 'docx'
+			},
+			allowed: {
+				rich_articles: false
+			}
+		};
 		let req;
 		let res;
 
 		before(function () {
+
+			const contentJSON = require(path.resolve(`${FIXTURES_DIRECTORY}/content/${CONTENT_ID}.json`));
+
 			underTest = proxyquire('../../../server/controllers/download-by-content-id', {
-				'../lib/get-content-by-id': getContentStub.resolves(enrich(require(path.resolve(`${FIXTURES_DIRECTORY}/content/${CONTENT_ID}.json`))))
+				'../lib/get-content-by-id': getContentStub.resolves(enrich(contentJSON, contract))
 			});
 
 			req = httpMocks.createRequest({
@@ -84,14 +95,13 @@ describe(MODULE_ID, function () {
 			});
 
 			res.locals = {
-				contract: {
-					download_formats: {
-						abc: 'docx'
-					}
-				},
+				contract,
 				licence: { id: 'xyz' },
 				syndication_contract: {
 					id: 'lmno'
+				},
+				flags: {
+					graphicSyndication: false
 				},
 				user: {
 					email: 'foo@bar.com',
@@ -178,6 +188,9 @@ describe(MODULE_ID, function () {
 					download_formats: {
 						abc: 'docx'
 					}
+				},
+				flags: {
+					graphicSyndication: false
 				},
 				licence: { id: 'xyz' },
 				syndication_contract: {
