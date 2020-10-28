@@ -96,7 +96,7 @@ module.exports = exports = class ArticleDownload extends Archiver {
 			if (format === 'xml') {
 				this.file = new DocumentBuilder(content)
 								.removeElementsByTagName() // Remove elements defined in FORMAT_ARTICLE_STRIP_ELEMENTS
-								.removeElementsByTagName(['img'])
+								.removeElementsByTagName(['img', 'figure'])
 								.removeProprietaryElement()
 								.removeWhiteSpace()
 								.getXMLFile();
