@@ -23,7 +23,7 @@ const writeFileAsync = util.promisify(writeFile);
 const BLOATED_THRESHOLD = HEALTH_CHECK_HISTORY.bloated_threshold;
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
-const log = new Logger({source: 'health/sqs'});
+const log = new Logger({source: MODULE_ID});
 
 const HISTORY_DIRECTORY = path.resolve(HEALTH_CHECK_HISTORY.directory, 'sqs');
 
