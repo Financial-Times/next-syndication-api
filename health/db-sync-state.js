@@ -4,11 +4,12 @@ const path = require('path');
 
 const nHealthCheck = require('n-health/src/checks/check');
 const nHealthStatus = require('n-health/src/checks/status');
-const log = require('../server/lib/logger');
+const { Logger } = require('../server/lib/logger');
 
 const pg = require('../db/pg');
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 module.exports = exports = new (class DBSyncStateCheck extends nHealthCheck {
 	async tick() {

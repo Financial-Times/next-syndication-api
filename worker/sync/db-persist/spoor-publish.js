@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const log = require('../../../server/lib/logger');
+const { Logger } = require('../../../server/lib/logger');
 const fetch = require('n-eager-fetch');
 
 const {
@@ -14,6 +14,7 @@ const messageCode = require('../../../server/lib/resolve/messageCode');
 
 const PACKAGE = require(path.resolve('./package.json'));
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 module.exports = exports = async (event) => {
 	try {

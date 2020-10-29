@@ -4,7 +4,7 @@ const path = require('path');
 
 require('../queue/connect');
 
-const log = require('./lib/logger');
+const { Logger } = require('./lib/logger');
 
 const CONFIG = require('config');
 
@@ -13,6 +13,7 @@ const app = require('./app');
 const PORT = process.env.PORT || CONFIG.PORT || 3255;
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 process.on('uncaughtException', err => {
 	log.error(`${MODULE_ID} UncaughtException =>`, {
@@ -27,14 +28,14 @@ app.listen(PORT, () => {
 module.exports = app;
 
 process.on('unhandledRejection', (reason) => {
-	log.error({
+	log.error('unhandledRejection', {
 		event: 'UNHANDLED_PROMISE_REJECTION',
 		reason
 	});
 });
 
 process.on('unhandledPromiseRejectionWarning', (reason) => {
-	log.warn({
+	log.warn('unhandledPromiseRejectionWarning', {
 		event: 'UNHANDLED_PROMISE_REJECTION_WARNING',
 		error: reason
 	});

@@ -1,13 +1,13 @@
 'use strict';
 
-
 const esClient = require('@financial-times/n-es-client');
 
 const {
 	DOWNLOAD_ARTICLE_FORMATS,
 } = require('config');
 
-const log = require('./logger');
+const { Logger } = require('./logger');
+const log = new Logger({source: 'lib/get-content-by-id'});
 
 const pg = require('../../db/pg');
 
@@ -41,7 +41,7 @@ module.exports = exports = async (contentId, format, lang, contract, graphicSynd
 		content.extension = DOWNLOAD_ARTICLE_FORMATS[format] || 'docx';
 	}
 	catch (error) {
-		log.error({
+		log.error('GET_CONTENT_FAILED', {
 			event: 'GET_CONTENT_FAILED',
 			contentId,
 			lang,
@@ -54,13 +54,13 @@ module.exports = exports = async (contentId, format, lang, contract, graphicSynd
 		try {
 			content = enrich(content, contract, graphicSyndicationFlag);
 
-			log.info({
+			log.info('GET_CONTENT_SUCCESS', {
 				event: 'GET_CONTENT_SUCCESS',
 				contentId
 			})
 		}
 		catch (error) {
-			log.error({
+			log.error('ENRICHING_CONTENT_FAILED', {
 				event: 'ENRICHING_CONTENT_FAILED',
 				contentId,
 				error

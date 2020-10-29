@@ -1,7 +1,7 @@
 'use strict';
 
-const log = require('../lib/logger');
 const hasGraphicsAccess = require('../helpers/has-graphics-access');
+const { Logger } = require('../lib/logger');
 
 const fetch = require('n-eager-fetch');
 
@@ -16,6 +16,7 @@ const {
 } = require('config');
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'middleware/get-syndication-licence-for-user'});
 	const URI = `${BASE_URI_FT_API}/licences?userid=${res.locals.userUuid}`;
 	const headers = {
 		'X-Api-Key': ALS_API_KEY
@@ -67,7 +68,7 @@ module.exports = exports = async (req, res, next) => {
 	}
 	catch (error) {
 // todo: if user is in out system and no longer has an syndication contract, remove them from DB
-		log.error({
+		log.error('LICENCE_FOUND_ERROR', {
 			event: 'LICENCE_FOUND_ERROR',
 			error,
 			URI,

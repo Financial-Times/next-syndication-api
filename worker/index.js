@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const log = require('../server/lib/logger');
+const { Logger } = require('../server/lib/logger');
 
 const {
 	SYNDICATION_DOWNLOAD_SQS_URL: DEFAULT_QUEUE_URL
@@ -11,6 +11,7 @@ const {
 const QueueSubscriber = require('../queue/subscriber');
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 module.exports = exports = ({ autoAck, callback, event_type, queue_url = DEFAULT_QUEUE_URL }) => {
 	let subscriber = new QueueSubscriber({

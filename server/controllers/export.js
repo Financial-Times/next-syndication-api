@@ -1,12 +1,13 @@
 'use strict';
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const { EXPORT } = require('config');
 
 const RE_QUOTES = /"/gm;
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'controllers/export'});
 	const START = Date.now();
 
 	try {
@@ -42,7 +43,7 @@ module.exports = exports = async (req, res, next) => {
 		next();
 	}
 	catch(error) {
-		log.error({
+		log.error('EXPORT_ERROR', {
 			event: 'EXPORT_ERROR',
 			error
 		});

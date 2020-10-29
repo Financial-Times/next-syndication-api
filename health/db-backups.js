@@ -8,7 +8,7 @@ const moment = require('moment');
 
 const nHealthCheck = require('n-health/src/checks/check');
 const nHealthStatus = require('n-health/src/checks/status');
-const log = require('../server/lib/logger');
+const { Logger } = require('../server/lib/logger');
 
 const {
 	AWS_ACCESS_KEY,
@@ -25,6 +25,7 @@ const S3 = new AWS.S3({
 S3.listObjectsV2Async = util.promisify(S3.listObjectsV2);
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 module.exports = exports = new (class S3PostgreSQLBackupCheck extends nHealthCheck {
 	constructor(...args) {

@@ -1,6 +1,6 @@
 'use strict';
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const ACL = {
 	user: false,
@@ -9,6 +9,7 @@ const ACL = {
 };
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'controllers/reload'});
 	const { locals: { $DB: db, user } } = res;
 
 	try {
@@ -25,7 +26,7 @@ module.exports = exports = async (req, res, next) => {
 		next();
 	}
 	catch(error) {
-		log.error({
+		log.error('RELOAD_ERROR', {
 			event: 'RELOAD_ERROR',
 			error
 		});

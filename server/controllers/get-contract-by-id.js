@@ -1,6 +1,6 @@
 'use strict';
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const {
 	SALESFORCE: {
@@ -16,6 +16,7 @@ const getSalesforceContractByID = require('../lib/get-salesforce-contract-by-id'
 const reformatSalesforceContract = require('../lib/reformat-salesforce-contract');
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'controllers/get-contract-by-id'});
 	try {
 		if (SALESFORCE_ENVIRONMENT !== 'production') {
 			res.json({
@@ -63,7 +64,7 @@ module.exports = exports = async (req, res, next) => {
 		}
 	}
 	catch (error) {
-		log.error({
+		log.error('GET_CONTRACT_BY_ID_ERROR', {
 			route: req.route.path,
 			error
 		});

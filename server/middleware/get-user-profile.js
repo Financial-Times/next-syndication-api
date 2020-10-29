@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 const fetch = require('n-eager-fetch');
 
 const {
@@ -13,6 +13,7 @@ const {
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'middleware/get-user-profile'});
 	const { locals: {
 		ACCESS_TOKEN_LICENCE,
 		ACCESS_TOKEN_USER,
@@ -72,7 +73,7 @@ module.exports = exports = async (req, res, next) => {
 		next();
 	}
 	catch (error) {
-		log.error({
+		log.error('GET_USER_PROFILE_ERROR', {
 			event: 'GET_USER_PROFILE_ERROR',
 			error,
 			URI,

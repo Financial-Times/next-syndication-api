@@ -1,13 +1,14 @@
 'use strict';
 
 const qs = require('querystring');
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 const fetch = require('n-eager-fetch');
 const createAuthorizationQueryString = require('../helpers/create-authorization-query-string');
 
 const { BASE_URI_FT_API } = require('config');
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'middleware/get-licence-access-auth-token'});
 	const querystring = createAuthorizationQueryString('licence_data');
 
 	const URI = `${BASE_URI_FT_API}/authorize?${querystring}`;
@@ -32,7 +33,7 @@ module.exports = exports = async (req, res, next) => {
 		next();
 	}
 	catch (error) {
-		log.error({
+		log.error('LICENCE_ACCESS_TOKEN_ERROR', {
 			event: 'LICENCE_ACCESS_TOKEN_ERROR',
 			error,
 			URI

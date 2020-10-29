@@ -1,6 +1,6 @@
 'use strict';
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const moment = require('moment');
 
@@ -14,6 +14,7 @@ const {
 } = require('config');
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'controllers/unsave-by-content-id'});
 	try {
 		const referrer = String(req.get('referrer'));
 
@@ -80,7 +81,7 @@ module.exports = exports = async (req, res, next) => {
 		next();
 	}
 	catch (error) {
-		log.error({
+		log.error('CONTENT_NOT_FOUND_ERROR', {
 			event: 'CONTENT_NOT_FOUND_ERROR',
 			contentId: req.params.content_id,
 			error

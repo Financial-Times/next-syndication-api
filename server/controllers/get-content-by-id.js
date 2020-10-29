@@ -4,13 +4,14 @@ const {
 	DEFAULT_DOWNLOAD_FORMAT,
 	DEFAULT_DOWNLOAD_LANGUAGE
 } = require('config');
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 const syndicate = require('../lib/syndicate-content');
 const getContentById = require('../lib/get-content-by-id');
 const flagIsOn = require('../helpers/flag-is-on');
 
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'controllers/get-content-by-id'});
 	try {
 
 
@@ -44,7 +45,7 @@ module.exports = exports = async (req, res, next) => {
 			res.sendStatus(404);
 		}
 	} catch (error) {
-		log.error({
+		log.error('FAILED_TO_GET_CONTENT_BY_ID', {
 			event: 'FAILED_TO_GET_CONTENT_BY_ID',
 			error
 		})

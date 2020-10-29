@@ -6,7 +6,8 @@ const { PassThrough } = require('stream');
 const util = require('util');
 const url = require('url');
 
-const log = require('../logger');
+const { Logger } = require('../logger');
+const log = new Logger({source: 'lib/download/video'});
 const fetch = require('n-eager-fetch');
 
 const ArticleDownload = require('./article');
@@ -75,7 +76,7 @@ module.exports = exports = class VideoDownload extends ArticleDownload {
 
 			}
 			catch (error) {
-				log.error({
+				log.error('appendCaptions', {
 					error,
 					contentId: content.id
 				});

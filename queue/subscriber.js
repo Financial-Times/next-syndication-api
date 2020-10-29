@@ -3,7 +3,7 @@
 const { EventEmitter } = require('events');
 const path = require('path');
 
-const log = require('../server/lib/logger');
+const { Logger } = require('../server/lib/logger');
 
 const {
 	SYNDICATION_DOWNLOAD_SQS_URL: DEFAULT_QUEUE_URL
@@ -12,6 +12,7 @@ const {
 const sqs = require('./connect');
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 module.exports = exports = class QueueSubscriber extends EventEmitter {
 	constructor({

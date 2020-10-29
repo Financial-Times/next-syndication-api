@@ -1,6 +1,7 @@
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'middleware/check-if-new-syndication-user'});
 
 	const { locals: {
 		EXPEDITED_USER_AUTH,

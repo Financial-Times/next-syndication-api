@@ -9,7 +9,7 @@ const { mkdir, ls, rm } = require('shelljs');
 
 const nHealthCheck = require('n-health/src/checks/check');
 const nHealthStatus = require('n-health/src/checks/status');
-const log = require('../server/lib/logger');
+const { Logger } = require('../server/lib/logger');
 
 const {
 	HEALTH_CHECK_HISTORY,
@@ -23,6 +23,7 @@ const writeFileAsync = util.promisify(writeFile);
 const BLOATED_THRESHOLD = HEALTH_CHECK_HISTORY.bloated_threshold;
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 const HISTORY_DIRECTORY = path.resolve(HEALTH_CHECK_HISTORY.directory, 'sqs');
 

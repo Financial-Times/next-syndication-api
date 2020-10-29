@@ -1,13 +1,14 @@
 'use strict';
 
 const qs = require('querystring');
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 const fetch = require('n-eager-fetch');
 const createAuthorizationQueryString = require('../helpers/create-authorization-query-string');
 
 const { BASE_URI_FT_API } = require('config');
 
 module.exports = exports = async (req, res, next) => {
+	const log = new Logger({req, res, source: 'middleware/get-user-access-auth-token'});
 	const { locals: {
 		EXPEDITED_USER_AUTH,
 		MAINTENANCE_MODE
@@ -42,7 +43,7 @@ module.exports = exports = async (req, res, next) => {
 		next();
 	}
 	catch (error) {
-		log.error({
+		log.error('USER_ACCESS_TOKEN_ERROR', {
 			event: 'USER_ACCESS_TOKEN_ERROR',
 			error,
 			URI

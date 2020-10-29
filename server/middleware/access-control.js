@@ -1,6 +1,6 @@
 'use strict';
 
-const log = require('../lib/logger');
+const { Logger } = require('../lib/logger');
 
 const inSafeList = requestersOrigin => {
 	if (/^https:\/\/ft-next-syndication-(?:api|downloads).herokuapp\.com$/.test(requestersOrigin)) {
@@ -14,10 +14,11 @@ const inSafeList = requestersOrigin => {
 };
 
 module.exports = exports = (req, res, next) => {
+	const log = new Logger({req, res, source: 'middleware/access-control'});
 	const requestersOrigin = req.get('origin');
 	const isCorsRequest = !!(requestersOrigin && inSafeList(requestersOrigin));
 
-	log.info({
+	log.info('access-control', {
 		requestersOrigin,
 		isCorsRequest,
 		method: req.method

@@ -2,13 +2,14 @@
 
 const path = require('path');
 
-const log = require('../logger');
+const { Logger } = require('../logger');
 
 const {
 	DEFAULT_DOWNLOAD_LANGUAGE
 } = require('config');
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
+const log = new Logger({source: MODULE_ID});
 
 module.exports = exports = (item, contract) => {
 	try {
