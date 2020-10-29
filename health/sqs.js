@@ -23,7 +23,7 @@ const writeFileAsync = util.promisify(writeFile);
 const BLOATED_THRESHOLD = HEALTH_CHECK_HISTORY.bloated_threshold;
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
-const log = new Logger({source: MODULE_ID});
+const log = new Logger({source: 'health/sqs'});
 
 const HISTORY_DIRECTORY = path.resolve(HEALTH_CHECK_HISTORY.directory, 'sqs');
 
@@ -122,7 +122,7 @@ module.exports = exports = new (class SQSCheck extends nHealthCheck {
 
 		this.status = ok === true ? nHealthStatus.PASSED : nHealthStatus.FAILED;
 
-		log.info(`${MODULE_ID} in ${Date.now() - START}ms => ${this.checkOutput}`);
+		log.info('start', {event: `${MODULE_ID} in ${Date.now() - START}ms => ${this.checkOutput}`});
 
 		return this.checkOutput;
 	}
