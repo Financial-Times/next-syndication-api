@@ -122,7 +122,7 @@ module.exports = exports = new (class SQSCheck extends nHealthCheck {
 
 		this.status = ok === true ? nHealthStatus.PASSED : nHealthStatus.FAILED;
 
-		log.info(`${MODULE_ID} in ${Date.now() - START}ms => ${this.checkOutput}`);
+		log.info('sqsHealthCheckCompleted', {message: `${MODULE_ID} in ${Date.now() - START}ms => ${this.checkOutput}`});
 
 		return this.checkOutput;
 	}
