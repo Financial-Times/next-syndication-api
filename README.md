@@ -32,7 +32,11 @@ For an explanation, including a Slides deck which explains the infrastructure, p
 Syndication deviates from our standard deployment process please refer to the steps detailed [Deploying the download server](https://github.com/Financial-Times/next-syndication-dl#deploying-the-download-server) if you are making a release on this app.
 
 ---
+## Splunk Dashboard
 
+Dashboard: [https://financialtimes.splunkcloud.com/en-US/app/search/next_syndication_accounts_team](https://financialtimes.splunkcloud.com/en-US/app/search/next_syndication_accounts_team)
+
+---
 ## Salesforce dependency
 
 If you need to test a specific contract, since all contracts live in the production salesforce environment, in order to test certain contracts locally you will need to use the production `SALESFORCE_*` environment variables rather than the development ones (see Vault).
