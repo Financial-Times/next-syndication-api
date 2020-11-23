@@ -39,8 +39,8 @@ module.exports = exports = function article(content, contract, graphicSyndicatio
 			)
 
 	content.canAllGraphicsBeSyndicated =
-		// From MDN docs: every acts like the "for all" quantifier in mathematics. 
-		// In particular, for an empty array, it returns true. 
+		// From MDN docs: every acts like the "for all" quantifier in mathematics.
+		// In particular, for an empty array, it returns true.
 		// So if the filter above returned an empty array, [].every(whatever) would return `true`
 		graphicEmbeds.length > 0 &&
 		graphicEmbeds
