@@ -39,7 +39,10 @@ module.exports = exports = function article(content, contract, graphicSyndicatio
 			)
 
 	content.canAllGraphicsBeSyndicated =
-		graphicEmbeds &&
+		// From MDN docs: every acts like the "for all" quantifier in mathematics. 
+		// In particular, for an empty array, it returns true. 
+		// So if the filter above returned an empty array, [].every(whatever) would return `true`
+		graphicEmbeds.length > 0 &&
 		graphicEmbeds
 			.every((item) => item.canBeSyndicated === 'yes');
 
@@ -58,7 +61,7 @@ module.exports = exports = function article(content, contract, graphicSyndicatio
 			.removeElementsByTagName()
 			.removeProprietaryElement();
 
-		if (graphicSyndicationFlag && content.extension  === 'docx' && contract.allowed.rich_articles){
+		if (graphicSyndicationFlag && content.extension === 'docx' && contract.allowed.rich_articles) {
 			documentBuilder.removeNonSyndicatableImages();
 		} else {
 			documentBuilder.removeElementsByTagName(['img', 'figure']);
