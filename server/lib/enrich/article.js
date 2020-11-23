@@ -42,6 +42,7 @@ module.exports = exports = function article(content, contract, graphicSyndicatio
 		// From MDN docs: every acts like the "for all" quantifier in mathematics.
 		// In particular, for an empty array, it returns true.
 		// So if the filter above returned an empty array, [].every(whatever) would return `true`
+		graphicEmbeds &&
 		graphicEmbeds.length > 0 &&
 		graphicEmbeds
 			.every((item) => item.canBeSyndicated === 'yes');
