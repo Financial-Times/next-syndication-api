@@ -63,7 +63,7 @@ If *nobody* can see their icons, then this is a more serious problem and should 
 
 ## Second Line Troubleshooting
 
-- You can see the details of a specific contract by calling `GET https://www.ft.com/syndication/contracts/:contract_id` with a valid api key.
+- You can see the details of a specific contract by calling `GET https://www.ft.com/syndication/contracts/:contract_id` with a valid api key sent in `x-api-key` header. You can find the API key in Vault : `next` team, `next-syndication-api` project, `production` folder, the key is called `SYNDICATION_API_KEY`. The `:contract_id` should have the `FTS-xxxxxxxx` format.
 - `POST` call to `https://www.ft.com/syndication/contracts/:contract_id/resolve` with a valid api key and a json body which is an array of content ids will return the syndication permissions for each article
 
 ### People can't see their syndication icons
