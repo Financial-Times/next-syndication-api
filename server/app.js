@@ -3,7 +3,6 @@
 process.env.TZ = 'UTC';
 
 const express = require('@financial-times/n-internal-tool');
-const authS3O = require('@financial-times/s3o-middleware');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
@@ -97,18 +96,6 @@ app.post('/syndication/download-format', middleware, require('./controllers/upda
 
 // force reload all computed tables in the DB
 app.get('/syndication/reload', middleware, require('./controllers/reload'));
-
-// Page for handling erasure requests
-const erasureMiddleware = [
-	authS3O,
-	cookieParser(),
-	bodyParser.urlencoded({ extended: true }),
-	flagMaintenanceMode,
-	db
-];
-app.get('/syndication/erasure', erasureMiddleware, (req, res) => res.render('erasure'));
-app.post('/syndication/erasure', erasureMiddleware);
-app.post('/syndication/erasure-search', erasureMiddleware, require('./controllers/erasure-search'));
 
 if (process.env.NODE_ENV !== 'production') {
 	app.get('/syndication/backup', middleware, require('./controllers/backup'));
