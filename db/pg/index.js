@@ -41,11 +41,5 @@ module.exports = exports = async (options = DB) => {
 			db = await massive(conn);
 		}
 	}
-	else {
-		log.info(`${MODULE_ID} reloading DB instance => `, db.instance.$cn);
-
-		db = await db.reload();
-	}
-
 	return db;
 };
