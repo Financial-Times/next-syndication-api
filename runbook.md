@@ -55,9 +55,9 @@ This is a standard Heroku app, so try all the normal things here (bounce the dyn
 ### People can't see their syndication icons
 
 If syndication icons are not appearing for an idividual user (as opposed to all users) then it is likely this user is not on a licence or has been removed from a licence.
-This system has an upstream dependency on Salesforce, so it is worth investigating the user's licence status there too. If the licence was recently renewed or set up, it is worth checking if they have been given the correct assets. 
+This system has an upstream dependency on Salesforce, so it is worth investigating the user's licence status there too. If the licence was recently renewed or set up, it is worth checking if they have been given the correct assets.
 
-As an example an incident in February 2020 occurred because an `FTB Article` asset was added by the account manager instead of `FT Article`. 
+As an example an incident in February 2020 occurred because an `FTB Article` asset was added by the account manager instead of `FT Article`.
 
 If *nobody* can see their icons, then this is a more serious problem and should be pushed to Second Line.
 
@@ -99,6 +99,13 @@ If this is a problem for all Syndication users it could be:
 ### Pingdom
 
 - [next-syndication-api--eu-gtg](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=4897636)
+- [User Rights US Service reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834166)
+- [User Rights EU Service reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834226)
+- [Licence Service reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834275)
+- [User Profile Service US reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834360)
+- [User Profile Service EU reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834372)
+- [Auth Service US reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834376)
+- [Auth Service EU reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834387)
 
 ### Splunk searches
 
