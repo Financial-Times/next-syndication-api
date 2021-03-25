@@ -27,7 +27,7 @@ const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolv
 const log = new Logger({ source: MODULE_ID });
 
 module.exports = exports = async (event) => {
-	log.info('contributor-check', { event.syndication_state, event.content_id, event.contract_id });
+	log.info('contributor-check', event);
 
 	if (event.syndication_state !== 'withContributorPayment' || event.state !== 'started') {
 		return;
