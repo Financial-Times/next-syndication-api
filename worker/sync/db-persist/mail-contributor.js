@@ -24,9 +24,11 @@ const HTML = Handlebars.compile(fs.readFileSync(path.resolve('./server/views/par
 const TXT = Handlebars.compile(fs.readFileSync(path.resolve('./server/views/partial/email_contributor_body.txt.hbs'), 'utf8'), { noEscape: true });
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
-const log = new Logger({source: MODULE_ID});
+const log = new Logger({ source: MODULE_ID });
 
 module.exports = exports = async (event) => {
+	log.info('contributor-check', event);
+
 	if (event.syndication_state !== 'withContributorPayment' || event.state !== 'started') {
 		return;
 	}
@@ -40,11 +42,11 @@ module.exports = exports = async (event) => {
 	}
 
 	try {
-//		const verified = await transporter.verify();
-//
-//		if (!verified) {
-//			throw new Error(`${MODULE_ID} UnverifiedEmailTransportError =>`, verified);
-//		}
+		//		const verified = await transporter.verify();
+		//
+		//		if (!verified) {
+		//			throw new Error(`${MODULE_ID} UnverifiedEmailTransportError =>`, verified);
+		//		}
 
 		const [contract] = await db.syndication.get_contract_data([event.contract_id]);
 
@@ -67,8 +69,8 @@ module.exports = exports = async (event) => {
 		log.info(`${MODULE_ID} MAIL SENT =>`, res);
 
 		const data = contributor_payment && contributor_payment.contract_id !== null
-					? contributor_payment
-					: event;
+			? contributor_payment
+			: event;
 
 		data.email_sent = new Date();
 
