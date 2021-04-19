@@ -7,20 +7,18 @@ const fetch = require('node-fetch');
 const handlebars = require('../../../server/lib/handlebars');
 const { Logger } = require('../../../server/lib/logger');
 
-//const moment = require('moment');
 const moment = require('moment-timezone');
-// const nodemailer = require('nodemailer');
 
 const {
-	CONTRIBUTOR_EMAIL
+	CONTRIBUTOR_EMAIL,
+	EMAIL_PLATFORM_API_KEY,
+	EMAIL_PLATFORM_URL,
+	ACCOUNTS_EMAIL
 } = require('config');
-const { EMAIL_PLATFORM_API_KEY, EMAIL_PLATFORM_URL, ACCOUNTS_EMAIL } = process.env
 
 const pg = require('../../../db/pg');
 
 const Handlebars = handlebars();
-
-// const transporter = nodemailer.createTransport(JSON.parse(JSON.stringify(CONTRIBUTOR_EMAIL.transport)));
 
 const HTML = Handlebars.compile(fs.readFileSync(path.resolve('./server/views/partial/email_contributor_body.html.hbs'), 'utf8'), { noEscape: true });
 const TXT = Handlebars.compile(fs.readFileSync(path.resolve('./server/views/partial/email_contributor_body.txt.hbs'), 'utf8'), { noEscape: true });
@@ -44,12 +42,6 @@ module.exports = exports = async (event) => {
 	}
 
 	try {
-		//		const verified = await transporter.verify();
-		//
-		//		if (!verified) {
-		//			throw new Error(`${MODULE_ID} UnverifiedEmailTransportError =>`, verified);
-		//		}
-
 		const [contract] = await db.syndication.get_contract_data([event.contract_id]);
 		event.contract = contract;
 
@@ -57,7 +49,6 @@ module.exports = exports = async (event) => {
 
 		event.displayDate = moment.tz(event.time, CONTRIBUTOR_EMAIL.timezone).format(CONTRIBUTOR_EMAIL.date_display_format);
 
-		/// --- Email Platform Implementation --- 
 		const emailPlatformHeaders = {
 			'Content-Type': 'application/json',
 			'Authorization': EMAIL_PLATFORM_API_KEY
@@ -80,16 +71,6 @@ module.exports = exports = async (event) => {
 		if (res.total_rejected_recipients !== 0) {
 			log.info('Some emails were not delivered. Not delivered count', res.total_rejected_recipients)
 		}
-
-		// const transport = {
-		// from: CONTRIBUTOR_EMAIL.from,
-		// to: CONTRIBUTOR_EMAIL.to,
-		// subject: CONTRIBUTOR_EMAIL.subject,
-		// html: HTML(event),
-		// text: TXT(event)
-		// };
-
-		// const res = await transporter.sendMail(transport);
 
 		log.info(`${MODULE_ID} MAIL SENT =>`, res.json());
 
