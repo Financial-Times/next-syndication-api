@@ -1,50 +1,57 @@
+<!--
+    Written in the format prescribed by https://github.com/Financial-Times/runbook.md.
+    Any future edits should abide by this format.
+-->
 # Syndication Api
 
 API for FT syndication features
+
+## Code
+
+next-syndication-api
 
 ## Primary URL
 
 http://ft-next-syndication-api.herokuapp.com
 
-
 ## Service Tier
 
 Bronze
-
 
 ## Lifecycle Stage
 
 Production
 
-
-## Delivered By
-
-accounts-customer-products
-
-
-## Supported By
-
-customer-products-ops-cops
-
-## Known About By
-
-- alice.bartlett
-
 ## Contains Personal Data
 
-True
+Yes
 
 ## Contains Sensitive Data
 
-False
+No
+
+<!-- Placeholder - remove HTML comment markers to activate
+## Can Download Personal Data
+Choose Yes or No
+
+...or delete this placeholder if not applicable to this system
+-->
+
+<!-- Placeholder - remove HTML comment markers to activate
+## Can Contact Individuals
+Choose Yes or No
+
+...or delete this placeholder if not applicable to this system
+-->
 
 ## Host Platform
 
 Heroku
 
 ## Architecture
+
 Here is a diagram for the high level architecture of Syndication
-https://app.lucidchart.com/documents/edit/4d31c9e5-eafe-4639-bba0-24d7a488b08f/0_0
+<https://app.lucidchart.com/documents/edit/4d31c9e5-eafe-4639-bba0-24d7a488b08f/0_0>
 
 ## First Line Troubleshooting
 
@@ -59,12 +66,12 @@ This system has an upstream dependency on Salesforce, so it is worth investigati
 
 As an example an incident in February 2020 occurred because an `FTB Article` asset was added by the account manager instead of `FT Article`.
 
-If *nobody* can see their icons, then this is a more serious problem and should be pushed to Second Line.
+If _nobody_ can see their icons, then this is a more serious problem and should be pushed to Second Line.
 
 ## Second Line Troubleshooting
 
-- You can see the details of a specific contract by calling `GET https://www.ft.com/syndication/contracts/:contract_id` with a valid api key sent in `x-api-key` header. You can find the API key in Vault : `next` team, `next-syndication-api` project, `production` folder, the key is called `SYNDICATION_API_KEY`. The `:contract_id` should have the `FTS-xxxxxxxx` format.
-- `POST` call to `https://www.ft.com/syndication/contracts/:contract_id/resolve` with a valid api key and a json body which is an array of content ids will return the syndication permissions for each article
+*   You can see the details of a specific contract by calling `GET https://www.ft.com/syndication/contracts/:contract_id` with a valid api key sent in `x-api-key` header. You can find the API key in Vault : `next` team, `next-syndication-api` project, `production` folder, the key is called `SYNDICATION_API_KEY`. The `:contract_id` should have the `FTS-xxxxxxxx` format.
+*   `POST` call to `https://www.ft.com/syndication/contracts/:contract_id/resolve` with a valid api key and a json body which is an array of content ids will return the syndication permissions for each article
 
 ### People can't see their syndication icons
 
@@ -72,25 +79,22 @@ If this is a problem for an individual, it is likely to be an issue with their c
 
 If this is a problem for all Syndication users it could be:
 
-* A problem with the front end applications ([n-front-page](https://github.com/Financial-Times/next-front-page), [next-article](https://github.com/Financial-Times/next-article))
-* A problem with o-teaser (which is the Origami component that displays syndication icons)
-* A problem with x-teaser (https://github.com/Financial-Times/x-dash)
-* A problem with this application
-* A problem with Salesforce (all contracts live in Salesforce)
-* A problem with [next-syn-list](https://github.com/Financial-Times/next-syn-list)
-
+*   A problem with the front end applications ([n-front-page](https://github.com/Financial-Times/next-front-page), [next-article](https://github.com/Financial-Times/next-article))
+*   A problem with o-teaser (which is the Origami component that displays syndication icons)
+*   A problem with x-teaser (<https://github.com/Financial-Times/x-dash>)
+*   A problem with this application
+*   A problem with Salesforce (all contracts live in Salesforce)
+*   A problem with [next-syn-list](https://github.com/Financial-Times/next-syn-list)
 
 ### General tips for troubleshooting Customer Products Systems
 
-- [Out of hours runbook for FT.com (wiki)](https://customer-products.in.ft.com/wiki/Out-of-hours-troubleshooting-guide)
-- [General tips for debugging FT.com (wiki)](https://customer-products.in.ft.com/wiki/Debugging-Tips).
-- [General information about monitoring and troubleshooting FT.com systems (wiki)](https://customer-products.in.ft.com/wiki/Monitoring-and-Troubleshooting-systems)
-
+*   [Out of hours runbook for FT.com (wiki)](https://customer-products.in.ft.com/wiki/Out-of-hours-troubleshooting-guide)
+*   [General tips for debugging FT.com (wiki)](https://customer-products.in.ft.com/wiki/Debugging-Tips).
+*   [General information about monitoring and troubleshooting FT.com systems (wiki)](https://customer-products.in.ft.com/wiki/Monitoring-and-Troubleshooting-systems)
 
 ## Monitoring
 
 [General information about monitoring and troubleshooting FT.com systems (wiki)](https://customer-products.in.ft.com/wiki/Monitoring-and-Troubleshooting-systems)
-
 
 ### Grafana
 
@@ -98,22 +102,18 @@ If this is a problem for all Syndication users it could be:
 
 ### Pingdom
 
-- [next-syndication-api--eu-gtg](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=4897636)
-- [User Rights US Service reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834166)
-- [User Rights EU Service reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834226)
-- [Licence Service reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834275)
-- [User Profile Service US reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834360)
-- [User Profile Service EU reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834372)
-- [Auth Service US reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834376)
-- [Auth Service EU reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834387)
+* [next-syndication-api--eu-gtg](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=4897636)
+* [User Rights US Service reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834166)
+* [User Rights EU Service reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834226)
+* [Licence Service reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834275)
+* [User Profile Service US reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834360)
+* [User Profile Service EU reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834372)
+* [Auth Service US reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834376)
+* [Auth Service EU reachable](https://my.pingdom.com/reports/responsetime#daterange=7days&tab=uptime_tab&check=7834387)
 
 ### Splunk searches
 
-- [index=heroku source="*syndication-api*"](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3Dheroku%20source%3D%22*syndication-api*%22&display.page.search.mode=smart&dispatch.sample_ratio=1&earliest=-1h&latest=now&sid=1565272294.5309696)
-
-## Healthchecks
-
-- ft-next-syndication-api.herokuapp.com-https
+*   [index=heroku source="_syndication-api_"](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3Dheroku%20source%3D%22*syndication-api*%22&display.page.search.mode=smart&dispatch.sample_ratio=1&earliest=-1h&latest=now&sid=1565272294.5309696)
 
 ## Failover Architecture Type
 
@@ -121,11 +121,11 @@ None
 
 ## Failover Process Type
 
-Not applicable
+NotApplicable
 
 ## Failback Process Type
 
-Not applicable
+NotApplicable
 
 ## Failover Details
 
@@ -135,15 +135,14 @@ This is a single region application so no failover is possible
 
 Manual
 
-
 ## Data Recovery Details
 
 A database backup happens every hour at 7 minutes past the hour, and the result outputted to s3 (arn:aws:s3:::next-syndication-db-backups).
-https://github.com/Financial-Times/next-syndication-db-schema#restoring-on-production-from-backup
+<https://github.com/Financial-Times/next-syndication-db-schema#restoring-on-production-from-backup>
 
 ## Release Process Type
 
-Fully Automated
+FullyAutomated
 
 ## Rollback Process Type
 
@@ -166,9 +165,3 @@ PartiallyAutomated
 
 You can read about how to rotate an AWS key [over on the Customer Products Wiki](https://customer-products.in.ft.com/wiki/Rotating-AWS-Keys)
 See the Customer Products [key management and troubleshooting wiki page](https://customer-products.in.ft.com/wiki/Key-Management-and-Troubleshooting)
-
-## Dependencies
-
-- salesforce
-- up-ica
-- next-esinterface
