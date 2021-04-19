@@ -13,7 +13,6 @@ const NodeMailerJSONTransport = require('nodemailer/lib/json-transport');
 const MessageQueueEvent = require('../../../../queue/message-queue-event');
 
 const {
-	CONTRIBUTOR_EMAIL,
 	TEST: { FIXTURES_DIRECTORY }
 } = require('config');
 
@@ -92,10 +91,10 @@ describe.only(MODULE_ID, function () {
 
 		before(() => {
 			fetchMock.mock('https://ep.ft.com/send-api/send-by-address', {
-				"message": "OK",
-				"total_accepted_recipients": 1,
-				"total_rejected_recipients": 0,
-				"errors": []
+				'message': 'OK',
+				'total_accepted_recipients': 1,
+				'total_rejected_recipients': 0,
+				'errors': []
 			})
 		})
 
