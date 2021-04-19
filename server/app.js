@@ -32,9 +32,7 @@ const app = module.exports = express({
 		require('../health/db-sync-state'),
 		require('../health/sqs'),
 		require('../health/error-spikes'),
-	].concat(
-		require('../health/middlewares')
-	),
+	]
 });
 
 const middleware = [
