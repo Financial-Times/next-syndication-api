@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const fetch = require('node-fetch');
 
 const handlebars = require('../../../server/lib/handlebars');
 const { Logger } = require('../../../server/lib/logger');

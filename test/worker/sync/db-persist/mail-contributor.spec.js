@@ -6,6 +6,7 @@ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const proxyquire = require('proxyquire');
+const fetchMock = require('fetch-mock').sandbox();
 
 const NodeMailerJSONTransport = require('nodemailer/lib/json-transport');
 
@@ -21,7 +22,7 @@ chai.use(sinonChai);
 
 const MODULE_ID = path.relative(`${process.cwd()}/test`, module.id) || require(path.resolve('./package.json')).name;
 
-describe(MODULE_ID, function () {
+describe.only(MODULE_ID, function () {
 	const contractResponse = require(path.resolve(`${FIXTURES_DIRECTORY}/contractResponse.json`));
 	let underTest;
 	let db;
@@ -84,23 +85,31 @@ describe(MODULE_ID, function () {
 			message = { data: event };
 
 			underTest = proxyquire('../../../../worker/sync/db-persist/mail-contributor', {
-				'../../../db/pg': sinon.stub().resolves(db)
+				'../../../db/pg': sinon.stub().resolves(db),
+				'node-fetch': fetchMock
 			});
 		});
+
+		before(() => {
+			fetchMock.mock('https://ep.ft.com/send-api/send-by-address', {
+				"message": "OK",
+				"total_accepted_recipients": 1,
+				"total_rejected_recipients": 0,
+				"errors": []
+			})
+		})
 
 		it('sends an email', async function () {
 			const res = await underTest(event, message, {}, subscriber);
 
 			expect(res).to.be.an('object')
-				.and.to.have.property('message')
-				.and.to.be.a('string');
+				.and.to.have.property('body')
 
-			const email = JSON.parse(res.message);
+			const incomingBody = JSON.parse(res.body);
 
-			expect(email.subject).to.equal(CONTRIBUTOR_EMAIL.subject);
-
-			expect(email.from.address).to.equal(CONTRIBUTOR_EMAIL.from);
-			expect(email.to[0].address).to.equal(CONTRIBUTOR_EMAIL.to);
+			expect(incomingBody.message).to.equal('OK');
+			expect(incomingBody.total_accepted_recipients).to.equal(1);
+			expect(incomingBody.total_rejected_recipients).to.equal(0);
 		});
 
 		it('records the contributor content purchase to the DB', async function () {
