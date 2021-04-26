@@ -19,6 +19,8 @@
     uri: "DATABASE_URL"
     user_name: "DATABASE_USER_NAME"
   DEFAULT_DB_ENDPOINT: "DEFAULT_DB_ENDPOINT"
+  EMAIL_PLATFORM_API_KEY: "EMAIL_PLATFORM_API_KEY"
+  EMAIL_PLATFORM_URL: "EMAIL_PLATFORM_URL"
   ES:
     access_key: "ES_AWS_ACCESS_KEY"
     secret_access_key: "ES_AWS_SECRET_ACCESS_KEY"
@@ -48,7 +50,7 @@
   apikey: "apikey"
 
   CONTRIBUTOR_EMAIL:
-    from: "GOOGLE_EMAIL_FROM_ADDRESS"
+    from: "EMAIL_PLATFORM_FROM_EMAIL"
     to: "GOOGLE_EMAIL_TO_ADDRESS"
     transport:
       auth:
