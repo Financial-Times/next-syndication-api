@@ -74,8 +74,7 @@ module.exports = exports = async (event) => {
 			log.info('Some emails were not delivered. Not delivered count', res.total_rejected_recipients)
 		}
 
-		let responseData;
-		res.json().then(data => responseData = data)
+		const responseData = await res.json();
 
 		log.info(`${MODULE_ID} MAIL SENT =>`, responseData);
 
