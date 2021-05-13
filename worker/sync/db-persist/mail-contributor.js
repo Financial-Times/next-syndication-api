@@ -62,6 +62,8 @@ module.exports = exports = async (event) => {
 			plainTextContent: TXT(event)
 		}
 
+		log.info('preparing to send email', {emailPlatformHeaders, emailPlatformBody})
+
 		const res = await fetch(EMAIL_PLATFORM_URL, {
 			method: 'POST',
 			headers: emailPlatformHeaders,
@@ -72,7 +74,10 @@ module.exports = exports = async (event) => {
 			log.info('Some emails were not delivered. Not delivered count', res.total_rejected_recipients)
 		}
 
-		log.info(`${MODULE_ID} MAIL SENT =>`, res.json());
+		let responseData;
+		res.json().then(data => responseData = data)
+
+		log.info(`${MODULE_ID} MAIL SENT =>`, responseData);
 
 		const data = contributor_payment && contributor_payment.contract_id !== null
 			? contributor_payment
