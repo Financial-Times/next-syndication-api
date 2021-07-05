@@ -12,12 +12,12 @@ const { DB } = require('config');
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
 const log = new Logger({source: MODULE_ID});
 
-const sslSetUp = { 
+const sslSetUp = {
 	ssl: true,
 	extra: {
-  		ssl: {
+		ssl: {
 			rejectUnauthorized: false,
-  		},
+		},
 	}
 }
 
@@ -41,7 +41,7 @@ module.exports = exports = async (options = DB) => {
 				password: options.password,
 				port: options.port,
 				user: options.user_name,
-				...sslSetUp, 
+				...sslSetUp,
 			};
 
 			db = await massive(conn);
