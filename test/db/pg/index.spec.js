@@ -57,7 +57,13 @@ describe(MODULE_ID, function () {
 			port: 'DB_PORT',
 			database: 'DB_NAME',
 			user: 'DB_USER',
-			password: 'DB_PASSWORD'
+			password: 'DB_PASSWORD',
+			ssl: true,
+			extra: {
+				ssl: {
+					rejectUnauthorized: false,
+				},
+			}
 		});
 
 		expect(DB).to.equal(db);
