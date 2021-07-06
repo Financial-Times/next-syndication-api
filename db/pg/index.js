@@ -28,8 +28,7 @@ module.exports = exports = async (options = DB) => {
 		log.info(`${MODULE_ID} creating new DB instance with options => `, options);
 
 		if (options.uri) {
-			const conn = Object.assign(...sslSetUp, pgConn.parse(options.uri));
-
+			const conn = Object.assign({ ...sslSetUp}, pgConn.parse(options.uri));
 			log.info(`${MODULE_ID} creating new DB instance with URI String => `, conn);
 
 			db = await massive(conn);

@@ -68,4 +68,31 @@ describe(MODULE_ID, function () {
 
 		expect(DB).to.equal(db);
 	});
+
+	it('creates a new database instance if options do not match', async function() {
+		beforeEach(() => {
+			db = null;
+		})
+
+		const DB = await underTest({
+			uri: 'DATABASE_URL'
+		});
+
+		expect(massiveStub).to.have.been.calledWith({
+			database: 'DATABASE_URL',
+			user: '',
+			password: '',
+			port: null,
+			host: null,
+			ssl: true,
+			extra: {
+				ssl: {
+					rejectUnauthorized: false,
+				},
+			}
+		});
+
+		expect(DB).to.equal(db);
+	})
+
 });
