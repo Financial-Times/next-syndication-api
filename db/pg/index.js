@@ -12,15 +12,6 @@ const { DB } = require('config');
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
 const log = new Logger({source: MODULE_ID});
 
-const sslSetUp = {
-	ssl: true,
-	extra: {
-		ssl: {
-			rejectUnauthorized: false,
-		},
-	}
-}
-
 let db;
 
 module.exports = exports = async (options = DB) => {
@@ -28,7 +19,8 @@ module.exports = exports = async (options = DB) => {
 		log.info(`${MODULE_ID} creating new DB instance with options => `, options);
 
 		if (options.uri) {
-			const conn = Object.assign({ ...sslSetUp}, pgConn.parse(options.uri));
+			const conn = Object.assign({ ssl: { rejectUnauthorized : false } }, pgConn.parse(options.uri));
+
 			log.info(`${MODULE_ID} creating new DB instance with URI String => `, conn);
 
 			db = await massive(conn);
@@ -39,9 +31,12 @@ module.exports = exports = async (options = DB) => {
 				host: options.host,
 				password: options.password,
 				port: options.port,
-				user: options.user_name,
-				...sslSetUp,
+				user: options.user_name
 			};
+
+			if (options.ssl === true) {
+				conn.ssl = { rejectUnauthorized : false };
+			}
 
 			db = await massive(conn);
 		}
