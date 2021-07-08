@@ -19,7 +19,7 @@ module.exports = exports = async (options = DB) => {
 		log.info(`${MODULE_ID} creating new DB instance with options => `, options);
 
 		if (options.uri) {
-			const conn = Object.assign({ ssl: { rejectUnauthorized : false } }, pgConn.parse(options.uri));
+			const conn = Object.assign({ ssl: { rejectUnauthorized : false, sslmode: require } }, pgConn.parse(options.uri));
 
 			log.info(`${MODULE_ID} creating new DB instance with URI String => `, conn);
 
@@ -35,7 +35,7 @@ module.exports = exports = async (options = DB) => {
 			};
 
 			if (options.ssl === true) {
-				conn.ssl = { rejectUnauthorized : false };
+				conn.ssl = { rejectUnauthorized : false, sslmode: require };
 			}
 
 			db = await massive(conn);
