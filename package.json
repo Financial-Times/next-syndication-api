@@ -31,7 +31,7 @@
     "nodemailer": "^6.0.0",
     "s3-upload-stream": "^1.0.7",
     "shelljs": "^0.8.0",
-    "xmldom": "^0.3.0"
+    "xmldom": "^0.5.0"
   },
   "devDependencies": {
     "@financial-times/n-gage": "^6.0.0",
