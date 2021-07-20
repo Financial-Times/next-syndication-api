@@ -9,6 +9,7 @@ module.exports = nHealth.runCheck({
 	threshold,
 	samplePeriod: `${samplePeriod}min`,
 	name: `${statusCode} rate for articles is acceptable`,
+	id: 'next-syndication-api-error-spikes',
 	severity: 1,
 	businessImpact: `Error rate for the syndication-api has exceeded a threshold of ${threshold * 100}% over the last ${samplePeriod} minutes.`,
 	technicalSummary: `The proportion of ${statusCode} (Unauthorized) responses for syndication API requests across all heroku dynos vs all responses is higher than a threshold of ${threshold} over the last ${samplePeriod} minutes`,

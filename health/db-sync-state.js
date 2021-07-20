@@ -41,6 +41,7 @@ module.exports = exports = new (class DBSyncStateCheck extends nHealthCheck {
 })({
 	businessImpact: 'The Syndication database\'s computed tables are not in-sync with the base table data and, as such, may be showing incorrect data to users.',
 	name: 'Syndication database data integrity',
+	id: 'next-syndication-api-db-data-integrity',
 /*eslint-disable*/
 	panicGuide: `To force a reload of all the computed tables, run:
 
