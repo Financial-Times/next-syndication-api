@@ -129,6 +129,7 @@ module.exports = exports = new (class SQSCheck extends nHealthCheck {
 })({
 	businessImpact: 'Saved and downloaded items are not currently being processed by the Syndication API and, as such, are backing up in the Syndication SQS Queue.',
 	name: 'Syndication SQS Queue message processing',
+	id: 'next-syndication-api-sqs',
 /*eslint-disable*/
 	panicGuide: `1. check SQS Queue (next-syndication-downloads-prod) on Infra Prod to see if there are messages outstanding on the queue (Monitoring --> Approximate Number Of Messages Visible chart, or, Send and Recieve Messages --> Poll for Messages --> inspect the message id for message details).
 2. If there is a message in the queue, check/tail the server/worker logs on Heroku:
