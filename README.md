@@ -176,3 +176,6 @@ The response the API provides for the same article can vary depending on the spe
 - Account of company that has a deal in place to republish the article: `messageCode: 'MSG_2100'` (i.e. article can be downloaded for republishing).
 
 N.B. To be a syndication subscriber requires having `S1` in your [products list](https://session-next.ft.com/products), which should be the default case for all FT developer accounts, but if not then contact syndhelp@ft.com.
+
+## Dealing with `no pg_hba.conf entry` - `Syndication database data integrity` errors
+Turns out that our Database Integrity healthcheck (db-sync-state) runs against review branches, as well as production. The `DATABASE_URL` secret is not stored in vault; it automatically added by the Postgres add-on. However, this secret is only added to the `prod` app's secrets. If you encounter this error, this is most likely the database secrets were updated. To fix this, you need to get the `DATABASE_URL` secret from the `prod` app, and add it to the review apps' secrets. To do this, go to Heroku's next-syndication-api main pipeline page, click "Configure" in the `Review Apps` column, then select `More settings`. In the `Settings` page, scroll down to `Reveal Config Vars`, reveal the vars and add the `DATABASE_URL` secret
