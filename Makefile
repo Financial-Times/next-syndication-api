@@ -38,6 +38,9 @@ run-local:
 	./node_modules/.bin/pm2 start procfile.json
 	./node_modules/.bin/pm2 logs
 
+stop-local:
+	./node_modules/.bin/pm2 stop procfile.json
+
 run-monit:
 	./node_modules/.bin/pm2 monit
 

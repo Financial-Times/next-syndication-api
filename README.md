@@ -85,6 +85,8 @@ This will start the `next-syndication-api` the associated worker processes and t
 
 You can also run `make run-monit` to bring up the [PM2 process monitor](https://www.npmjs.com/package/pm2#cpu--memory-monitoring).
 
+Once you have stopped the app running, you will need to run `make stop-local` to stop all the clusters running too.
+
 ---
 
 ## Configuration
