@@ -74,12 +74,14 @@ Once you have set up the projects you want to work on, and want to run all proje
 
   ```
 - This API doesn't run the router, so you will need to start that manually with `cd` into `next-router` and `make run-https` unless you are also running another app like next-syn-list
+    - NB if you are also running an app like `next-article`, you don't need to run the router, in fact this will stop your local article app from working.
 - `cd` into `next-syndication-api` and `make run-local`
 - go to `http://local.ft.com:3255/__gtg`to confirm the syndication API app is responding
 
-
 - `cd` into `next-syn-list` and run `make run`
 - go to [https://local.ft.com:5050/syndication/user-status](https://local.ft.com:5050/syndication/user-status) to confirm everything is working
+- if you want to test that the syndication icon buttons work too, install and run [next-article](https://github.com/Financial-Times/next-article) locally. Stop next-router running if you are running this app locally.
+
 
 This will start the `next-syndication-api` the associated worker processes and the republishing contract and history pages using [PM2](https://www.npmjs.com/package/pm2) and tail the logs for all HTTP servers/processes.
 
