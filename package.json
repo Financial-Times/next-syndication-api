@@ -82,6 +82,7 @@
       "server/app-dl.js",
       "server/env.js",
       "server/init.js",
+      "server/controllers/nonproduction/db-persist.js",
       "worker/index.js",
       "worker/crons/index.js",
       "worker/crons/backup/callback.js",
