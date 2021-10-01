@@ -10,7 +10,6 @@ module.exports = exports = (req, res, next) => {
 	const log = new Logger({req, res, source: 'middleware/decode-session'});
 	const sessionToken = req.cookies.FTSession;
 	const sessionSecureToken = req.cookies.FTSession_s;
-
 	if (!sessionToken || !sessionSecureToken) {
 		res.redirect(`https://accounts.ft.com/login?location=${req.originalUrl}`);
 		return;

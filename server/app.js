@@ -99,8 +99,12 @@ app.post('/syndication/download-format', middleware, require('./controllers/upda
 app.get('/syndication/reload', middleware, require('./controllers/reload'));
 
 if (process.env.NODE_ENV !== 'production') {
+	// trigger the cron worker code
 	app.get('/syndication/backup', middleware, require('./controllers/backup'));
 	app.get('/syndication/redshift', middleware, require('./controllers/redshift'));
+	// trigger the db-persist code
+	// note that this will add data to the connected database, so use only on test databases
+	app.post('/syndication/db-persist', middleware, require('./controllers/nonproduction/db-persist'));
 }
 
 const contractsMiddleware = [
