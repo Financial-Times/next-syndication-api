@@ -151,6 +151,24 @@ Then you can't connect to the mail server.
 
 Try turning wifi off on your phone to tether your computer to your phone's 4G connection and you should find it now works.
 
+## API Endpoint Postman collection
+
+There is a [zipped JSON export of a Postman collection](docs/syndication-api-postman.json.zip) that gives you an easy way to run all the endpoints that this API provides to run syndication, as well as some endpoints to troubleshoot and trigger workers jobs.
+
+To run this, you will need to:
+
+- import the JSON into your Postman app to create the collection
+- set up an Environment in Postman with the following variables
+  - `syndication-api-key`, set to the value of the `SYNDICATION_API_KEY` (see Vault) to run the troubleshooting and workers endpoints
+  - `als-api-key`, set to the value of `ALS_API_KEY` (see Vault) to run the membership API licence details endpoint
+- set up Cookies in Postman for domain `local.ft.com` and get the values for `FTSession` and `FTSession_s` from your ft.com cookie in your browser to pass authentication
+
+### Important notes
+
+- the endpoint set up to trigger the `db persist` worker will result in dummy data being written to the database, only use when connected to local databases.
+- `backup worker` and `redshift worker` will save output files in a `/development` subfolder of the S3 bucket
+- `reload` usually times out, but all this does is run `SELECT syndication.reload_all()` on the database
+- `get contract by id` will actually result in the contract record being updated in the database with latest data from Salesforce (unless it is the FT Staff contract which uses a stub), despite being a `GET` request
 
 ## Maintenance mode
 
@@ -158,8 +176,7 @@ To turn maintenance mode on, simply turn the `syndicationMaintenance` flag on fo
 
 Conversely, turn it off again to turn maintenance mode off.
 
-## Shell script
-There was a [shell script](https://github.com/constantology/n-dev-mode/blob/master/project/syndication) but this is out of date and not maintained
+If you want to run the API endpoints in Postman while this flag is on, set a cookie for domain `local.ft.com` in Postman for `next-flags` to override it with `next-flags=syndicationMaintenance%3Aoff`
 
 ---
 

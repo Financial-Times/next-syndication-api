@@ -10,7 +10,8 @@ module.exports = {
 			'test/fixtures/article.plain',
 			'test/fixtures/pandoc_stub',
 			'test/fixtures/podcast.m4a',
-			'test/fixtures/video-small.mp4'
+			'test/fixtures/video-small.mp4',
+			'doc/syndication-api-postman.json.zip'
 		],
 		allowOverrides: []
 	},
