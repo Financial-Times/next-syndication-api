@@ -51,7 +51,9 @@ function decorateContract(contract, hasGraphics = false) {
 		acc[asset.content_type] = asset;
 
 		asset.assets.forEach(item => {
-			item.content = item.content_set.join('; ');
+			if (Array.isArray(item.content_set)) {
+				item.content = item.content_set.join('; ');
+			}
 
 			if (Array.isArray(item.addendums) && item.addendums.length) {
 				asset.hasAddendums = true;
