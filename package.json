@@ -94,7 +94,7 @@
       "worker/sync/db-persist/index.js",
       "coverage",
       "test",
-      "docs/syndication-api-postman.json"
+      "doc/syndication-api-postman.json"
     ]
   },
   "engines": {
