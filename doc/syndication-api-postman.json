@@ -160,7 +160,7 @@
 					"response": []
 				},
 				{
-					"name": "reload TIMES OUT, just runs SELECT syndication.reload_all() anyway",
+					"name": "reload TIMES OUT, refreshes the full DB contents using syndication.reload_all()",
 					"protocolProfileBehavior": {
 						"disableCookies": false
 					},
