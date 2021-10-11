@@ -49,6 +49,7 @@ In order to see the syndication icons, you need to belong to a licence with a sy
 
 You WILL need:
 * [next-syndication-db-schema](https://github.com/Financial-Times/next-syndication-db-schema) - database schema (see Database dependency below)
+* [pandoc](https://pandoc.org/installing.html) installed on your machine for `/download` to work locally
 
 You MIGHT need:
 * [next-syn-list](https://github.com/Financial-Times/next-syn-list) - front-end app for syndication customers. If you want to work on the pages that users see when they go to `/republishing` you will need this.
