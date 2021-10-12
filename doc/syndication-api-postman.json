@@ -1,0 +1,595 @@
+{
+	"info": {
+		"_postman_id": "591a46cb-4551-4b05-9d49-f30250d9f0b0",
+		"name": "Syndication API endpoints (local.ft.com)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "troubleshooting and workers",
+			"item": [
+				{
+					"name": "debug an article (fetch from next-es-interface to check values)",
+					"protocolProfileBehavior": {
+						"disableCookies": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://local.ft.com:5050/syndication/content/ec1fe89c-e687-417a-bf8e-012f4825e6cc",
+							"protocol": "https",
+							"host": [
+								"local",
+								"ft",
+								"com"
+							],
+							"port": "5050",
+							"path": [
+								"syndication",
+								"content",
+								"ec1fe89c-e687-417a-bf8e-012f4825e6cc"
+							]
+						},
+						"description": "fetch an article from elastic search to check its values, check if it can be syndicated etc."
+					},
+					"response": []
+				},
+				{
+					"name": "get contract by id",
+					"protocolProfileBehavior": {
+						"disableCookies": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{syndication-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://local.ft.com:5050/syndication/contracts/CA-00001558",
+							"protocol": "https",
+							"host": [
+								"local",
+								"ft",
+								"com"
+							],
+							"port": "5050",
+							"path": [
+								"syndication",
+								"contracts",
+								"CA-00001558"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resolve contract by id",
+					"protocolProfileBehavior": {
+						"disableCookies": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{syndication-api-key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\"17620a3b-b82d-4b85-aa85-4cf2793b7a02\"]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://local.ft.com:5050/syndication/contracts/CA-00001558/resolve",
+							"protocol": "https",
+							"host": [
+								"local",
+								"ft",
+								"com"
+							],
+							"port": "5050",
+							"path": [
+								"syndication",
+								"contracts",
+								"CA-00001558",
+								"resolve"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "backup worker (will output to development folder on s3)",
+					"protocolProfileBehavior": {
+						"disableCookies": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://local.ft.com:5050/syndication/backup",
+							"protocol": "https",
+							"host": [
+								"local",
+								"ft",
+								"com"
+							],
+							"port": "5050",
+							"path": [
+								"syndication",
+								"backup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "redshift worker test (will output to development folder on s3)",
+					"protocolProfileBehavior": {
+						"disableCookies": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://local.ft.com:5050/syndication/redshift",
+							"protocol": "https",
+							"host": [
+								"local",
+								"ft",
+								"com"
+							],
+							"port": "5050",
+							"path": [
+								"syndication",
+								"redshift"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reload TIMES OUT, refreshes the full DB contents using syndication.reload_all()",
+					"protocolProfileBehavior": {
+						"disableCookies": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://local.ft.com:5050/syndication/reload",
+							"protocol": "https",
+							"host": [
+								"local",
+								"ft",
+								"com"
+							],
+							"port": "5050",
+							"path": [
+								"syndication",
+								"reload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "db persist - NB this adds dummy data, only use on dev/test, see server/controllers/nonproduction/db-persist.js",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n            \"state\": \"started\",\n            \"user\": {\n                \"first_name\": \"D\",\n                \"surname\": \"B\",\n                \"email\": \"d@test.com\",\n                \"id\": \"{{user-id}}\",\n                \"role\": \"sooperdooperuser\"\n            },\n            \"_id\": \"431431jkfnqkw3r1fqe1\",\n            \"content_id\": \"3fa5612f-042a-4ce1-9a5a-75292fd3ddef\",\n            \"content_url\": \"https://www.ft.com/content/3fa5612f-042a-4ce1-9a5a-75292fd3ddef\",\n            \"user_id\": \"{{user-id}}\"\n        }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://local.ft.com:5050/syndication/db-persist",
+							"protocol": "https",
+							"host": [
+								"local",
+								"ft",
+								"com"
+							],
+							"port": "5050",
+							"path": [
+								"syndication",
+								"db-persist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "membership API's licence data (id is for syndication test account)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{als-api-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.ft.com/licences?linkid=FTS-14076678&linktype=contract",
+							"protocol": "https",
+							"host": [
+								"api",
+								"ft",
+								"com"
+							],
+							"path": [
+								"licences"
+							],
+							"query": [
+								{
+									"key": "linkid",
+									"value": "FTS-14076678"
+								},
+								{
+									"key": "linktype",
+									"value": "contract"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "endpoints that don't get triggered by interacting with the republishing site, to be used for debugging and triggering worker processes"
+		},
+		{
+			"name": "user status",
+			"protocolProfileBehavior": {
+				"disableCookies": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://local.ft.com:5050/syndication/user-status",
+					"protocol": "https",
+					"host": [
+						"local",
+						"ft",
+						"com"
+					],
+					"port": "5050",
+					"path": [
+						"syndication",
+						"user-status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "download format",
+			"protocolProfileBehavior": {
+				"disableCookies": false
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "format",
+							"value": "plain",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://local.ft.com:5050/syndication/download-format",
+					"protocol": "https",
+					"host": [
+						"local",
+						"ft",
+						"com"
+					],
+					"port": "5050",
+					"path": [
+						"syndication",
+						"download-format"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "contract status",
+			"protocolProfileBehavior": {
+				"disableCookies": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://local.ft.com:5050/syndication/contract-status",
+					"protocol": "https",
+					"host": [
+						"local",
+						"ft",
+						"com"
+					],
+					"port": "5050",
+					"path": [
+						"syndication",
+						"contract-status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save an article",
+			"protocolProfileBehavior": {
+				"disableCookies": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://local.ft.com:5050/syndication/save/ec1fe89c-e687-417a-bf8e-012f4825e6cc",
+					"protocol": "https",
+					"host": [
+						"local",
+						"ft",
+						"com"
+					],
+					"port": "5050",
+					"path": [
+						"syndication",
+						"save",
+						"ec1fe89c-e687-417a-bf8e-012f4825e6cc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "download an article",
+			"protocolProfileBehavior": {
+				"disableCookies": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://local.ft.com:5050/syndication/download/ec1fe89c-e687-417a-bf8e-012f4825e6cc",
+					"protocol": "https",
+					"host": [
+						"local",
+						"ft",
+						"com"
+					],
+					"port": "5050",
+					"path": [
+						"syndication",
+						"download",
+						"ec1fe89c-e687-417a-bf8e-012f4825e6cc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "unsave an article (post)",
+			"protocolProfileBehavior": {
+				"disableCookies": false
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://local.ft.com:5050/syndication/unsave/ec1fe89c-e687-417a-bf8e-012f4825e6cc",
+					"protocol": "https",
+					"host": [
+						"local",
+						"ft",
+						"com"
+					],
+					"port": "5050",
+					"path": [
+						"syndication",
+						"unsave",
+						"ec1fe89c-e687-417a-bf8e-012f4825e6cc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete a saved article",
+			"protocolProfileBehavior": {
+				"disableCookies": false
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://local.ft.com:5050/syndication/save/ec1fe89c-e687-417a-bf8e-012f4825e6cc",
+					"protocol": "https",
+					"host": [
+						"local",
+						"ft",
+						"com"
+					],
+					"port": "5050",
+					"path": [
+						"syndication",
+						"save",
+						"ec1fe89c-e687-417a-bf8e-012f4825e6cc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "translations",
+			"protocolProfileBehavior": {
+				"disableCookies": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://local.ft.com:5050/syndication/translations",
+					"protocol": "https",
+					"host": [
+						"local",
+						"ft",
+						"com"
+					],
+					"port": "5050",
+					"path": [
+						"syndication",
+						"translations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resolve (what syndication icon should these posted article IDs show?)",
+			"protocolProfileBehavior": {
+				"disableCookies": false
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\"c3e9b81a-c477-11e7-b2bb-322b2cb39656\",\"a22ff86e-ba37-11e7-9bfb-4a9c83ffa852\"]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://local.ft.com:5050/syndication/resolve",
+					"protocol": "https",
+					"host": [
+						"local",
+						"ft",
+						"com"
+					],
+					"port": "5050",
+					"path": [
+						"syndication",
+						"resolve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "export history",
+			"protocolProfileBehavior": {
+				"disableCookies": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://local.ft.com:5050/syndication/export",
+					"protocol": "https",
+					"host": [
+						"local",
+						"ft",
+						"com"
+					],
+					"port": "5050",
+					"path": [
+						"syndication",
+						"export"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "history",
+			"protocolProfileBehavior": {
+				"disableCookies": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://local.ft.com:5050/syndication/history?type=saved&offset=0&limit=2",
+					"protocol": "https",
+					"host": [
+						"local",
+						"ft",
+						"com"
+					],
+					"port": "5050",
+					"path": [
+						"syndication",
+						"history"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "saved"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"value": ""
+		}
+	]
+}

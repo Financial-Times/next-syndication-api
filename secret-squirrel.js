@@ -153,6 +153,10 @@ module.exports = {
 			'7324539d-cf00-4164-b0b2-e6ffb9a6b791', // test/server/helper/array-to-map.spec.js:17|18
 			'066a1263-bdc6-41ee-867d-7d0bad397b14', // test/server/helper/array-to-map.spec.js:22|23
 			'71f15834-c2f3-474b-846d-5779bcaf9753', // test/server/helper/array-to-map.spec.js:27|28
+			'591a46cb-4551-4b05-9d49-f30250d9f0b0', // doc/syndication-api-postman.json
+			'ec1fe89c-e687-417a-bf8e-012f4825e6cc', // doc/syndication-api-postman.json, a content ID
+			'17620a3b-b82d-4b85-aa85-4cf2793b7a02', // doc/syndication-api-postman.json, a content ID
+			'3fa5612f-042a-4ce1-9a5a-75292fd3ddef', // doc/syndication-api-postman.json, a content ID
 		]
 	}
 };

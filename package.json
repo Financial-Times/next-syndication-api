@@ -93,7 +93,8 @@
       "worker/sync/content-es/index.js",
       "worker/sync/db-persist/index.js",
       "coverage",
-      "test"
+      "test",
+      "doc/syndication-api-postman.json"
     ]
   },
   "engines": {
