@@ -88,6 +88,12 @@ This will start the `next-syndication-api` the associated worker processes and t
 
 You can also run `make run-monit` to bring up the [PM2 process monitor](https://www.npmjs.com/package/pm2#cpu--memory-monitoring).
 
+### Restarting
+
+When restarting the app to check your changes, you will need to make sure there are no pm2 processes kicking about that might show you the unchanged version.
+You can stop all pm2 processes with the command `make kill-all`. You can chain commands with `make kill-all && make run-local` so you don't have to wait for the kill-all process to finish before
+
+
 ---
 
 ## Configuration
