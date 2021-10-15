@@ -61,7 +61,8 @@ This is a standard Heroku app, so try all the normal things here (bounce the dyn
 
 ### People can't see their syndication icons
 
-If syndication icons are not appearing for an idividual user (as opposed to all users) then it is likely this user is not on a licence or has been removed from a licence.
+If syndication icons are not appearing for an individual user (as opposed to all users) then it is likely this user is not on a licence or has been removed from a licence.
+
 This system has an upstream dependency on Salesforce, so it is worth investigating the user's licence status there too. If the licence was recently renewed or set up, it is worth checking if they have been given the correct assets.
 
 As an example an incident in February 2020 occurred because an `FTB Article` asset was added by the account manager instead of `FT Article`.
@@ -70,21 +71,122 @@ If _nobody_ can see their icons, then this is a more serious problem and should 
 
 ## Second Line Troubleshooting
 
-*   You can see the details of a specific contract by calling `GET https://www.ft.com/syndication/contracts/:contract_id` with a valid api key sent in `x-api-key` header. You can find the API key in Vault : `next` team, `next-syndication-api` project, `production` folder, the key is called `SYNDICATION_API_KEY`. The `:contract_id` should have the `FTS-xxxxxxxx` format.
-*   `POST` call to `https://www.ft.com/syndication/contracts/:contract_id/resolve` with a valid api key and a json body which is an array of content ids will return the syndication permissions for each article
+_NB: There is a common misconception that you need all parts of Syndication to be running locally to test a single part of it. However, `next-router` will only look for a locally-running syndication API if it has the `syn-` environmental variables in the `.env` file. You can run n-syndication or next-syn-list locally and the router will use the syndication API running in production if those variables are not there._
+
+### Check the details of a specific contract
+
+*   **Contract check:** You can see the details of a specific contract by calling `GET https://www.ft.com/syndication/contracts/:contract_id` with a valid api key sent in `x-api-key` header. This will pull details from Salesforce and run them through the API. 
+    * You can find the API key in Vault : `next` team, `next-syndication-api` project, `production` folder, the key is called `SYNDICATION_API_KEY`.
+    * The `:contract_id` should have the `FTS-xxxxxxxx` format, unless it is the FT Staff licence which has a `CA-xxxxxxxx` format and uses a stub rather than Salesforce
+*   **Article republishing permissions check:** `POST` call to `https://www.ft.com/syndication/contracts/:contract_id/resolve` with a valid api key (as above) and a json body which is an array of content ids will return the syndication permissions for each article you listed
+*   **Tip:** You can reuse the [Postman collection](https://github.com/Financial-Times/next-syndication-api/blob/main/doc/syndication-api-postman.json) ([instructions](https://github.com/Financial-Times/next-syndication-api#api-endpoint-postman-collection)) for these API endpoints, you will need to adapt the `local.ft.com url:5050` to `www.ft.com`
+
+#### **Masquerading**
+
+Apart from saving and downloading content, you can masquerade as a different contract by passing `contract_id=${VALID_CONTRACT_NUMBER}` in the query string of any [__public__ endpoint](https://github.com/Financial-Times/next-syndication-api/wiki/Syndication-API:-Endpoints#endpoints-public) defined that uses contract information.
+
+You must have at least a `superuser` role in the syndication user table for this to work.
+
+This also works for the `/republishing/contract` endpoint (served by https://github.com/Financial-Times/next-syn-list) and can be handy for viewing contract details when debugging.
+
+### Check the user status page works
+If the problem is happening for everyone, check the `/syndication/user-status` endpoint, otherwise see if you can get the person who is having the issue (or customer support masquerading as that user) to hit the URL while you're tailing the logs and look for any lines that `error: ` this should highlight JavaScript errors.
+
 
 ### People can't see their syndication icons
 
+If you cannot see syndication icons, you can check your products with `https://session-next.ft.com/products`. 'Products' should include 'S1'. If you do not have this product, email customer support at `help@ft.com` and ask to be added to a staff syndication licence `CA-00001558`.
+
 If this is a problem for an individual, it is likely to be an issue with their contract (have they been removed by accident?)
+
+Get their user ID, and check their product allowances on https://api.ft.com/users/USER_ID_HERE/products (if you've never used this you will need an api key - see pinned items on #api-tech-support channel for self-service key creation)
+
+If they are attached to a syndication license they will have S1 in the list of product codes. If they don't have this, the problem is either with syndication set up or membership. If they do have this, the problem is more likely with us.
 
 If this is a problem for all Syndication users it could be:
 
+*   Is the `syndication` flag on in our feature flags?
 *   A problem with the front end applications ([n-front-page](https://github.com/Financial-Times/next-front-page), [next-article](https://github.com/Financial-Times/next-article))
 *   A problem with o-teaser (which is the Origami component that displays syndication icons)
 *   A problem with x-teaser (<https://github.com/Financial-Times/x-dash>)
-*   A problem with this application
+*   A problem with [n-syndication](https://github.com/Financial-Times/n-syndication) which contains the logic for the icons
+*   A problem with [next-syndication-api](https://github.com/Financial-Times/next-syndication-api)
 *   A problem with Salesforce (all contracts live in Salesforce)
 *   A problem with [next-syn-list](https://github.com/Financial-Times/next-syn-list)
+
+We can check the details of a specific contract and the user status page to begin to debug the issue. It is useful to tail the heroku logs for next-syndication-api while doing this so you can also see database activity with `heroku logs --app ft-next-syndication-api --tail --num 0 `
+
+### Contract details not refreshing
+
+First go to the `/syndication/contract-status?contract_id=${CONTRACT_NUMBER_HAVING_ISSUES}` and look for the `last_updated` property. You will need to have your 'role' set to 'superuser' or 'superdooperuser' in the syndication users table for this to return anything other than the contract you are on.
+
+The API won't go query Salesforce unless the `last_updated` date is greater than 24 hours. So check the date. If you need to force a refresh, you can do so by connecting to the production DB, e.g. via TablePlus or PGAdmin, and running:
+
+```sql
+
+    UPDATE syndication.contracts 
+       SET (last_updated) = (now() - '25 hours'::interval) 
+     WHERE contract_id = 'CONTRACT_NUMBER_HAVING_ISSUES';
+``` 
+
+### Save/Downloads not showing up
+
+Check the `next-syndication-downloads-prod` SQS queue to see if the events have been processed.
+
+Tail the logs and try saving/downloading an item.
+
+#### Downloads not working
+
+Downloads (served on host dl.syndication.ft.com) are run from the `ft-next-syndication-dl` app so that downloads don't run through router, preflight, etc. Check the `ft-next-syndication-dl` heroku app, make sure it's running, tail its logs and try downloading.
+
+### Spanish Translations not available
+Two places to check: the S3 bucket where translations are placed in XML format, and the content_es table in the syndication database where the article is saved as JSON.
+
+Spanish Translations of articles are provided by a 3rd Party, Vanguard Publications. Our contact Merle Thorpe puts XML files into an S3 bucket (ft-article-translations-en-to-es-from-vanguard-publications), next-syndication-lambdas then listens for files being put in, transforms the files and inserts the translation into the database in a JSON format.
+
+Every 6 months the AWS Access Key and Secret Key for allowing them to upload the XML files into S3 will need to be rotated and sent to Merle. The AWS User is called vanguard_publications and new credentials can be created in the AWS IAM console, Merle has a Lastpass account so new credentials can be sent via that.
+
+They should have been given the credentials before the current ones expire so that they have a chance to switch.
+
+### Emails not working
+
+Emails are sent by the `db-persist` worker using nodemailer and gmail.
+
+If you are getting an `ETIMEDOUT` errors, this is probably because the connection is being blocked by the FT firewall.
+
+You can test this by running (from terminal):
+
+```shell
+
+    ~$ openssl s_client -crlf -connect smtp.gmail.com:465
+
+```
+
+The last line of your out put should look something like this:
+
+```shell
+
+    220 smtp.gmail.com ESMTP q4sm4655414wmd.3 - gsmtp
+
+```
+
+If the last line of your output looks more like this:
+
+
+```shell
+
+    connect: Operation timed out
+    connect:errno=60
+
+```
+
+Then you can't connect to the mail server.
+
+Try turning wifi off on your phone to tether your computer to your phone's 4G connection and you should find it now works.
+
+### Dealing with `no pg_hba.conf entry` - `Syndication database data integrity` errors
+
+Turns out that our Database Integrity healthcheck (db-sync-state) runs against review branches, as well as production. The `DATABASE_URL` secret is not stored in vault; it automatically added by the Postgres add-on. However, this secret is only added to the `prod` app's secrets. If you encounter this error, this is most likely the database secrets were updated. To fix this, you need to get the `DATABASE_URL` secret from the `prod` app, and add it to the review apps' secrets. To do this, go to Heroku's next-syndication-api main pipeline page, click "Configure" in the `Review Apps` column, then select `More settings`. In the `Settings` page, scroll down to `Reveal Config Vars`, reveal the vars and add the `DATABASE_URL` secret
 
 ### General tips for troubleshooting Customer Products Systems
 
