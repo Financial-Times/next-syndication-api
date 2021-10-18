@@ -60,7 +60,7 @@ const middleware = [
 ];
 
 app.get('/__gtg', (req, res) => res.sendStatus(200));
-
+app.get('/__syndication/', (req, res) => res.sendStatus(200));
 // this is here to stop weird error logs, we can't find what exactly is pinging this endpoint
 // so this keeps everyone happy... :P
 app.get('/syndication/admin/save', (req, res) => res.sendStatus(204));
@@ -81,6 +81,10 @@ app.get('/syndication/content/:content_id', middleware, require('./controllers/g
 // download a content item for a contract
 // IMPORTANT: THIS IS ONLY USED IN DEVELOPMENT. IN PRODUCTION THIS ENDPOINT IS RUN FROM ./app-dl.js
 app.get('/syndication/download/:content_id', middleware, require('./controllers/download-by-content-id'));
+
+// test to see if skipping preflight fixes the downloading videos timeout problem
+// https://github.com/Financial-Times/next-service-registry/pull/1075
+app.get('/__syndication/download/:content_id', middleware, require('./controllers/download-by-content-id'));
 
 // un/save a content item to a contract
 app.get('/syndication/save/:content_id', middleware, require('./controllers/save-by-content-id'));
