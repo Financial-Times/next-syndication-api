@@ -81,14 +81,6 @@ _NB: There is a common misconception that you need all parts of Syndication to b
 *   **Article republishing permissions check:** `POST` call to `https://www.ft.com/syndication/contracts/:contract_id/resolve` with a valid api key (as above) and a json body which is an array of content ids will return the syndication permissions for each article you listed
 *   **Tip:** You can reuse the [Postman collection](https://github.com/Financial-Times/next-syndication-api/blob/main/doc/syndication-api-postman.json) ([instructions](https://github.com/Financial-Times/next-syndication-api#api-endpoint-postman-collection)) for these API endpoints, you will need to adapt the `local.ft.com url:5050` to `www.ft.com`
 
-#### **Masquerading**
-
-Apart from saving and downloading content, you can masquerade as a different contract by passing `contract_id=${VALID_CONTRACT_NUMBER}` in the query string of any [__public__ endpoint](https://github.com/Financial-Times/next-syndication-api/wiki/Syndication-API:-Endpoints#endpoints-public) defined that uses contract information.
-
-You must have at least a `superuser` role in the syndication user table for this to work.
-
-This also works for the `/republishing/contract` endpoint (served by https://github.com/Financial-Times/next-syn-list) and can be handy for viewing contract details when debugging.
-
 ### Check the user status page works
 If the problem is happening for everyone, check the `/syndication/user-status` endpoint, otherwise see if you can get the person who is having the issue (or customer support masquerading as that user) to hit the URL while you're tailing the logs and look for any lines that `error: ` this should highlight JavaScript errors.
 
