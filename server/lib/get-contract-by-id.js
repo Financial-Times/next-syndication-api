@@ -91,18 +91,24 @@ module.exports = exports = async (contractId, locals = {}) => {
 
 		contract = pgMapColumns(contract, contractsColumnMappings);
 
-		if (locals && locals.licence) {
-			contract.licence_id = locals.licence.id;
+		if (locals.MASQUERADING !== true) {
+			// this will be the user's licence ID regardless of whether they are masquerading or not
+			// purpose of this unclear but leaving it in, this should come back from get_contract_data if the licence ID already exists
+			// I think it is to fill in the licence ID and update the database from the user's licence ID which is retrieved earlier in the middleware, so that licence IDs are populated, however it does it in a way that breaks things if you are looking at another licence's data but not masquerading as that user (which only customer support can do)
+			if (locals && locals.licence) {
+				contract.licence_id = locals.licence.id;
+			}
+
+			// If you get the error, Cannot set property '#<anonymous>' of undefined, try refreshing
+			[contract_data] = await db.syndication.upsert_contract([contract]);
+
+			log.info('CONTRACT_PERSISTED_TO_DB', {
+				event: 'CONTRACT_PERSISTED_TO_DB',
+				contractID: contractId
+			});
 		}
-		// If you get the error, Cannot set property '#<anonymous>' of undefined, try refreshing
-		[contract_data] = await db.syndication.upsert_contract([contract]);
+
 		[contract_data] = await db.syndication.get_contract_data([contractId]);
-
-		log.info('CONTRACT_PERSISTED_TO_DB', {
-			event: 'CONTRACT_PERSISTED_TO_DB',
-			contractID: contractId
-		});
-
 		return decorateContract(contract_data, locals.hasGraphicSyndication);
 	}
 	else {
