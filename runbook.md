@@ -98,7 +98,7 @@ If they are attached to a syndication license they will have S1 in the list of p
 If this is a problem for all Syndication users it could be:
 
 *   Is the `syndication` flag on in our feature flags?
-*   A problem with the front end applications ([next-front-page](https://github.com/Financial-Times/next-front-page), [next-article](https://github.com/Financial-Times/next-article),[next-myft-page](https://github.com/Financial-Times/next-myft-page),[next-stream-page](https://github.com/Financial-Times/next-stream-page), [next-video-page](https://github.com/Financial-Times/next-video-page))
+*   A problem with the front end applications ([next-front-page](https://github.com/Financial-Times/next-front-page), [next-article](https://github.com/Financial-Times/next-article), [next-myft-page](https://github.com/Financial-Times/next-myft-page), [next-stream-page](https://github.com/Financial-Times/next-stream-page), [next-video-page](https://github.com/Financial-Times/next-video-page))
 *   A problem with o-teaser (which is the Origami component that displays syndication icons)
 *   A problem with x-teaser (<https://github.com/Financial-Times/x-dash>)
 *   A problem with [n-syndication](https://github.com/Financial-Times/n-syndication) which contains the logic for the icons
@@ -120,6 +120,14 @@ The API won't go query Salesforce unless the `last_updated` date is greater than
        SET (last_updated) = (now() - '25 hours'::interval) 
      WHERE contract_id = 'CONTRACT_NUMBER_HAVING_ISSUES';
 ``` 
+
+
+### Masquerading
+Aside from saving and downloading content, you can masquerade as a different contract by passing `contract_id=${VALID_CONTRACT_NUMBER}` in the query string of any public endpoint defined that uses contract information.
+
+See [server/middleware/masquerade.js](https://github.com/Financial-Times/next-syndication-api/blob/main/server/middleware/masquerade.js#L6) for implementation. You must have at least a `superuser` role in the syndication user table for this to work.
+
+This also works for the `/republishing/contract` endpoint (part of https://github.com/Financial-Times/next-syn-list) and can be handy for viewing contract details when debugging.
 
 ### Save/Downloads not showing up
 
