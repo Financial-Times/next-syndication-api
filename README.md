@@ -13,7 +13,7 @@ The API behind the FT.com/republishing tool.
 
 _NB: There is a common misconception that you need all parts of Syndication to be running locally to test a single part of it. However, `next-router` will only look for a locally-running syndication API if it has the `syn-` environmental variables in the `.env` file. You can run n-syndication or next-syn-list locally and the router will use the syndication API running in production if those variables are not there._
 
-[next-syndication-api wiki page](https://github.com/Financial-Times/next-syndication-api/wiki/next-syndication-api)
+[next-syndication-api wiki page](https://github.com/Financial-Times/next-syndication-api/wiki/Syndication-API-(next-syndication-api))
 
 ### More information about the syndication system
 

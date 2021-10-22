@@ -98,7 +98,7 @@ If they are attached to a syndication license they will have S1 in the list of p
 If this is a problem for all Syndication users it could be:
 
 *   Is the `syndication` flag on in our feature flags?
-*   A problem with the front end applications ([n-front-page](https://github.com/Financial-Times/next-front-page), [next-article](https://github.com/Financial-Times/next-article))
+*   A problem with the front end applications ([next-front-page](https://github.com/Financial-Times/next-front-page), [next-article](https://github.com/Financial-Times/next-article),[next-myft-page](https://github.com/Financial-Times/next-myft-page),[next-stream-page](https://github.com/Financial-Times/next-stream-page), [next-video-page](https://github.com/Financial-Times/next-video-page),)
 *   A problem with o-teaser (which is the Origami component that displays syndication icons)
 *   A problem with x-teaser (<https://github.com/Financial-Times/x-dash>)
 *   A problem with [n-syndication](https://github.com/Financial-Times/n-syndication) which contains the logic for the icons
