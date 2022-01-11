@@ -114,7 +114,7 @@ module.exports = exports = async (req, res, next) => {
 
 		dl.on('complete', (state, status) => {
 			if (state === 'complete') {
-				log.count('archive-download-complete')
+				log.count('article-download-complete')
 			}
 			res.status(status);
 		});
