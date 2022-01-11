@@ -1,4 +1,17 @@
-# Snyk (https://snyk.io) policy file, which patches or ignores known vulnerabilities.
-version: v1.13.5
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.22.1
 ignore: {}
-patch: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:hoek:20180212':
+    - node-slack > request > hawk > hoek:
+        patched: '2022-01-11T10:12:17.904Z'
+    - node-slack > request > hawk > boom > hoek:
+        patched: '2022-01-11T10:12:17.904Z'
+    - node-slack > request > hawk > sntp > hoek:
+        patched: '2022-01-11T10:12:17.904Z'
+    - node-slack > request > hawk > cryptiles > boom > hoek:
+        patched: '2022-01-11T10:12:17.904Z'
+  'npm:tunnel-agent:20170305':
+    - node-slack > request > tunnel-agent:
+        patched: '2022-01-11T10:12:17.904Z'
