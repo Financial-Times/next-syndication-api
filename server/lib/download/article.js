@@ -68,6 +68,7 @@ module.exports = exports = class ArticleDownload extends Archiver {
 
 		if (this.endCalled !== true) {
 			this.endCalled = true;
+			this.emit('cancelled');
 		}
 	}
 
@@ -113,6 +114,7 @@ module.exports = exports = class ArticleDownload extends Archiver {
 			return this.file;
 		}
 		catch (error) {
+			this.emit('error', error);
 			log.error('convertArticle', {
 				contentId: content.id,
 				error

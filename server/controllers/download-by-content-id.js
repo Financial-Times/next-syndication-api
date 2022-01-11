@@ -65,13 +65,15 @@ module.exports = exports = async (req, res, next) => {
 	req.connection.on('close', () => dl.cancel());
 
 	prepareDownloadResponse(res, content);
-
 	if (dl.downloadAsArchive) {
+		log.count('archive-download-start');
+
 		dl.on('error', (err, httpStatus) => {
 			log.error('DOWNLOAD_ARCHIVE_ERROR', {
 				event: 'DOWNLOAD_ARCHIVE_ERROR',
 				error: err.stack || err
 			});
+			log.count('archive-download-error');
 
 			res.status(httpStatus || 500).end();
 		});
@@ -81,12 +83,12 @@ module.exports = exports = async (req, res, next) => {
 
 			if (dl.cancelled !== true) {
 				res.end();
-
 				next();
 			}
 		});
 
 		dl.on('complete', (state, status) => {
+			log.count('archive-download-complete')
 			res.status(status);
 		});
 
@@ -99,6 +101,24 @@ module.exports = exports = async (req, res, next) => {
 		await dl.appendAll();
 	}
 	else {
+		log.count('article-download-start')
+
+		dl.on('error', (err) => {
+			log.error('DOWNLOAD_ARTICLE_ERROR', {
+				event: 'DOWNLOAD_ARTICLE_ERROR',
+				error: err.stack || err
+			});
+			log.count('article-download-error');
+			res.status(500).end();
+		});
+
+		dl.on('complete', (state, status) => {
+			if (state === 'complete') {
+				log.count('archive-download-complete')
+			}
+			res.status(status);
+		});
+
 		const file = await dl.convertArticle();
 
 		res.set('content-length', file.length);
