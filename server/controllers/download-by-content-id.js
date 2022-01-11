@@ -66,9 +66,9 @@ module.exports = exports = async (req, res, next) => {
 
 	prepareDownloadResponse(res, content);
 
-	let articleOrArchive = dl.downloadAsArchive ? 'Archive' : 'Article'
+	let articleOrArchive = dl.downloadAsArchive ? 'Archive' : 'Article';
 
-	log.count(`${articleOrArchive.toLowerCase()}-download-start`)
+	log.count(`${articleOrArchive.toLowerCase()}-download-start`);
 
 	dl.on('error', (err) => {
 		log.error(`DOWNLOAD_${articleOrArchive.toUpperCase()}_ERROR`, {
@@ -81,18 +81,9 @@ module.exports = exports = async (req, res, next) => {
 
 	dl.on('complete', (state, status) => {
 		if (state === 'complete') {
-			log.count(`${articleOrArchive.toLowerCase()}-download-complete`)
+			log.count(`${articleOrArchive.toLowerCase()}-download-complete`);
 		}
 		res.status(status);
-	});
-
-	dl.on('end', () => {
-		log.debug(`Download${articleOrArchive}End => ${content.id} in ${Date.now() - dl.START}ms`);
-
-		if (dl.cancelled !== true) {
-			res.end();
-			next();
-		}
 	});
 
 	dl.on('cancelled', () => {
@@ -100,6 +91,15 @@ module.exports = exports = async (req, res, next) => {
 	});
 
 	if (articleOrArchive === 'Archive') {
+		dl.on('end', () => {
+			log.debug(`DownloadArchiveEnd => ${content.id} in ${Date.now() - dl.START}ms`);
+
+			if (dl.cancelled !== true) {
+				res.end();
+				next();
+			}
+		});
+
 		dl.pipe(res);
 
 		await dl.appendAll();
