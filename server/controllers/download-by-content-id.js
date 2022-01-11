@@ -86,20 +86,20 @@ module.exports = exports = async (req, res, next) => {
 		res.status(status);
 	});
 
-	if (articleOrArchive === 'Archive') {
-			dl.on('end', () => { //I don't know for sure this ever gets executed.
-			log.debug(`DownloadArchiveEnd => ${content.id} in ${Date.now() - dl.START}ms`);
+	dl.on('end', () => {
+		log.debug(`Download${articleOrArchive}End => ${content.id} in ${Date.now() - dl.START}ms`);
 
-			if (dl.cancelled !== true) {
-				res.end();
-				next();
-			}
-		});
-
-		dl.on('cancelled', () => {
+		if (dl.cancelled !== true) {
+			res.end();
 			next();
-		});
+		}
+	});
 
+	dl.on('cancelled', () => {
+		next();
+	});
+
+	if (articleOrArchive === 'Archive') {
 		dl.pipe(res);
 
 		await dl.appendAll();
