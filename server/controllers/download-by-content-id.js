@@ -66,32 +66,38 @@ module.exports = exports = async (req, res, next) => {
 
 	prepareDownloadResponse(res, content);
 
-	if (dl.downloadAsArchive) {
-		dl.on('error', (err, httpStatus) => {
-			log.error('DOWNLOAD_ARCHIVE_ERROR', {
-				event: 'DOWNLOAD_ARCHIVE_ERROR',
-				error: err.stack || err
-			});
+	let articleOrArchive = dl.downloadAsArchive ? 'Archive' : 'Article';
 
-			res.status(httpStatus || 500).end();
+	log.count(`${articleOrArchive.toLowerCase()}-download-start`);
+
+	dl.on('error', (err) => {
+		log.error(`DOWNLOAD_${articleOrArchive.toUpperCase()}_ERROR`, {
+			event: `DOWNLOAD_${articleOrArchive.toUpperCase()}_ERROR`,
+			error: err.stack || err
 		});
+		log.count(`${articleOrArchive.toLowerCase()}-download-error`);
+		res.status(500).end();
+	});
 
+	dl.on('complete', (state, status) => {
+		if (state === 'complete') {
+			log.count(`${articleOrArchive.toLowerCase()}-download-complete`);
+		}
+		res.status(status);
+	});
+
+	dl.on('cancelled', () => {
+		next();
+	});
+
+	if (articleOrArchive === 'Archive') {
 		dl.on('end', () => {
 			log.debug(`DownloadArchiveEnd => ${content.id} in ${Date.now() - dl.START}ms`);
 
 			if (dl.cancelled !== true) {
 				res.end();
-
 				next();
 			}
-		});
-
-		dl.on('complete', (state, status) => {
-			res.status(status);
-		});
-
-		dl.on('cancelled', () => {
-			next();
 		});
 
 		dl.pipe(res);
