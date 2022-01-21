@@ -32,6 +32,7 @@ const app = module.exports = express({
 		require('../health/db-sync-state'),
 		require('../health/sqs'),
 		require('../health/error-spikes'),
+		require('../health/article-dl-no-data')
 	],
 	errorRateHealthcheck: {
 		severity: 2
