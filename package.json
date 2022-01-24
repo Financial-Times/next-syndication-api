@@ -31,7 +31,8 @@
     "nodemailer": "^6.0.0",
     "s3-upload-stream": "^1.0.7",
     "shelljs": "^0.8.0",
-    "xmldom": "^0.3.0"
+    "xmldom": "^0.3.0",
+    "@snyk/protect": "latest"
   },
   "devDependencies": {
     "@financial-times/n-gage": "^8.2.0",
@@ -53,8 +54,7 @@
     "pm2": "^2.6.1",
     "proxyquire": "^1.7.4",
     "sinon": "^6.0.0",
-    "sinon-chai": "^3.2.0",
-    "snyk": "^1.167.0"
+    "sinon-chai": "^3.2.0"
   },
   "nyc": {
     "exclude": [
@@ -105,8 +105,9 @@
   "scripts": {
     "commit": "commit-wizard",
     "heroku-postbuild": "make heroku-postbuild",
-    "prepare": "npx snyk protect || npx snyk protect -d || true",
-    "preinstall": "[ \"$INIT_CWD\" != \"$PWD\" ] || npm_config_yes=true npx check-engine && { [ \"$INIT_CWD\" != \"$PWD\" ] || npm_config_yes=true npx check-engine; }"
+    "prepare": "npm run snyk-protect && npx snyk protect || npx snyk protect -d || true",
+    "preinstall": "[ \"$INIT_CWD\" != \"$PWD\" ] || npm_config_yes=true npx check-engine && { [ \"$INIT_CWD\" != \"$PWD\" ] || npm_config_yes=true npx check-engine; }",
+    "snyk-protect": "snyk-protect"
   },
   "config": {},
   "husky": {
@@ -119,5 +120,6 @@
   "volta": {
     "node": "12.22.8",
     "npm": "7.20.2"
-  }
+  },
+  "snyk": true
 }
