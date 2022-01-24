@@ -11,7 +11,7 @@ module.exports = nHealth.runCheck({
 	name: `${statusCode} rate for articles is acceptable`,
 	id: 'next-syndication-api-error-spikes',
 	severity: 1,
-	businessImpact: `Error rate for the syndication-api has exceeded a threshold of ${threshold * 100}% over the last ${samplePeriod} minutes.`,
+	businessImpact: `Error rate for the syndication-api has exceeded a threshold of ${threshold}% over the last ${samplePeriod} minutes.`,
 	technicalSummary: `The proportion of ${statusCode} (Unauthorized) responses for syndication API requests across all heroku dynos vs all responses is higher than a threshold of ${threshold} over the last ${samplePeriod} minutes`,
 	panicGuide: 'Check the heroku logs for the app for any error messages. Possible causes could be incorrect data from Salesforce or Membership’s ALS'
 })
