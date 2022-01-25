@@ -2,7 +2,7 @@
 
 process.env.TZ = 'UTC';
 
-const express = require('@financial-times/n-internal-tool');
+const express = require('@financial-times/n-express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
