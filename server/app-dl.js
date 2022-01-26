@@ -30,7 +30,7 @@ const app = module.exports = express({
 	withFlags: true,
 	healthchecks: [
 		require('../health/dl-error-spikes'),
-	] //this healthcheck probably needs to be removed
+	]//this healthcheck probably needs to be removed
 });
 
 const middleware = [
