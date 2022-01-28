@@ -105,7 +105,7 @@
     "commit": "commit-wizard",
     "heroku-postbuild": "make heroku-postbuild",
     "prepare": "npx snyk protect || npx snyk protect -d || true",
-    "preinstall": "[ \"$INIT_CWD\" != \"$PWD\" ] || npm_config_yes=true npx check-engine && { [ \"$INIT_CWD\" != \"$PWD\" ] || npm_config_yes=true npx check-engine; }"
+    "preinstall": "[ \"$INIT_CWD\" != \"$PWD\" ] || npm_config_yes=true npx check-engine"
   },
   "config": {},
   "husky": {
