@@ -63,6 +63,7 @@ module.exports = exports = new (class S3PostgreSQLBackupCheck extends nHealthChe
 		return this.checkOutput;
 	}
 })({
+	id: 'next-syndication-api-hourly-db-backup',
 	businessImpact: 'The Syndication hourly database backups have not run for the last hour, this could result in loss of data if we need to restore the database after a fatal crash.',
 	name: 'Syndication hourly database backups',
 /*eslint-disable*/
