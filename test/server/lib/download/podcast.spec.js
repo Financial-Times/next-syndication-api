@@ -402,7 +402,7 @@ describe(MODULE_ID, function () {
 			let article;
 			let media;
 
-			before(function(done) {
+			before(async () => {
 				dl = new underTest({
 					content,
 					contract: CONTRACT,
@@ -412,23 +412,13 @@ describe(MODULE_ID, function () {
 					user: USER
 				});
 
-				try {
-					dl.on('end', async () => {
-						extractedFiles = await decompress(filename, extractDir);
+				await dl.pipe(fs.createWriteStream(filename));
+				await dl.appendAll();
 
-						article = extractedFiles.find(item => item.path.endsWith(content.transcriptExtension));
-						media = extractedFiles.find(item => item.path.endsWith(content.download.extension));
+				extractedFiles = await decompress(filename, extractDir);
 
-						done();
-					})
-				} catch (e) {
-					done();
-				}
-
-
-				dl.pipe(fs.createWriteStream(filename));
-
-				dl.appendAll().then(() => {});
+				article = extractedFiles.find(item => item.path.endsWith(content.transcriptExtension));
+				media = extractedFiles.find(item => item.path.endsWith(content.download.extension));
 			});
 
 			it('article', function() {
