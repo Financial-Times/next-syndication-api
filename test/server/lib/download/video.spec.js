@@ -428,7 +428,7 @@ describe(MODULE_ID, function () {
 			let captions;
 			let media;
 
-			before(async () =>{
+			before(function(done) {
 				dl = new underTest({
 					content,
 					contract: CONTRACT,
@@ -438,14 +438,19 @@ describe(MODULE_ID, function () {
 					user: USER
 				});
 
-				await dl.pipe(fs.createWriteStream(filename));
+				dl.on('end', async () => {
+					extractedFiles = await decompress(filename, extractDir);
 
-				await dl.appendAll().then(() => {});
-				extractedFiles = await decompress(filename, extractDir);
+					article = extractedFiles.find(item => item.path.endsWith(content.transcriptExtension));
+					captions = extractedFiles.find(item => item.path === path.basename(url.parse(content.captions[0].url).pathname));
+					media = extractedFiles.find(item => item.path.endsWith(content.download.extension));
 
-				article = extractedFiles.find(item => item.path.endsWith(content.transcriptExtension));
-				captions = extractedFiles.find(item => item.path === path.basename(url.parse(content.captions[0].url).pathname));
-				media = extractedFiles.find(item => item.path.endsWith(content.download.extension));
+					return done();
+				});
+
+				dl.pipe(fs.createWriteStream(filename));
+
+				dl.appendAll().then(() => {});
 			});
 
 			it('article', function() {
