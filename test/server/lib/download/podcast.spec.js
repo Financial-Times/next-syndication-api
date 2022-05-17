@@ -412,14 +412,19 @@ describe(MODULE_ID, function () {
 					user: USER
 				});
 
-				dl.on('end', async () => {
-					extractedFiles = await decompress(filename, extractDir);
+				try {
+					dl.on('end', async () => {
+						extractedFiles = await decompress(filename, extractDir);
 
-					article = extractedFiles.find(item => item.path.endsWith(content.transcriptExtension));
-					media = extractedFiles.find(item => item.path.endsWith(content.download.extension));
+						article = extractedFiles.find(item => item.path.endsWith(content.transcriptExtension));
+						media = extractedFiles.find(item => item.path.endsWith(content.download.extension));
 
+						done();
+					})
+				} catch (e) {
 					done();
-				});
+				}
+
 
 				dl.pipe(fs.createWriteStream(filename));
 

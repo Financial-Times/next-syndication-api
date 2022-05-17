@@ -438,15 +438,20 @@ describe(MODULE_ID, function () {
 					user: USER
 				});
 
-				dl.on('end', async () => {
-					extractedFiles = await decompress(filename, extractDir);
+				try {
+					dl.on('end', async () => {
+						extractedFiles = await decompress(filename, extractDir);
 
-					article = extractedFiles.find(item => item.path.endsWith(content.transcriptExtension));
-					captions = extractedFiles.find(item => item.path === path.basename(url.parse(content.captions[0].url).pathname));
-					media = extractedFiles.find(item => item.path.endsWith(content.download.extension));
+						article = extractedFiles.find(item => item.path.endsWith(content.transcriptExtension));
+						captions = extractedFiles.find(item => item.path === path.basename(url.parse(content.captions[0].url).pathname));
+						media = extractedFiles.find(item => item.path.endsWith(content.download.extension));
 
+						done();
+					});
+				} catch (e) {
 					done();
-				});
+				}
+
 
 				dl.pipe(fs.createWriteStream(filename));
 
