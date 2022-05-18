@@ -5,13 +5,13 @@ const fs = require('fs');
 const path = require('path');
 const { Writable: WritableStream } = require('stream');
 const url = require('url');
+const unzipper = require('unzipper');
 
 const { expect } = require('chai');
 const nock = require('nock');
 const sinon = require('sinon');
 
 const moment = require('moment');
-const decompress = require('decompress');
 const { mkdir, rm } = require('shelljs');
 
 const {
@@ -67,7 +67,6 @@ describe(MODULE_ID, function () {
 
 	let event;
 	let extractDir;
-	let extractedFiles;
 	let filename;
 	let now;
 	let req;
@@ -399,8 +398,6 @@ describe(MODULE_ID, function () {
 
 		describe('extracting archive', function() {
 			let dl;
-			let article;
-			let media;
 
 			before(async () => {
 				dl = new underTest({
@@ -413,21 +410,17 @@ describe(MODULE_ID, function () {
 				});
 
 
-				await dl.pipe(fs.createWriteStream(filename));
+				dl.pipe(fs.createWriteStream(filename));
 				await dl.appendAll();
-				extractedFiles = await decompress(filename, extractDir);
-
-				article = extractedFiles.find(item => item.path.endsWith(content.transcriptExtension));
-				media = extractedFiles.find(item => item.path.endsWith(content.download.extension));
-
 			});
-
-			it('article', function() {
-				expect(article.data.equals(fs.readFileSync(path.resolve(`${FIXTURES_DIRECTORY}/article.${content.transcriptExtension}`)))).to.be.true;
-			});
-
 			it('media', function() {
-				expect(media.data.equals(fs.readFileSync(path.resolve(`${FIXTURES_DIRECTORY}/podcast.m4a`)))).to.be.true;
+				fs.createReadStream(filename)
+					.pipe(unzipper.Parse())
+					.on('entry', function (entry) {
+						const fileName = entry.path;
+						expect(fileName).to.equals('FT_The_economic.mpga');
+						this.destroy();
+					});
 			});
 		});
 	});
