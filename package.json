@@ -1,7 +1,7 @@
 {
   "name": "ft-next-syndication-api",
   "description": "Next Syndication API",
-  "version": "0.40.1",
+  "version": "0.41.1",
   "private": true,
   "dependencies": {
     "@financial-times/n-es-client": "3.0.0",
@@ -39,7 +39,6 @@
     "chai": "^4.0.2",
     "check-engine": "^1.10.1",
     "coveralls": "^2.13.1",
-    "decompress": "^4.2.0",
     "eslint": "^3.19.0",
     "fetch-mock": "^9.11.0",
     "lintspaces-cli": "^0.6.0",
@@ -53,7 +52,8 @@
     "proxyquire": "^1.7.4",
     "sinon": "^6.0.0",
     "sinon-chai": "^3.2.0",
-    "snyk": "^1.167.0"
+    "snyk": "^1.167.0",
+    "unzipper": "^0.10.11"
   },
   "nyc": {
     "exclude": [
@@ -98,7 +98,7 @@
     ]
   },
   "engines": {
-    "node": "12.x",
+    "node": "16.x",
     "npm": "7.x || 8.x"
   },
   "scripts": {
@@ -116,7 +116,7 @@
     }
   },
   "volta": {
-    "node": "12.22.8",
+    "node": "16.14.0",
     "npm": "7.20.2"
   }
 }
