@@ -439,7 +439,7 @@ describe(MODULE_ID, function () {
 				await dl.appendAll();
 			});
 
-			xit('media', function() {
+			it('media', function() {
 				fs.createReadStream(filename)
 					.pipe(unzipper.Parse())
 					.on('entry', function (entry) {
