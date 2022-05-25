@@ -25,7 +25,7 @@ module.exports = exports = class DocumentBuilder {
 		this.content = content;
 
 		this.contentDocument = new DOMParser().parseFromString(
-			`<body>${content.bodyHTML}</body>`,
+			`<body><h3>${content.standfirst}</h3>${content.bodyHTML}</body>`,
 			FORMAT_ARTICLE_CONTENT_TYPE
 		);
 	}
