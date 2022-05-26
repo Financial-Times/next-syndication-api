@@ -23,9 +23,9 @@ const RE_REMOVE_TAGS = /<\/?[^>]*>/gm;
 module.exports = exports = class DocumentBuilder {
 	constructor(content) {
 		this.content = content;
-
+		const standfirst = `<h3>${content.standfirst}</h3>`
 		this.contentDocument = new DOMParser().parseFromString(
-			`<body><h3>${content.standfirst}</h3>${content.bodyHTML}</body>`,
+			`<body>${content.standfirst ? standfirst : null}${content.bodyHTML}</body>`,
 			FORMAT_ARTICLE_CONTENT_TYPE
 		);
 	}
