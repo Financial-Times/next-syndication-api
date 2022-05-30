@@ -92,6 +92,6 @@ module.exports = exports = async (req, res, next) => {
 
 		res.sendStatus(503);
 
-		throw error;
+		next(error);
 	}
 };

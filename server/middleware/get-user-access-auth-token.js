@@ -51,6 +51,6 @@ module.exports = exports = async (req, res, next) => {
 
 		res.sendStatus(401);
 
-		throw error;
+		next(error);
 	}
 };
