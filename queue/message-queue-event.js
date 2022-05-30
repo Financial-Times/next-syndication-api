@@ -121,7 +121,7 @@ module.exports = exports = class MessageQueueEvent {
 
 	publish() {
 		return publish(this)
-			.then(success => success).catch((e) => this.log.error('publish queue event', e))
+			.then(success => success).catch((e) => this.log.error('SyndicationSQSQueuePublishError', e))
 	}
 
 	toJSON() {
