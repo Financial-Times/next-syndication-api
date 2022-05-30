@@ -7,6 +7,7 @@ const { SYNDICATION_DOWNLOAD_SQS_URL: DEFAULT_QUEUE_URL } = require('config');
 
 const SchemaMessageV1 = require('../schema/message-v1.json');
 const publish = require('./publish');
+const { Logger } = require('../server/lib/logger');
 
 const ajv = new AJV({
 	allErrors: true,
@@ -24,6 +25,8 @@ const PROPERTY_queue_url = Symbol('queue_url');
 
 module.exports = exports = class MessageQueueEvent {
 	constructor(config = {}) {
+		 this.log = new Logger({source: 'queue-event'});
+
 		let { event, schema = SchemaMessageV1, queue_url = DEFAULT_QUEUE_URL } = config;
 
 		switch (Object.prototype.toString.call(event)) {
@@ -119,7 +122,7 @@ module.exports = exports = class MessageQueueEvent {
 
 	publish() {
 		return publish(this)
-			.then(success => success);
+			.then(success => success).catch((e) => this.log.error('publish queue event', e))
 	}
 
 	toJSON() {
