@@ -25,8 +25,7 @@ const PROPERTY_queue_url = Symbol('queue_url');
 
 module.exports = exports = class MessageQueueEvent {
 	constructor(config = {}) {
-		 this.log = new Logger({source: 'queue-event'});
-
+		this.log = new Logger({source: 'queue-event'});
 		let { event, schema = SchemaMessageV1, queue_url = DEFAULT_QUEUE_URL } = config;
 
 		switch (Object.prototype.toString.call(event)) {
