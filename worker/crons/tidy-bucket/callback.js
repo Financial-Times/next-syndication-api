@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const { Logger } = require('../../../server/lib/logger');
+const {Logger} = require('../../../server/lib/logger');
 
 const AWS = require('aws-sdk');
 const moment = require('moment');
@@ -31,8 +31,7 @@ module.exports = exports = async () => {
 		await tidyRedshift();
 
 		log.info(`${MODULE_ID} | Finished tidy-bucket`);
-	}
-	catch (e) {
+	} catch (e) {
 		log.error(`${MODULE_ID} => `, e);
 	}
 };
@@ -50,16 +49,21 @@ async function tidyBackups() {
 	});
 
 	if (keys.length) {
-		await Promise.all(keys.map(async item => {
-			return await S3.deleteObject({
-				Bucket: DB.BACKUP.bucket.id,
-				Key: item.Key
-			}).promise();
-		}));
+		try {
+			await Promise.all(keys.map(async item => {
+				return await S3.deleteObject({
+					Bucket: DB.BACKUP.bucket.id,
+					Key: item.Key
+				}).promise();
+			}));
+		} catch (e) {
+			log.error(`${MODULE_ID} | S3 delete object => `, e);
+		}
+
 	}
 }
 
-async function _tidyBackups({ maxKeepHour, maxKeepDay, continueFrom, keys }) {
+async function _tidyBackups({maxKeepHour, maxKeepDay, continueFrom, keys}) {
 	const params = {
 		Bucket: DB.BACKUP.bucket.id,
 		MaxKeys: 1000,
@@ -70,28 +74,31 @@ async function _tidyBackups({ maxKeepHour, maxKeepDay, continueFrom, keys }) {
 		params.StartAfter = continueFrom;
 	}
 
-	const res = await S3.listObjectsV2(params).promise();
+	try {
+		const res = await S3.listObjectsV2(params).promise();
 
-	for (let [, item] of res.Contents.entries()) {
-		const date = moment(item.Key.substring(item.Key.indexOf('.') + 1, item.Key.lastIndexOf('.')), DB.BACKUP.date_format);
+		for (let [, item] of res.Contents.entries()) {
+			const date = moment(item.Key.substring(item.Key.indexOf('.') + 1, item.Key.lastIndexOf('.')), DB.BACKUP.date_format);
 
-		if (date.isBefore(maxKeepDay)) {
-			keys.push({ Key: item.Key });
-		}
-		else if (date.isBefore(maxKeepHour)) {
-			if (date.hour() !== 0) {
-				keys.push({ Key: item.Key });
+			if (date.isBefore(maxKeepDay)) {
+				keys.push({Key: item.Key});
+			} else if (date.isBefore(maxKeepHour)) {
+				if (date.hour() !== 0) {
+					keys.push({Key: item.Key});
+				}
 			}
 		}
-	}
 
-	if (res.IsTruncated === true) {
-		await _tidyBackups({
-			maxKeepHour,
-			maxKeepDay,
-			continueFrom: res.Contents[res.Contents.length - 1].Key,
-			keys
-		});
+		if (res.IsTruncated === true) {
+			await _tidyBackups({
+				maxKeepHour,
+				maxKeepDay,
+				continueFrom: res.Contents[res.Contents.length - 1].Key,
+				keys
+			});
+		}
+	} catch (e) {
+		log.error(`${MODULE_ID} | S3 list objects => `, e);
 	}
 }
 
@@ -108,15 +115,19 @@ async function tidyRedshift() {
 
 	if (keys.length) {
 		await Promise.all(keys.map(async item => {
-			return await S3.deleteObject({
-				Bucket: REDSHIFT.bucket.id,
-				Key: item.Key
-			}).promise();
+			try {
+				return await S3.deleteObject({
+					Bucket: REDSHIFT.bucket.id,
+					Key: item.Key
+				}).promise();
+			} catch (e) {
+				log.error(`${MODULE_ID} | S3 delete object => `, e);
+			}
 		}));
 	}
 }
 
-async function _tidyRedshift({ maxKeepDay, continueFrom, keys }) {
+async function _tidyRedshift({maxKeepDay, continueFrom, keys}) {
 	const params = {
 		Bucket: REDSHIFT.bucket.id,
 		MaxKeys: 1000,
@@ -127,21 +138,25 @@ async function _tidyRedshift({ maxKeepDay, continueFrom, keys }) {
 		params.StartAfter = continueFrom;
 	}
 
-	const res = await S3.listObjectsV2(params).promise();
+	try {
+		const res = await S3.listObjectsV2(params).promise();
 
-	for (let [, item] of res.Contents.entries()) {
-		const date = moment(item.Key.substring(item.Key.indexOf('.') + 1, item.Key.lastIndexOf('.')), DB.BACKUP.date_format);
+		for (let [, item] of res.Contents.entries()) {
+			const date = moment(item.Key.substring(item.Key.indexOf('.') + 1, item.Key.lastIndexOf('.')), DB.BACKUP.date_format);
 
-		if (date.isBefore(maxKeepDay)) {
-			keys.push({ Key: item.Key });
+			if (date.isBefore(maxKeepDay)) {
+				keys.push({Key: item.Key});
+			}
 		}
-	}
 
-	if (res.IsTruncated === true) {
-		await _tidyBackups({
-			maxKeepDay,
-			continueFrom: res.Contents[res.Contents.length - 1].Key,
-			keys
-		});
+		if (res.IsTruncated === true) {
+			await _tidyBackups({
+				maxKeepDay,
+				continueFrom: res.Contents[res.Contents.length - 1].Key,
+				keys
+			});
+		}
+	} catch (e) {
+		log.error(`${MODULE_ID} | S3 delete object => `, e);
 	}
 }
