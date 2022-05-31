@@ -3,27 +3,10 @@
 process.env.TZ = 'UTC';
 
 const express = require('@financial-times/n-express');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-
-const accessControl = require('./middleware/access-control');
-const apiKey = require('./middleware/api-key');
-const cache = require('./middleware/cache');
-const checkIfNewSyndicationUser = require('./middleware/check-if-new-syndication-user');
-const db = require('./middleware/db');
-const decodeSession = require('./middleware/decode-session');
-const expediteUserAuth = require('./middleware/expedite-user-auth');
-const flagMaintenanceMode = require('./middleware/flag-maintenance-mode');
-const getContractByIdFromSession = require('./middleware/get-contract-by-id-from-session');
 const getContractByIdFromParam = require('./middleware/get-contract-by-id-from-param');
-const getUserAccessAuthToken = require('./middleware/get-user-access-auth-token');
-const getSyndicationLicenceForUser = require('./middleware/get-syndication-licence-for-user');
-const getUserProfile = require('./middleware/get-user-profile');
-const isSyndicationUser = require('./middleware/is-syndication-user');
-const masquerade = require('./middleware/masquerade');
-const routeMaintenanceMode = require('./middleware/route-maintenance-mode');
+const { middleware, contractsMiddleware } = require('./middleware');
 
-const app = module.exports = express({
+const app = (module.exports = express({
 	systemCode: 'next-syndication-api',
 	graphiteName: 'syndication-api',
 	withFlags: true,
@@ -34,33 +17,12 @@ const app = module.exports = express({
 		require('../health/error-spikes'),
 		require('../health/article-dl-no-data'),
 		require('../health/article-dl-error-spike'),
-		require('../health/archive-dl-error-spike'),
+		require('../health/archive-dl-error-spike')
 	],
 	errorRateHealthcheck: {
 		severity: 2
 	}
-});
-
-const middleware = [
-	cookieParser(),
-	bodyParser.text(),
-	bodyParser.json(),
-	bodyParser.urlencoded({ extended: true }),
-	accessControl,
-	cache,
-	flagMaintenanceMode,
-	db,
-	decodeSession,
-	expediteUserAuth,
-	isSyndicationUser,
-	masquerade,
-	getSyndicationLicenceForUser,
-	getUserAccessAuthToken,
-	getUserProfile,
-	getContractByIdFromSession,
-	checkIfNewSyndicationUser,
-	routeMaintenanceMode
-];
+}));
 
 app.get('/__gtg', (req, res) => res.sendStatus(200));
 app.get('/__syndication/', (req, res) => res.sendStatus(200));
@@ -113,15 +75,6 @@ if (process.env.NODE_ENV !== 'production') {
 	// note that this will add data to the connected database, so use only on test databases
 	app.post('/syndication/db-persist', middleware, require('./controllers/nonproduction/db-persist'));
 }
-
-const contractsMiddleware = [
-	cookieParser(),
-	bodyParser.text(),
-	bodyParser.json(),
-	accessControl,
-	cache,
-	apiKey
-];
 
 app.post('/syndication/contracts/:contract_id/resolve', contractsMiddleware, getContractByIdFromParam, require('./controllers/resolve'));
 app.get('/syndication/contracts/:contract_id', contractsMiddleware, require('./controllers/get-contract-by-id'));
