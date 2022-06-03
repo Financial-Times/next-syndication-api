@@ -33,7 +33,18 @@ module.exports = exports = async (req, res, next) => {
 		if (!syndicationLicences.length) {
 			const isProduction = process.env.NODE_ENV === 'production';
 			if (isProduction) {
-				throw new ReferenceError(`No Syndication Licence found for user#${res.locals.userUuid} using ${URI}`);
+				const error = new ReferenceError(
+					`No Syndication Licence found for user#${res.locals.userUuid} using ${URI}`
+				);
+				log.error('LICENCE_FOUND_ERROR', {
+					event: 'LICENCE_FOUND_ERROR',
+					error,
+					URI,
+					headers,
+					user: res.locals.userUuid
+				});
+				res.sendStatus(404);
+				next(error);
 			}
 
 			syndicationLicences.push({
@@ -52,7 +63,18 @@ module.exports = exports = async (req, res, next) => {
 								|| syndicationLicences[0];
 
 		if (!syndicationLicence) {
-			throw new ReferenceError(`No Syndication Licence found for user#${res.locals.userUuid} using ${URI}`);
+			const error = new ReferenceError(
+				`No Syndication Licence found for user#${res.locals.userUuid} using ${URI}`
+			);
+			log.error('LICENCE_FOUND_ERROR', {
+				event: 'LICENCE_FOUND_ERROR',
+				error,
+				URI,
+				headers,
+				user: res.locals.userUuid
+			});
+			res.sendStatus(404);
+			next(error);
 		}
 
 		res.locals.licence = syndicationLicence;
