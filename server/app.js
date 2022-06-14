@@ -4,7 +4,6 @@ process.env.TZ = 'UTC';
 
 const express = require('@financial-times/n-express');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 
 const accessControl = require('./middleware/access-control');
 const apiKey = require('./middleware/api-key');
@@ -43,9 +42,9 @@ const app = module.exports = express({
 
 const middleware = [
 	cookieParser(),
-	bodyParser.text(),
-	bodyParser.json(),
-	bodyParser.urlencoded({ extended: true }),
+	express.text(),
+	express.json(),
+	express.urlencoded({ extended: true }),
 	accessControl,
 	cache,
 	flagMaintenanceMode,
@@ -116,8 +115,8 @@ if (process.env.NODE_ENV !== 'production') {
 
 const contractsMiddleware = [
 	cookieParser(),
-	bodyParser.text(),
-	bodyParser.json(),
+	express.text(),
+	express.json(),
 	accessControl,
 	cache,
 	apiKey
