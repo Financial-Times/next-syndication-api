@@ -162,3 +162,8 @@ To turn maintenance mode on, simply turn the `syndicationMaintenance` flag on fo
 Conversely, turn it off again to turn maintenance mode off.
 
 If you want to run the API endpoints in Postman while this flag is on, set a cookie for domain `local.ft.com` in Postman for `next-flags` to override it with `next-flags=syndicationMaintenance%3Aoff`
+
+## Database Credentials & Key Rotation
+Be aware that both next-syndication-dl & next-syndication-api share the same database. When database credentials are rotated in the Heroku add-on, you must manually update the `DATABASE_HOST`, `DATABASE_NAME`, `DATABASE_PASSWORD`, `DATABASE_PORT`, and `DATABASE_USER_NAME` environment variables in the Heroku dashboards and vault folders for both the next-syndication-dl & next-syndication-api. Failure to update creditentials for both apps will cause issues. 
+
+AWS keys must not include "/" characters, which can cause [parsing issues with Vault](https://financialtimes.slack.com/archives/C02SM4C7BDZ/p1641393223095500). 
