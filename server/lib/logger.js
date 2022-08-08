@@ -8,6 +8,8 @@ const _logger = new MaskLogger([
 	'contract_id',
 	'first_name',
 	'surname',
+	'uri',
+	'user_name',
 	'x-api-key'
 ]);
 
