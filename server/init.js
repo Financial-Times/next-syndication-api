@@ -2,6 +2,8 @@
 
 const path = require('path');
 
+const createErrorLogger = require('@dotcom-reliability-kit/middleware-log-errors');
+
 require('../queue/connect');
 
 const { Logger } = require('./lib/logger');
@@ -20,6 +22,8 @@ process.on('uncaughtException', err => {
 		error: err.stack
 	});
 });
+
+app.use(createErrorLogger());
 
 app.listen(PORT, () => {
 	log.info(`${MODULE_ID} Listening on => ${PORT}`);
