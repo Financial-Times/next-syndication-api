@@ -73,7 +73,7 @@ If _nobody_ can see their icons, then this is a more serious problem and should 
 The app connects to Salesforce to get contract details for the user, and updates the Syndication database when it receives them
 * User: `next-syndication`
 * URLs: Logs in and uses an SDK, retrieves details from `/SCRMContract/[someContractID]`
-* Splunk: [index="heroku" source=\*syndication-api\* salesforce error| spath "message.error message" | search "message.error message"=NullApexResponse](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3D%22heroku%22%20source%3D*syndication-api*%20salesforce%20error%7C%20spath%20%22message.error%20message%22%20%7C%20search%20%22message.error%20message%22%3DNullApexResponse&sid=1661942615.1390859&display.page.search.mode=smart&dispatch.sample_ratio=1&workload_pool=standard_perf&earliest=-1h&latest=now)
+* Splunk: [index="heroku" source=\*syndication-api\* salesforce error](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3D%22heroku%22%20source%3D*syndication-api*%20salesforce%20error&display.page.search.mode=smart&dispatch.sample_ratio=1&workload_pool=standard_perf&earliest=-1h&latest=now&sid=1661952146.1430281), `NullApexResponse` is in the error message specifically for the call to Salesforce
 
 ## Second Line Troubleshooting
 
@@ -222,7 +222,7 @@ Turns out that our Database Integrity healthcheck (db-sync-state) runs against r
 ### Splunk searches
 
 *   [index=heroku source="_syndication-api_"](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3Dheroku%20source%3D%22*syndication-api*%22&display.page.search.mode=smart&dispatch.sample_ratio=1&earliest=-1h&latest=now&sid=1565272294.5309696)
-* Salesforce failures can be found as [index="heroku" source=*syndication-api* salesforce error| spath "message.error message" | search "message.error message"=NullApexResponse](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3D%22heroku%22%20source%3D*syndication-api*%20salesforce%20error%7C%20spath%20%22message.error%20message%22%20%7C%20search%20%22message.error%20message%22%3DNullApexResponse&sid=1661942615.1390859&display.page.search.mode=smart&dispatch.sample_ratio=1&workload_pool=standard_perf&earliest=-1h&latest=now)
+* Salesforce failures can be found as [index="heroku" source=*syndication-api* salesforce error](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3D%22heroku%22%20source%3D*syndication-api*%20salesforce%20error&display.page.search.mode=smart&dispatch.sample_ratio=1&workload_pool=standard_perf&earliest=-1h&latest=now&sid=1661952146.1430281), `NullApexResponse` is in the error message specifically for the call to Salesforce
 
 ## Failover Architecture Type
 
