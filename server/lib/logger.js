@@ -1,4 +1,4 @@
-const MaskLogger = require('@financial-times/n-mask-logger').default;
+const MaskLogger = require('@financial-times/n-mask-logger');
 const  { metrics } = require('@financial-times/n-express');
 
 
