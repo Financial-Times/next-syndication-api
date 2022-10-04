@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@financial-times/n-gage": "9.0.1",
-    "@financial-times/n-heroku-tools": "^10.0.0",
+    "@financial-times/n-heroku-tools": "^14.0.0",
     "@financial-times/n-test": "^1.13.2",
     "chai": "^4.0.2",
     "check-engine": "^1.10.1",
