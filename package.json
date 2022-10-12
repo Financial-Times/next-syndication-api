@@ -22,7 +22,7 @@
     "mime-types": "^2.1.5",
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",
-    "n-eager-fetch": "5.1.0",
+    "n-eager-fetch": "6.0.0",
     "n-health": "7.0.1",
     "nforce": "^1.7.0",
     "node-schedule": "^1.2.5",
