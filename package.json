@@ -33,16 +33,24 @@
     "xmldom": "^0.6.0"
   },
   "devDependencies": {
-    "@financial-times/n-gage": "9.0.1",
-    "@financial-times/n-heroku-tools": "^14.0.0",
+    "dotcom-tool-kit": "^2.3.5",
+    "@dotcom-tool-kit/backend-app": "^2.0.11",
+    "@dotcom-tool-kit/mocha": "^2.1.5",
+    "@dotcom-tool-kit/husky-npm": "^2.2.0",
+    "@dotcom-tool-kit/npm": "^2.0.9",
     "@financial-times/n-test": "^4.0.0",
+    "@dotcom-tool-kit/eslint": "^2.2.1",
+    "@financial-times/eslint-config-next": "^6.0.0",
+    "@dotcom-tool-kit/secret-squirrel": "^1.0.7",
     "chai": "^4.0.2",
     "check-engine": "^1.10.1",
     "coveralls": "^2.13.1",
-    "eslint": "^3.19.0",
+    "eslint": "^8.15.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "fetch-mock": "^9.11.0",
     "lintspaces-cli": "^0.6.0",
-    "mocha": "^3.3.0",
+    "mocha": "^6.1.4",
     "nock": "^9.0.13",
     "node-mocks-http": "^1.6.2",
     "node-pandoc": "^0.3.0",
@@ -54,6 +62,7 @@
     "sinon-chai": "^3.2.0",
     "snyk": "^1.996.0",
     "unzipper": "^0.10.11"
+
   },
   "nyc": {
     "exclude": [
@@ -103,16 +112,25 @@
   },
   "scripts": {
     "commit": "commit-wizard",
-    "heroku-postbuild": "make heroku-postbuild",
+    "heroku-postbuild": "dotcom-tool-kit build:remote release:remote cleanup:remote",
     "prepare": "npx snyk protect || npx snyk protect -d || true",
-    "preinstall": "[ \"$INIT_CWD\" != \"$PWD\" ] || npm_config_yes=true npx check-engine"
+    "preinstall": "[ \"$INIT_CWD\" != \"$PWD\" ] || npm_config_yes=true npx check-engine",
+    "build": "dotcom-tool-kit build:local",
+    "test": "export IGNORE_A11Y=true; export NEW_SYNDICATION_USERS=testUserUuid1,testUserUuid2;  export NEW_SYNDICATION_USERS_AWAITING=testUserUuid3,testUserUuid4; export NODE_ENV=test; dotcom-tool-kit test:local",
+    "start": "dotcom-tool-kit run:local",
+    "lint": "eslint . --ext .js",
+    "lint-fix": "eslint . --ext .js --fix",
+    "start-local": "./node_modules/.bin/pm2 start procfile.json && ./node_modules/.bin/pm2 logs",
+    "killall": "./node_modules/.bin/pm2 stop all && ./node_modules/.bin/pm2 kill",
+    "monit": "./node_modules/.bin/pm2 monit",
+    "unit-test" : "IGNORE_A11Y=true  NEW_SYNDICATION_USERS=testUserUuid1,testUserUuid2  NEW_SYNDICATION_USERS_AWAITING=testUserUuid3,testUserUuid4 NODE_ENV=test node ./node_modules/.bin/mocha --full-trace --harmony --recursive --slow 15000 --sort --timeout 30000 test/"
   },
   "config": {},
   "husky": {
     "hooks": {
-      "commit-msg": "node_modules/.bin/secret-squirrel-commitmsg",
-      "pre-commit": "node_modules/.bin/secret-squirrel && make verify -j3",
-      "pre-push": "make verify -j3"
+      "commit-msg": "dotcom-tool-kit git:commitmsg",
+      "pre-commit": "dotcom-tool-kit git:precommit",
+      "pre-push": "npm run lint"
     }
   },
   "volta": {

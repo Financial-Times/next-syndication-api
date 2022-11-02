@@ -29,9 +29,8 @@ _NB: There is a common misconception that you need all parts of Syndication to b
 
     ~$ cd next-syndication-api
 
-    ~$ make install
+    ~$ npm install
     
-    ~$ make .env
 
 ```
 
@@ -96,19 +95,18 @@ Once you have set up the projects you want to work on, and want to run all proje
 
   (request will fail on the browser because is an API and it requires `x-api-key` to be present in the request)
 
-* This API doesn't run the router, so you will need to start that manually with `cd` into `next-router` and `make run-https` (this is very important for `next-syndication-api` if this is ignored the `next-router` will be throwing exceptions)
 
   * HOWEVER if you are also running another app like `next-syn-list` or `next-article`, do not run `next-router` at the same time. Those apps run `next-router` by default so you don't need an independent instance. In fact, trying to run an independent instance of `next-router` will stop your local `next-article` app from working.
-* `cd` into `next-syndication-api` and `make run-local`
+* `cd` into `next-syndication-api` and `npm run start-local`
   * This will start the `next-syndication-api`, the associated worker processes and the republishing contract and history pages using [PM2](https://www.npmjs.com/package/pm2), and tail the logs for all HTTP servers/processes.
 * go to [http://local.ft.com:3255/__gtg](http://local.ft.com:3255/__gtg) to confirm the syndication API app is responding
 
 * go to [https://local.ft.com:5050/syndication/user-status](https://local.ft.com:5050/syndication/user-status) to confirm the app is responding with data
-* Optionally, you can also run `make run-monit` to bring up the [PM2 process monitor](https://www.npmjs.com/package/pm2#cpu--memory-monitoring) e.g. for checking out CPU and memory usage.
+* Optionally, you can also run `npm run monit` to bring up the [PM2 process monitor](https://www.npmjs.com/package/pm2#cpu--memory-monitoring) e.g. for checking out CPU and memory usage.
 
 ### Running the Syndication UI (optional)
 
-* if you also want to locally test all the `/republishing` pages, `cd` into `next-syn-list` and run `make run`
+* if you also want to locally test all the `/republishing` pages, `cd` into `next-syn-list` and run `npm run start`
 
 * if you want to test that the syndication icon buttons work too, install and run [next-article](https://github.com/Financial-Times/next-article) locally.
 
@@ -118,7 +116,7 @@ Once you have set up the projects you want to work on, and want to run all proje
 ### Restarting
 
 When restarting the app to check your changes, you will need to make sure there are no pm2 processes kicking about that might show you the unchanged version.
-You can stop all pm2 processes with the command `make kill-all`. You can chain commands with `make kill-all && make run-local` so you don't have to wait for the kill-all process to finish before
+You can stop all pm2 processes with the command `npm run killall`. You can chain commands with `run killall && npm run start-local` so you don't have to wait for the kill-all process to finish before
 
 ---
 
@@ -136,7 +134,7 @@ All secrets are added to the [generic config](https://github.com/Financial-Times
 
 You will notice that [next-syndication-dl](https://github.com/Financial-Times/next-syndication-dl) does not have its own `config` directory.
 
-Don't worry, this is by design: the `config` directory and the `pandoc-dpkg` directories are both symlinked to the root of the project by the `make install` task.
+Don't worry, this is by design: the `config` directory and the `pandoc-dpkg` directories are both symlinked to the root of the project by the `npm install` task.
 
 ## Emails
 

@@ -1,0 +1,29 @@
+plugins:
+  - '@dotcom-tool-kit/backend-app'
+  - '@dotcom-tool-kit/eslint'
+  - '@dotcom-tool-kit/secret-squirrel'
+  - '@dotcom-tool-kit/npm'
+  - '@dotcom-tool-kit/husky-npm'
+  - '@dotcom-tool-kit/mocha'
+hooks:
+  test:local:
+    - Mocha
+
+  test:ci:
+    - Eslint
+
+options:
+  '@dotcom-tool-kit/mocha': {}
+  '@dotcom-tool-kit/eslint': { }
+  '@dotcom-tool-kit/circleci': { }
+  '@dotcom-tool-kit/heroku':
+    pipeline: ft-next-syndication-api
+    systemCode: next-syndication-api
+    scaling:
+      ft-next-syndication-api:
+        web:
+          size: standard-1X
+          quantity: 1
+  '@dotcom-tool-kit/vault':
+    team: next
+    app: next-syndication-api

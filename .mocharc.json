@@ -1,0 +1,13 @@
+{
+  "exit" : true,
+  "extension": ["js"],
+  "package": "./package.json",
+  "spec" : ["'test/**/*.js'"],
+  "timeout": 50000,
+  "harmony": true,
+  "slow": 20000,
+  "recursive": true,
+  "sort": true,
+  "full-trace" : true,
+  "bail": true
+}
