@@ -221,8 +221,8 @@ Turns out that our Database Integrity healthcheck (db-sync-state) runs against r
 
 ### Splunk searches
 
-*   [index=heroku source="_syndication-api_"](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3Dheroku%20source%3D%22*syndication-api*%22&display.page.search.mode=smart&dispatch.sample_ratio=1&earliest=-1h&latest=now&sid=1565272294.5309696)
-* Salesforce failures can be found as [index="heroku" source=*syndication-api* salesforce error](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3D%22heroku%22%20source%3D*syndication-api*%20salesforce%20error&display.page.search.mode=smart&dispatch.sample_ratio=1&workload_pool=standard_perf&earliest=-1h&latest=now&sid=1661952146.1430281), `NullApexResponse` is in the error message specifically for the call to Salesforce
+*   [index="heroku" source="next-syndication-api" sourcetype="heroku:app"](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3D%22heroku%22%20source%3D%22next-syndication-api%22%20sourcetype%3D%22heroku%3Aapp%22&display.page.search.mode=smart&dispatch.sample_ratio=1&earliest=-1h&latest=now&workload_pool=standard_perf&sid=1667810937.23521460)
+* Salesforce failures can be found as [index="heroku" source="next-syndication-api" sourcetype="heroku:app" salesforce error](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3D%22heroku%22%20source%3D%22next-syndication-api%22%20sourcetype%3D%22heroku%3Aapp%22%20salesforce%20error&display.page.search.mode=smart&dispatch.sample_ratio=1&workload_pool=standard_perf&earliest=-1h&latest=now&sid=1667810888.23521046), `NullApexResponse` is in the error message specifically for the call to Salesforce
 
 ## Failover Architecture Type
 
