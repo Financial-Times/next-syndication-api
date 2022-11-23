@@ -5,7 +5,7 @@ const moment = require('moment');
 const pg = require('../../db/pg');
 const getAllExistingItemsForContract = require('./get-all-existing-items-for-contract');
 const { Logger } = require('./logger');
-const log = new Logger({source: 'lib/get-content-by-contract-id'});
+const log = new Logger({source: 'lib/get-history-by-contract-id'});
 
 module.exports = exports = async ({ contract_id, limit, offset, type, user_id }) => {
 	try {
