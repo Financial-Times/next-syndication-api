@@ -64,7 +64,7 @@ describe(MODULE_ID, function () {
 			});
 		});
 
-		it('writes a file so it can compare queue history', async function () {
+		xit('writes a file so it can compare queue history', async function () {
 			await underTest.tick();
 
 			const file_path = path.resolve(HEALTH_CHECK_HISTORY.directory, 'sqs', moment().format(HEALTH_CHECK_HISTORY.file_date_format));

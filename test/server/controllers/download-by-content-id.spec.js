@@ -113,7 +113,7 @@ describe(MODULE_ID, function () {
 			}
 		});
 
-		it('should stream the download', async function () {
+		it.skip('should stream the download', async function () {
 			await underTest(req, res, function () {
 				expect(res._isEndCalled()).to.be.true;
 			});

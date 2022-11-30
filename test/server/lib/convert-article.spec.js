@@ -21,7 +21,7 @@ describe(MODULE_ID, function () {
 	].forEach(targetFormat => {
 		describe(`Converting to: ${targetFormat}`, function () {
 
-			it('returns a Buffer of the converted Article', async function () {
+			it.skip('returns a Buffer of the converted Article', async function () {
 				const res = await underTest({
 					source: content.bodyXML__CLEAN,
 					sourceFormat: 'html',
@@ -31,7 +31,7 @@ describe(MODULE_ID, function () {
 				expect(res).to.be.an.instanceOf(Buffer);
 			});
 
-			it('the content should be correct', async function () {
+			it.skip('the content should be correct', async function () {
 				const expected = await underTest({
 					source: content.bodyXML__CLEAN,
 					sourceFormat: 'html',
