@@ -22,6 +22,7 @@ describe(MODULE_ID, function () {
 	const DEFAULT_FORMAT = 'docx';
 
 	[
+		'0002839e-6dd8-34ff-ae14-e5dfb40b2eff',
 		'42ad255a-99f9-11e7-b83c-9588e51488a0',
 		'ef4c49fe-980e-11e7-b83c-9588e51488a0',
 		'b16fce7e-3c92-48a3-ace0-d1af3fce71af',
