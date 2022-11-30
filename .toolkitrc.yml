@@ -11,6 +11,7 @@ hooks:
 
   test:ci:
     - Eslint
+    - Mocha
 
 options:
   '@dotcom-tool-kit/mocha': {}
