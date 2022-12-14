@@ -55,15 +55,25 @@ module.exports = exports = SFContract => {
 
 
 function formatAsset(item) {
+	//if the contract data is coming all lowercase from salesforce, capitalize the first letter before saving to the DB. This is because of the enum_time_period in next-syndication-db-schema, which only accepts uppercase.
+	const lowerCaseEnumTimePeriods = ['day', 'week', 'month', 'year'];
+
+	let maxPermittedPrintUsagePeriod = item.maxPermittedPrintUsagePeriod || 'Year';
+
+	let maxPermittedOnlineUsagePeriod = item.maxPermittedOnlineUsagePeriod || 'Year';
+
+	maxPermittedPrintUsagePeriod = lowerCaseEnumTimePeriods.includes(maxPermittedPrintUsagePeriod) ? maxPermittedPrintUsagePeriod.charAt(0).toUpperCase() + maxPermittedPrintUsagePeriod.slice(1) : maxPermittedPrintUsagePeriod;
+	maxPermittedOnlineUsagePeriod = lowerCaseEnumTimePeriods.includes(maxPermittedOnlineUsagePeriod) ? maxPermittedOnlineUsagePeriod.charAt(0).toUpperCase() + maxPermittedOnlineUsagePeriod.slice(1) : maxPermittedOnlineUsagePeriod;
+
 	return {
 		asset_class: item.assetType,
 		asset_id: item.assetId,
 		asset_type: item.assetName,
 		content_type: ASSET_TYPE_TO_CONTENT_TYPE[item.assetName],
 		product: item.productName,
-		print_usage_period: item.maxPermittedPrintUsagePeriod || 'Year',
+		print_usage_period: maxPermittedPrintUsagePeriod,
 		print_usage_limit: item.maxPermittedPrintUsage,
-		online_usage_period: item.maxPermittedOnlineUsagePeriod || 'Year',
+		online_usage_period: maxPermittedOnlineUsagePeriod,
 		online_usage_limit: item.maxPermittedOnlineUsage,
 		embargo_period: item.embargoPeriod || 0,
 		content_set: item.contentSet,
