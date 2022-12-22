@@ -56,11 +56,14 @@
         - content_es
         - contract_asset_content_set
         - contract_asset_items
+        - contract_assets
+        - contract_asset_content_areas
         - contract_asset_register
         - contract_users
         - contracts
         - contributor_purchase
         - download_history
+        - legacy_download_history
         - migrated_users
         - save_history
         - users
