@@ -120,7 +120,6 @@
     "start": "dotcom-tool-kit run:local",
     "lint": "eslint . --ext .js",
     "lint-fix": "eslint . --ext .js --fix",
-    "start-local": "./node_modules/.bin/pm2 start procfile.json && ./node_modules/.bin/pm2 logs",
     "killall": "./node_modules/.bin/pm2 stop all && ./node_modules/.bin/pm2 kill",
     "monit": "./node_modules/.bin/pm2 monit",
     "unit-test" : "IGNORE_A11Y=true  NEW_SYNDICATION_USERS=testUserUuid1,testUserUuid2  NEW_SYNDICATION_USERS_AWAITING=testUserUuid3,testUserUuid4 NODE_ENV=test node ./node_modules/.bin/mocha --full-trace --harmony --recursive --slow 15000 --sort --timeout 30000 test/"
