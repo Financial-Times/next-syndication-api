@@ -31,10 +31,7 @@ module.exports = exports = (config) => {
 					user_agent: req.get('user-agent')
 				},
 				user: {
-					email: user.email,
-					first_name: user.first_name,
-					id: user.user_id,
-					surname: user.surname
+					id: user.user_id
 				}
 			}
 		});
