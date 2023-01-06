@@ -5,12 +5,19 @@ plugins:
   - '@dotcom-tool-kit/npm'
   - '@dotcom-tool-kit/husky-npm'
   - '@dotcom-tool-kit/mocha'
+  - './toolkit/start'
+  - './toolkit/logs'
+
 hooks:
   test:local:
     - Mocha
 
   test:ci:
     - Eslint
+  
+  run:local:
+    - SyndicationAPITask
+    - SyndicationAPILogs
 
 options:
   '@dotcom-tool-kit/mocha': {}

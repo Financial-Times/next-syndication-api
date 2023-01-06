@@ -97,7 +97,7 @@ Once you have set up the projects you want to work on, and want to run all proje
 
 
   * HOWEVER if you are also running another app like `next-syn-list` or `next-article`, do not run `next-router` at the same time. Those apps run `next-router` by default so you don't need an independent instance. In fact, trying to run an independent instance of `next-router` will stop your local `next-article` app from working.
-* `cd` into `next-syndication-api` and `npm run start-local`
+* `cd` into `next-syndication-api` and `npm start`
   * This will start the `next-syndication-api`, the associated worker processes and the republishing contract and history pages using [PM2](https://www.npmjs.com/package/pm2), and tail the logs for all HTTP servers/processes.
 * go to [http://local.ft.com:3255/__gtg](http://local.ft.com:3255/__gtg) to confirm the syndication API app is responding
 
@@ -116,7 +116,7 @@ Once you have set up the projects you want to work on, and want to run all proje
 ### Restarting
 
 When restarting the app to check your changes, you will need to make sure there are no pm2 processes kicking about that might show you the unchanged version.
-You can stop all pm2 processes with the command `npm run killall`. You can chain commands with `run killall && npm run start-local` so you don't have to wait for the kill-all process to finish before
+You can stop all pm2 processes with the command `npm run killall`. You can chain commands with `run killall && npm start` so you don't have to wait for the kill-all process to finish before
 
 ---
 
