@@ -23,7 +23,7 @@
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.35",
     "n-eager-fetch": "6.0.0",
-    "n-health": "7.0.2",
+    "n-health": "8.1.0",
     "nforce": "^1.7.0",
     "node-schedule": "^1.2.5",
     "node-slack": "^0.0.7",
