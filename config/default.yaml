@@ -67,6 +67,14 @@
         - migrated_users
         - save_history
         - users
+        - contract_asset_data
+        - contract_asset_data_downloaded_counts
+        - contract_asset_item_data
+        - contract_asset_register_data
+        - contract_data
+        - contract_unique_downloads
+        - downloads
+        - saved_items
 
   DEFAULT_DOWNLOAD_FORMAT: docx
   DEFAULT_DOWNLOAD_LANGUAGE: en
