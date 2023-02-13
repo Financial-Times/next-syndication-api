@@ -64,7 +64,7 @@ module.exports = exports = async (contractId, dontThrow) => {
 			return null;
 		}
 
-		throw new Error('NullApexResponse');
+		throw new Error('NullApexResponse', {furtherDetails: 'In the past this was associated with incidents where a given contract users cannot see the Syndication icons. A quick solution is for the B2B Operations Team to manually regenerate the licence via Salesforce', apexRes});
 	}
 	catch (error) {
 		log.error(error);
