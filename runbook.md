@@ -275,7 +275,7 @@ PartiallyAutomated
 You can read about how to rotate an AWS key [over on the Customer Products Wiki](https://customer-products.in.ft.com/wiki/Rotating-AWS-Keys)
 See the Customer Products [key management and troubleshooting wiki page](https://customer-products.in.ft.com/wiki/Key-Management-and-Troubleshooting)
 
-## Error Uuid Same Email
+## Error Same Email
 
 This was caused by the user already existing in the database with their old ID and the same email address.
 The database uses the user ID as the primary key and the email address as a unique index.
