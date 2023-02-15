@@ -283,6 +283,7 @@ Therefore, when you try to add a new user id with an email address that already 
 The system isn’t designed to handle user IDs changing.This can be fixed by making a backup, running a sql transaction script against the database, and then testing that all references to the old ID had disappeared.
 
 ```shell
+
     BEGIN;
     UPDATE syndication.users SET user_id='newId' WHERE user_id='oldId';
     UPDATE syndication.contract_users SET user_id='newId' WHERE user_id='oldId';
@@ -293,4 +294,5 @@ The system isn’t designed to handle user IDs changing.This can be fixed by mak
     UPDATE syndication.saved_items SET user_id='newId' WHERE user_id='oldId';
     UPDATE syndication.migrated_users SET user_id='newId' WHERE user_id='oldId';
     COMMIT;
+    
 ```
