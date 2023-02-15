@@ -149,6 +149,25 @@ We can check the details of a specific contract and the user status page to begi
 tail the heroku logs for next-syndication-api while doing this so you can also see database activity
 with `heroku logs --app ft-next-syndication-api --tail --num 0 `
 
+This could be caused too by the user already existing in the database with their old ID and the same email address. The database
+uses the user ID as the primary key and the email address as a unique index. Therefore, when you try to add a new user
+id with an email address that already exists, it will fail. The system isn’t designed to handle user IDs changing.This
+can be fixed by making a backup, running a sql transaction script against the database, and then testing that all
+references to the old ID had disappeared.
+
+```shell
+ BEGIN;
+    UPDATE syndication.users SET user_id='newId' WHERE user_id='oldId';
+    UPDATE syndication.contract_users SET user_id='newId' WHERE user_id='oldId';
+    UPDATE syndication.downloads SET user_id='newId' WHERE user_id='oldId';
+    UPDATE syndication.contract_unique_downloads SET user_id='newId' WHERE user_id='oldId';
+    UPDATE syndication.contributor_purchase SET user_id='newId' WHERE user_id='oldId';
+    UPDATE syndication.save_history SET user_id='newId' WHERE user_id='oldId';
+    UPDATE syndication.saved_items SET user_id='newId' WHERE user_id='oldId';
+    UPDATE syndication.migrated_users SET user_id='newId' WHERE user_id='oldId';
+ COMMIT;  
+```
+
 ### Contract details not refreshing
 
 First go to the `/syndication/contract-status?contract_id=${CONTRACT_NUMBER_HAVING_ISSUES}` and look for
@@ -336,24 +355,3 @@ You can read about how to rotate an AWS
 key [over on the Customer Products Wiki](https://customer-products.in.ft.com/wiki/Rotating-AWS-Keys)
 See the Customer
 Products [key management and troubleshooting wiki page](https://customer-products.in.ft.com/wiki/Key-Management-and-Troubleshooting)
-
-## Error Uuid Same Email
-
-This was caused by the user already existing in the database with their old ID and the same email address. The database
-uses the user ID as the primary key and the email address as a unique index. Therefore, when you try to add a new user
-id with an email address that already exists, it will fail. The system isn’t designed to handle user IDs changing.This
-can be fixed by making a backup, running a sql transaction script against the database, and then testing that all
-references to the old ID had disappeared.
-
-```shell
- BEGIN;
-    UPDATE syndication.users SET user_id='newId' WHERE user_id='oldId';
-    UPDATE syndication.contract_users SET user_id='newId' WHERE user_id='oldId';
-    UPDATE syndication.downloads SET user_id='newId' WHERE user_id='oldId';
-    UPDATE syndication.contract_unique_downloads SET user_id='newId' WHERE user_id='oldId';
-    UPDATE syndication.contributor_purchase SET user_id='newId' WHERE user_id='oldId';
-    UPDATE syndication.save_history SET user_id='newId' WHERE user_id='oldId';
-    UPDATE syndication.saved_items SET user_id='newId' WHERE user_id='oldId';
-    UPDATE syndication.migrated_users SET user_id='newId' WHERE user_id='oldId';
- COMMIT;  
-```
