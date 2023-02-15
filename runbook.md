@@ -277,11 +277,11 @@ See the Customer Products [key management and troubleshooting wiki page](https:/
 
 # Syndication Error when user have different GUID with same email
 
-This was caused by the user already existing in the database with their old ID and the same email address.  The database uses the user ID as the primary key and the email address as a unique index.
-Therefore when you try to add a new user id with an email address that already exists, it will fail. The system isn’t designed to handle user IDs changing
-This can be fixed by making a backup, running an sql transaction script against the database, and then testing that all references to the old ID had disappeared
+This was caused by the user already existing in the database with their old ID and the same email address.
+The database uses the user ID as the primary key and the email address as a unique index.
+Therefore, when you try to add a new user id with an email address that already exists, it will fail.
+The system isn’t designed to handle user IDs changing.This can be fixed by making a backup, running a sql transaction script against the database, and then testing that all references to the old ID had disappeared.
 
-Script: 
 ```shell
 BEGIN;
 UPDATE syndication.users SET user_id='newId' WHERE user_id='oldId';
