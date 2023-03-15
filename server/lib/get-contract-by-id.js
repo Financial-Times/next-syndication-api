@@ -61,7 +61,7 @@ function decorateContract(contract, hasGraphics = false) {
 		} else {
 			log.info('NULL ASSETS', {
 				asset: asset,
-				contract: contract
+				contract_id: contract.contract_id
 			});
 		}
 
