@@ -27,7 +27,7 @@ module.exports = exports = async (req, res, next) => {
 					['spanish content', 'spanish_content'],
 					['spanish weekend', 'spanish_weekend']
 				].forEach(([content_area, property]) => {
-					acc[property] = acc[property] || assets.some(({ content }) => content.toLowerCase().includes(content_area));
+					acc[property] = acc[property] || (assets && assets.some(({ content }) => content && content.toLowerCase().includes(content_area)));
 				});
 
 				return acc;

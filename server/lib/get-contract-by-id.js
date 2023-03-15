@@ -50,13 +50,20 @@ function decorateContract(contract, hasGraphics = false) {
 		acc[asset.asset_type] =
 		acc[asset.content_type] = asset;
 
-		asset.assets.forEach(item => {
-			item.content = (Array.isArray(item.content_set)) ? item.content_set.join('; ') : '';
+		if(Array.isArray(asset.assets)) {
+			asset.assets.forEach(item => {
+				item.content = (Array.isArray(item.content_set)) ? item.content_set.join('; ') : '';
 
-			if (Array.isArray(item.addendums) && item.addendums.length) {
-				asset.hasAddendums = true;
-			}
-		});
+				if (Array.isArray(item.addendums) && item.addendums.length) {
+					asset.hasAddendums = true;
+				}
+			});
+		} else {
+			log.info('NULL ASSETS', {
+				asset: asset,
+				contract_id: contract.contract_id
+			});
+		}
 
 		return acc;
 	}, {});
