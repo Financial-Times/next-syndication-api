@@ -58,6 +58,11 @@ function decorateContract(contract, hasGraphics = false) {
 					asset.hasAddendums = true;
 				}
 			});
+		} else {
+			log.info('NULL ASSETS', {
+				asset: asset,
+				contract: contract
+			});
 		}
 
 		return acc;
