@@ -1,7 +1,7 @@
 {
   "name": "ft-next-syndication-api",
   "description": "Next Syndication API",
-  "version": "0.41.10",
+  "version": "0.41.11",
   "private": true,
   "dependencies": {
     "@dotcom-reliability-kit/middleware-log-errors": "^1.2.5",
