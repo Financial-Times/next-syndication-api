@@ -33,18 +33,19 @@
     "xmldom": "^0.6.0"
   },
   "devDependencies": {
-    "dotcom-tool-kit": "^2.3.5",
     "@dotcom-tool-kit/backend-app": "^2.0.11",
-    "@dotcom-tool-kit/mocha": "^2.1.5",
-    "@dotcom-tool-kit/husky-npm": "^2.2.0",
-    "@dotcom-tool-kit/npm": "^2.0.9",
-    "@financial-times/n-test": "^4.0.0",
     "@dotcom-tool-kit/eslint": "^2.2.1",
-    "@financial-times/eslint-config-next": "^6.0.0",
+    "@dotcom-tool-kit/husky-npm": "^2.2.0",
+    "@dotcom-tool-kit/mocha": "^2.1.5",
+    "@dotcom-tool-kit/npm": "^2.0.9",
     "@dotcom-tool-kit/secret-squirrel": "^1.0.7",
+    "@financial-times/eslint-config-next": "^6.0.0",
+    "@financial-times/n-test": "^4.0.0",
     "chai": "^4.0.2",
+    "chai-http": "^4.3.0",
     "check-engine": "^1.10.1",
     "coveralls": "^2.13.1",
+    "dotcom-tool-kit": "^2.3.5",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -62,7 +63,6 @@
     "sinon-chai": "^3.2.0",
     "snyk": "^1.996.0",
     "unzipper": "^0.10.11"
-
   },
   "nyc": {
     "exclude": [
@@ -122,7 +122,7 @@
     "lint-fix": "eslint . --ext .js --fix",
     "killall": "./node_modules/.bin/pm2 stop all && ./node_modules/.bin/pm2 kill",
     "monit": "./node_modules/.bin/pm2 monit",
-    "unit-test" : "IGNORE_A11Y=true  NEW_SYNDICATION_USERS=testUserUuid1,testUserUuid2  NEW_SYNDICATION_USERS_AWAITING=testUserUuid3,testUserUuid4 NODE_ENV=test node ./node_modules/.bin/mocha --full-trace --harmony --recursive --slow 15000 --sort --timeout 30000 test/"
+    "unit-test": "IGNORE_A11Y=true  NEW_SYNDICATION_USERS=testUserUuid1,testUserUuid2  NEW_SYNDICATION_USERS_AWAITING=testUserUuid3,testUserUuid4 NODE_ENV=test node ./node_modules/.bin/mocha --full-trace --harmony --recursive --slow 15000 --sort --timeout 30000 test/"
   },
   "config": {},
   "husky": {
