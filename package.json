@@ -44,7 +44,7 @@
     "chai": "^4.0.2",
     "chai-http": "^4.3.0",
     "check-engine": "^1.10.1",
-    "coveralls": "^2.13.1",
+    "coveralls": "^3.1.1",
     "dotcom-tool-kit": "^2.3.5",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
