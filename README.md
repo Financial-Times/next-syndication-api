@@ -176,3 +176,55 @@ To turn maintenance mode on, simply turn the `syndicationMaintenance` flag on fo
 Conversely, turn it off again to turn maintenance mode off.
 
 If you want to run the API endpoints in Postman while this flag is on, set a cookie for domain `local.ft.com` in Postman for `next-flags` to override it with `next-flags=syndicationMaintenance%3Aoff`
+
+## Database Credentials & Key Rotation
+
+Be aware that both next-syndication-dl & next-syndication-api share the same database. When database credentials are rotated in the Heroku add-on, you must manually update the `DATABASE_HOST`, `DATABASE_NAME`, `DATABASE_PASSWORD`, `DATABASE_PORT`, and `DATABASE_USER_NAME` environment variables in the Heroku dashboards and vault folders for both the next-syndication-dl & next-syndication-api. Failure to update creditentials for both apps will cause issues.
+
+AWS keys must not include "/" characters, which can cause [parsing issues with Vault](https://financialtimes.slack.com/archives/C02SM4C7BDZ/p1641393223095500).
+
+## Get Articles To Check Syndication Status
+This dev tool was set up after it turned out that the emails notifying the right person that an article written by a freelancer was syndication were not sent. The emails are really important as freelancers get paid for each instance their article is syndicated. This is a back-up to get this information from [Heroku Dataclips](https://data.heroku.com/dataclips).
+
+Step 1: 
+
+Run the following query on the Syndication Database. You'll need to set the `time` variables to reflect the time period you need to check.
+```sql
+SELECT *
+FROM syndication.downloads
+WHERE time >= '2022-05-25'
+AND time <= '2022-05-26'
+```
+
+Step 2:
+
+Download the json file, move it to the dev-tools folder. You will need to change the json file and/or the `const { downloads } = require('../syndicationDownloads');` so that it imports the array correctly. 
+
+Step 3:
+In your terminal go to dev-tools folder. Set the ES access and secret access keys. Run `node getArticlesToCheckSyndicationStatus.js`. This will output a `syndicationBackpayWithNames.json` file, which will be an array of objects.
+
+An example of output:
+```json
+[
+	{
+		"canBeSyndicated": "withContributorPayment",
+		"id": "60084cef-9c34-4d12-8407-ea7007f0054e",
+		"title": "Nigeria’s Afrobeats superstars take on the world",
+		"byline": "Ayodeji Rotinwa",
+		"syndicationDetails": [
+			{
+				"uuid": "userID-user1",
+				"downloadTimestamp": "2020-10-30 11:09:17.125+00",
+				"syndicatedBy": "email-address-of-the-user",
+				"contract": "contract-this-user-is-on"
+			},
+			{
+				"uuid": "userID-user1",
+				"downloadTimestamp": "2020-10-30 11:09:17.452+00",
+				"syndicatedBy": "email-address-of-the-user",
+				"contract": "contract-this-user-is-on"
+			}
+		]
+	},
+]
+```
