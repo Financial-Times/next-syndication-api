@@ -105,7 +105,7 @@ Once you have set up the projects you want to work on, and want to run all proje
 * Optionally, you can also run `npm run monit` to bring up the [PM2 process monitor](https://www.npmjs.com/package/pm2#cpu--memory-monitoring) e.g. for checking out CPU and memory usage.
 
 ### Running against prod DB (optional)
-To run `next-syndication-api` agains prod DB you just have to add to the environment variables defined in `custom-environment-variables.yaml` the prefix `_PROD`.  
+To run `next-syndication-api` against prod DB is necessary add to the environment variables defined in `custom-environment-variables.yaml` the prefix `_PROD`.  
 ("DATABASE_NAME_PROD",DATABASE_HOST_PROD","DATABASE_PASSWORD_PROD","DATABASE_PORT_PROD","DATABASE_URL_PROD","DATABASE_USER_NAME_PROD").  
 These variables are already defined in development Vault folder.
 
