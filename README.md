@@ -20,7 +20,7 @@ _NB: There is a common misconception that you need all parts of Syndication to b
 
 * [The Syndication Wiki](https://github.com/Financial-Times/next-syndication-api/wiki) explains the system and its architecture, including endpoints and authentication.
 * [Next Wiki](https://github.com/Financial-Times/next/wiki/Syndication) covers GDPR SAR and erasure requests so that people without github access can read it, as it is automatically published to <https://customer-products.in.ft.com/wiki/Syndication>.
-
+* [Database Credentials & Key Rotation](https://github.com/Financial-Times/next-syndication-api/wiki#database-credentials-and-key-rotation) info related with key rotation in the systems
 ## Installation
 
 ```shell
@@ -104,6 +104,11 @@ Once you have set up the projects you want to work on, and want to run all proje
 * go to [https://local.ft.com:5050/syndication/user-status](https://local.ft.com:5050/syndication/user-status) to confirm the app is responding with data
 * Optionally, you can also run `npm run monit` to bring up the [PM2 process monitor](https://www.npmjs.com/package/pm2#cpu--memory-monitoring) e.g. for checking out CPU and memory usage.
 
+### Running against prod DB (optional)
+To run `next-syndication-api` against prod DB is necessary add to the environment variables defined in `custom-environment-variables.yaml` the prefix `_PROD`.  
+("DATABASE_NAME_PROD",DATABASE_HOST_PROD","DATABASE_PASSWORD_PROD","DATABASE_PORT_PROD","DATABASE_URL_PROD","DATABASE_USER_NAME_PROD").  
+These variables are already defined in development Vault folder.
+
 ### Running the Syndication UI (optional)
 
 * if you also want to locally test all the `/republishing` pages, `cd` into `next-syn-list` and run `npm run start`
@@ -171,9 +176,3 @@ To turn maintenance mode on, simply turn the `syndicationMaintenance` flag on fo
 Conversely, turn it off again to turn maintenance mode off.
 
 If you want to run the API endpoints in Postman while this flag is on, set a cookie for domain `local.ft.com` in Postman for `next-flags` to override it with `next-flags=syndicationMaintenance%3Aoff`
-
-## Database Credentials & Key Rotation
-
-Be aware that both next-syndication-dl & next-syndication-api share the same database. When database credentials are rotated in the Heroku add-on, you must manually update the `DATABASE_HOST`, `DATABASE_NAME`, `DATABASE_PASSWORD`, `DATABASE_PORT`, and `DATABASE_USER_NAME` environment variables in the Heroku dashboards and vault folders for both the next-syndication-dl & next-syndication-api. Failure to update creditentials for both apps will cause issues.
-
-AWS keys must not include "/" characters, which can cause [parsing issues with Vault](https://financialtimes.slack.com/archives/C02SM4C7BDZ/p1641393223095500).
