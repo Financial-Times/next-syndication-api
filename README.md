@@ -178,7 +178,7 @@ Conversely, turn it off again to turn maintenance mode off.
 If you want to run the API endpoints in Postman while this flag is on, set a cookie for domain `local.ft.com` in Postman for `next-flags` to override it with `next-flags=syndicationMaintenance%3Aoff`
 
 ## Get Articles To Check Syndication Status
-This dev tool was set up after it turned out that the emails notifying the right person that an article written by a freelancer was syndication were not sent. The emails are really important as freelancers get paid for each instance their article is syndicated. This is a back-up to get this information from [Heroku Dataclips](https://data.heroku.com/dataclips).
+This dev tool was set up after it turned out that the emails notifying the right person that an article written by a freelancer was syndicated were not sent. The emails are really important as freelancers get paid for each instance their article is syndicated. This is a back-up to get this information from [Heroku Dataclips](https://data.heroku.com/dataclips).
 
 Step 1: 
 
