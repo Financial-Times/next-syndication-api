@@ -59,7 +59,7 @@ Here is a diagram for the high level architecture of Syndication
 
 This is a standard Heroku app, so try all the normal things here (bounce the dynos etc). For localised errors, check the user trying to access the application is actually on a syndication licence.
 
-### People can't see their syndication icons
+### People can't see their syndication icons (first line)
 
 If syndication icons are not appearing for an individual user (as opposed to all users) then it is likely this user is not on a licence or has been removed from a licence.
 
@@ -67,7 +67,9 @@ This system has an upstream dependency on Salesforce, so it is worth investigati
 
 As an example an incident in February 2020 occurred because an `FTB Article` asset was added by the account manager instead of `FT Article`.
 
-If _nobody_ can see their icons, then this is a more serious problem and should be pushed to Second Line.
+To debug issues where only one person or one contract can't see the icons, please follow [a separate document on the subject](./doc/no-syndication-icons-debugging.md)
+
+If _nobody_ can see their icons, then this is a more serious problem and should be pushed to [Second Line](#people-cant-see-their-syndication-icons-second-line) .
 
 #### __Salesforce usage__
 The app connects to Salesforce to get contract details for the user, and updates the Syndication database when it receives them
@@ -90,8 +92,7 @@ _NB: There is a common misconception that you need all parts of Syndication to b
 ### Check the user status page works
 If the problem is happening for everyone, check the `/syndication/user-status` endpoint, otherwise see if you can get the person who is having the issue (or customer support masquerading as that user) to hit the URL while you're tailing the logs and look for any lines that `error: ` this should highlight JavaScript errors.
 
-
-### People can't see their syndication icons
+### People can't see their syndication icons (second line)
 
 If you cannot see syndication icons, you can check your products with `https://session-next.ft.com/products`. 'Products' should include 'S1'. If you do not have this product, email customer support at `help@ft.com` and ask to be added to a staff syndication licence `CA-00001558`.
 
@@ -114,6 +115,7 @@ If this is a problem for all Syndication users it could be:
 
 We can check the details of a specific contract and the user status page to begin to debug the issue. It is useful to tail the heroku logs for next-syndication-api while doing this so you can also see database activity with `heroku logs --app ft-next-syndication-api --tail --num 0 `
 
+#### Conflict of uuids and email addresses
 This could be caused too by the user already existing in the database with their old ID and the same email address. The database
 uses the user ID as the primary key and the email address as a unique index. Therefore, when you try to add a new user
 id with an email address that already exists, it will fail. The system isn’t designed to handle user IDs changing.This
