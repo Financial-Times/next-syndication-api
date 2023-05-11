@@ -123,5 +123,4 @@ const contractsMiddleware = [
 ];
 
 app.post('/syndication/contracts/:contract_id/resolve', contractsMiddleware, getContractByIdFromParam, require('./controllers/resolve'));
-app.post('/syndication/contracts/force-update/:contract_id', contractsMiddleware, getContractByIdFromParam, require('./controllers/force-refresh-contract'));
 app.get('/syndication/contracts/:contract_id', contractsMiddleware, require('./controllers/get-contract-by-id'));
