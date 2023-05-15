@@ -37,6 +37,16 @@ function decorateContract(contract, hasGraphics = false) {
 		}, {});
 	}
 
+	if (!contract.items) {
+		log.warn('NO_CONTRACT_ITEMS', {
+			message: `Contract ${contract.contract_id} has no assets in the Syndication database. We are unable to decorate it.`,
+			contract_id: contract.contract_id,
+			licence_id: contract.licence_id
+		});
+
+		return contract;
+	}
+
 	contract.itemsMap = contract.items.reduce((acc, asset) => {
 
 		if (asset.download_limit > 0) {
