@@ -21,6 +21,9 @@ const getUserProfile = require('./middleware/get-user-profile');
 const isSyndicationUser = require('./middleware/is-syndication-user');
 const masquerade = require('./middleware/masquerade');
 const routeMaintenanceMode = require('./middleware/route-maintenance-mode');
+const registerCrashHandler = require('@dotcom-reliability-kit/crash-handler');
+
+registerCrashHandler();
 
 const app = module.exports = express({
 	systemCode: 'next-syndication-api',
