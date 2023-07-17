@@ -22,6 +22,9 @@ const getUserAccessAuthToken = require('./middleware/get-user-access-auth-token'
 const getSyndicationLicenceForUser = require('./middleware/get-syndication-licence-for-user');
 const getUserProfile = require('./middleware/get-user-profile');
 const routeMaintenanceMode = require('./middleware/route-maintenance-mode');
+const registerCrashHandler = require('@dotcom-reliability-kit/crash-handler');
+
+registerCrashHandler();
 
 const app = module.exports = express({
 	systemCode: 'next-syndication-dl',
