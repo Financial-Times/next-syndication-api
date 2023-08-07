@@ -1,5 +1,4 @@
 plugins:
-  - '@dotcom-tool-kit/backend-app'
   - '@dotcom-tool-kit/eslint'
   - '@dotcom-tool-kit/secret-squirrel'
   - '@dotcom-tool-kit/npm'
@@ -7,6 +6,7 @@ plugins:
   - '@dotcom-tool-kit/mocha'
   - './toolkit/start'
   - './toolkit/logs'
+  - '@dotcom-tool-kit/backend-heroku-app'
 
 hooks:
   test:local:
@@ -14,15 +14,15 @@ hooks:
 
   test:ci:
     - Eslint
-  
+
   run:local:
     - SyndicationAPITask
     - SyndicationAPILogs
 
 options:
   '@dotcom-tool-kit/mocha': {}
-  '@dotcom-tool-kit/eslint': { }
-  '@dotcom-tool-kit/circleci': { }
+  '@dotcom-tool-kit/eslint': {}
+  '@dotcom-tool-kit/circleci': { nodeVersion: 18.17-browsers }
   '@dotcom-tool-kit/heroku':
     pipeline: ft-next-syndication-api
     systemCode: next-syndication-api
