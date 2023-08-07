@@ -1,10 +1,6 @@
 version: 2.1
 orbs:
   tool-kit: financial-times/dotcom-tool-kit@4
-executors:
-  node:
-    docker:
-      - image: cimg/node:18.17-browsers
 jobs:
   checkout:
     docker:
@@ -27,102 +23,53 @@ workflows:
           - scheduled_pipeline
           - << pipeline.trigger_source >>
     jobs:
-      - checkout:
-          filters:
-            tags:
-               only: /^v\d+\.\d+\.\d+(-.+)?/
+      - checkout
       - waiting-for-approval:
           type: approval
           filters:
             branches:
               only: /(^renovate-.*|^nori/.*)/
       - tool-kit/setup:
-          name: tool-kit/setup-<< matrix.executor >>
           requires:
             - checkout
             - waiting-for-approval
-          matrix:
-            parameters:
-              executor:
-                - node
-          filters:
-            tags:
-              only: /^v\d+\.\d+\.\d+(-.+)?/
       - envTest:
           requires:
             - checkout
             - waiting-for-approval
             - tool-kit/setup
       - tool-kit/build:
-          name: tool-kit/build-<< matrix.executor >>
           requires:
             - envTest
-            - tool-kit/setup-<< matrix.executor >>
-          matrix:
-            parameters:
-              executor:
-                - node
-          filters:
-            tags:
-              only: /^v\d+\.\d+\.\d+(-.+)?/
+            - tool-kit/setup
       - tool-kit/test:
-          name: tool-kit/test-<< matrix.executor >>
           requires:
-            - tool-kit/build-<< matrix.executor >>
-          matrix:
-            parameters:
-              executor:
-                - node
-          filters:
-            tags:
-              only: /^v\d+\.\d+\.\d+(-.+)?/
-      - tool-kit/deploy-review:
+            - tool-kit/build
+      - tool-kit/heroku-provision:
           requires:
-            - tool-kit/setup-node
+            - tool-kit/setup
             - waiting-for-approval
-          name: tool-kit/deploy-review-node
-          executor: node
           filters:
-            tags:
-              only: /^v\d+\.\d+\.\d+(-.+)?/
             branches:
               ignore: main
-      - tool-kit/deploy-staging:
+      - tool-kit/heroku-staging:
           requires:
-            - tool-kit/setup-node
-          name: tool-kit/deploy-staging-node
-          executor: node
+            - tool-kit/setup
           filters:
-            tags:
-              only: /^v\d+\.\d+\.\d+(-.+)?/
             branches:
               only: main
       - tool-kit/e2e-test-review:
           requires:
-            - tool-kit/deploy-review-node
-          name: tool-kit/e2e-test-review-node
-          executor: node
-          filters:
-            tags:
-              only: /^v\d+\.\d+\.\d+(-.+)?/
+            - tool-kit/heroku-provision
       - tool-kit/e2e-test-staging:
           requires:
-            - tool-kit/deploy-staging-node
-          name: tool-kit/e2e-test-staging-node
-          executor: node
-          filters:
-            tags:
-              only: /^v\d+\.\d+\.\d+(-.+)?/
-      - tool-kit/deploy-production:
+            - tool-kit/heroku-staging
+      - tool-kit/heroku-promote:
           requires:
             - envTest
-            - tool-kit/e2e-test-staging-node
-            - tool-kit/test-node
-          name: tool-kit/deploy-production-node
-          executor: node
+            - tool-kit/e2e-test-staging
+            - tool-kit/test
           filters:
-            tags:
-              only: /^v\d+\.\d+\.\d+(-.+)?/
             branches:
               only: main
   nightly:
@@ -137,34 +84,14 @@ workflows:
     jobs:
       - checkout
       - tool-kit/setup:
-          name: tool-kit/setup-<< matrix.executor >>
           requires:
             - checkout
-          matrix:
-            parameters:
-              executor:
-                - node
       - tool-kit/build:
-          name: tool-kit/build-<< matrix.executor >>
           requires:
-            - tool-kit/setup-<< matrix.executor >>
-          matrix:
-            parameters:
-              executor:
-                - node
+            - tool-kit/setup
       - tool-kit/test:
-          name: tool-kit/test-<< matrix.executor >>
           requires:
-            - tool-kit/build-<< matrix.executor >>
-          matrix:
-            parameters:
-              executor:
-                - node
-      - tool-kit/deploy-review:
+            - tool-kit/build
+      - tool-kit/heroku-provision:
           requires:
-            - tool-kit/setup-node
-          name: tool-kit/deploy-review-node
-          executor: node
-          filters:
-            branches:
-              ignore: main
+            - tool-kit/setup
