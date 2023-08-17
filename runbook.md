@@ -67,7 +67,7 @@ This system has an upstream dependency on Salesforce, so it is worth investigati
 
 As an example an incident in February 2020 occurred because an `FTB Article` asset was added by the account manager instead of `FT Article`.
 
-To debug issues where only one person or one contract can't see the icons, please follow [a separate document on the subject](./doc/no-syndication-icons-debugging.md)
+To debug issues where only one person or one contract can't see the icons, please follow [a separate document on the subject](https://financialtimes.atlassian.net/wiki/spaces/Accounts/pages/8121811189/When+one+user+cannot+see+their+syndication+icons)
 
 If _nobody_ can see their icons, then this is a more serious problem and should be pushed to [Second Line](#people-cant-see-their-syndication-icons-second-line) .
 
