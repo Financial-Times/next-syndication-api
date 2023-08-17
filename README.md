@@ -14,13 +14,13 @@ The API behind the FT.com/republishing tool.
 
 _NB: There is a common misconception that you need all parts of Syndication to be running locally to test a single part of it. However, `next-router` will only look for a locally-running syndication API if it has the `syn-` environmental variables in the `.env` file. You can run n-syndication or next-syn-list locally and the router will use the syndication API running in production if those variables are not there._
 
-[next-syndication-api wiki page](https://github.com/Financial-Times/next-syndication-api/wiki/Syndication-API-(next-syndication-api))
+[next-syndication-api wiki page](https://financialtimes.atlassian.net/wiki/spaces/Accounts/pages/8120533017/Syndication)
 
 ### More information about the syndication system
 
-* [The Syndication Wiki](https://github.com/Financial-Times/next-syndication-api/wiki) explains the system and its architecture, including endpoints and authentication.
+* [The Syndication Wiki](https://financialtimes.atlassian.net/wiki/spaces/Accounts/pages/8120533017/Syndication) explains the system and its architecture, including endpoints and authentication.
 * [Next Wiki](https://github.com/Financial-Times/next/wiki/Syndication) covers GDPR SAR and erasure requests so that people without github access can read it, as it is automatically published to <https://customer-products.in.ft.com/wiki/Syndication>.
-* [Database Credentials & Key Rotation](https://github.com/Financial-Times/next-syndication-api/wiki#database-credentials-and-key-rotation) info related with key rotation in the systems
+* [Database Credentials & Key Rotation](https://financialtimes.atlassian.net/wiki/spaces/Accounts/pages/8120533017/Syndication#database-credentials-and-key-rotation) info related with key rotation in the systems
 ## Installation
 
 ```shell
@@ -48,7 +48,7 @@ Syndication deviates from our standard deployment process please refer to the st
 
 ### Setting yourself up on a contract
 
-See [getting started](https://github.com/Financial-Times/next-syndication-api/wiki/Syndication-API:-authentication#getting-started) on the authentication wiki page
+See [getting started](https://financialtimes.atlassian.net/wiki/spaces/Accounts/pages/8120860789/Syndication+API+authentication) on the authentication wiki page
 
 ### Other contracts
 
@@ -65,7 +65,7 @@ You WILL need:
 * to be [set up on a syndication contract](#Setting-yourself-up-on-a-contract)
 * [next-syndication-db-schema](https://github.com/Financial-Times/next-syndication-db-schema) - database schema (see Database dependency below)
 * [pandoc](https://pandoc.org/installing.html) installed on your machine for `/download` to work locally
-  * [What is Pandoc?](https://github.com/Financial-Times/next-syndication-api/wiki/Syndication-API-&-DL:-Pandoc-and--pandoc-dpkg)
+  * [What is Pandoc?](https://financialtimes.atlassian.net/wiki/spaces/Accounts/pages/8121221233/Syndication+API+DL+Pandoc+and+pandoc+dpkg)
 
 You MIGHT need:
 
@@ -116,7 +116,7 @@ These variables are already defined in development Vault folder.
 * if you want to test that the syndication icon buttons work too, install and run [next-article](https://github.com/Financial-Times/next-article) locally.
 
   * Make sure to stop any instances of `next-router` you have running before you run `next-article`.
-  * Which syndication icon gets shown for each article depends on the [article data returned from CAPI/ES](https://github.com/Financial-Times/next-syndication-api/wiki/Syndication-API:-article-syndication-permissions_)
+  * Which syndication icon gets shown for each article depends on the [article data returned from CAPI/ES](https://financialtimes.atlassian.net/wiki/spaces/Accounts/pages/8120860920/Syndication+API+article+syndication+permissions)
 
 ### Restarting
 
