@@ -11,11 +11,11 @@ module.exports = exports = {
 			cite: 'endDate',
 			id: 'end_date'
 		}, {
-			cite: 'currentPeriodStartDate',
-			id: 'current_period_start_date'
+			cite: 'currentStartDate',
+			id: 'current_start_date'
 		}, {
-			cite: 'currentPeriodEndDate',
-			id: 'current_period_end_date'
+			cite: 'currentEndDate',
+			id: 'current_end_date'
 		}, {
 			cite: 'startDate',
 			id: 'start_date'
