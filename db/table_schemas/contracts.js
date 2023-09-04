@@ -27,6 +27,8 @@ module.exports = exports = {
 		{ AttributeAlias: 'owner_name', AttributeName: 'ownerName', AttributeType: 'S' },
 		{ AttributeAlias: 'owner_email', AttributeName: 'ownerEmail', AttributeType: 'S' },
 		{ AttributeAlias: 'last_updated', AttributeName: 'last_updated', AttributeType: 'S' },
+		{ AttributeAlias: 'current_start_date', AttributeName: 'currentStartDate', AttributeType: 'S' },
+		{ AttributeAlias: 'current_end_date', AttributeName: 'currentEndDate', AttributeType: 'S' },
 		{
 			AttributeAlias: 'assets', AttributeName: 'assets', AttributeType: 'L',
 			AttributeDefinitions: [
