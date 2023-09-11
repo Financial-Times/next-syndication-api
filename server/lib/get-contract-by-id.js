@@ -106,6 +106,11 @@ module.exports = exports = async (contractId, locals = {}) => {
 	if (contract.success === true) {
 		contract = reformatSalesforceContract(contract);
 		contract.last_updated = new Date();
+		if (contract.orders) {
+			const activeOrder = contract.orders.find(order => order.status === 'Active');
+			contract.current_start_date = new Date(activeOrder.startDate);
+			contract.current_end_date = new Date(activeOrder.endDate);
+		}
 
 		contract = pgMapColumns(contract, contractsColumnMappings);
 

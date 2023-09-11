@@ -1,86 +1,92 @@
 'use strict';
 
-const { ASSET_TYPE_TO_CONTENT_TYPE } = require('config');
+const {ASSET_TYPE_TO_CONTENT_TYPE} = require('config');
 
 module.exports = exports = {
 	clean: true,
 	items: [{
-		cite: 'contractNumber',
-		id: 'contract_id'
-	}, {
-		cite: 'endDate',
-		id: 'end_date'
-	}, {
-		cite: 'startDate',
-		id: 'start_date'
-	}, {
-		cite: 'contributor',
-		id: 'contributor_content'
-	}, {
-		cite: 'licenceeName',
-		id: 'licencee_name'
-	}, {
-		cite: 'clientPublications',
-		id: 'client_publications'
-	}, {
-		cite: 'clientWebsite',
-		id: 'client_website'
-	}, {
-		cite: 'ownerEmail',
-		id: 'owner_email'
-	}, {
-		cite: 'ownerName',
-		id: 'owner_name'
-	}, {
-		cite: 'assets',
-		clean: true,
-		id: 'assets',
-		items: [{
-			cite: 'assetType',
-			default: 'New',
-			id: 'asset_class'
+			cite: 'contractNumber',
+			id: 'contract_id'
 		}, {
-			cite: 'assetName',
-			id: 'asset_type'
+			cite: 'endDate',
+			id: 'end_date'
 		}, {
-			delete: false,
-			cite: 'asset_type',
-			id: 'content_type',
-			transform: (val) => ASSET_TYPE_TO_CONTENT_TYPE[val]
+			cite: 'currentStartDate',
+			id: 'current_start_date'
 		}, {
-			cite: 'productName',
-			id: 'product'
+			cite: 'currentEndDate',
+			id: 'current_end_date'
 		}, {
-			cite: 'maxPermittedPrintUsagePeriod',
-			id: 'print_usage_period'
+			cite: 'startDate',
+			id: 'start_date'
 		}, {
-			cite: 'maxPermittedPrintUsage',
-			id: 'print_usage_limit'
+			cite: 'contributor',
+			id: 'contributor_content'
 		}, {
-			cite: 'maxPermittedOnlineUsagePeriod',
-			id: 'online_usage_period'
+			cite: 'licenceeName',
+			id: 'licencee_name'
 		}, {
-			cite: 'maxPermittedOnlineUsage',
-			id: 'online_usage_limit'
+			cite: 'clientPublications',
+			id: 'client_publications'
 		}, {
-			cite: 'embargoPeriod',
-			id: 'embargo_period'
+			cite: 'clientWebsite',
+			id: 'client_website'
 		}, {
-			cite: 'content',
-			id: 'content' //,
+			cite: 'ownerEmail',
+			id: 'owner_email'
+		}, {
+			cite: 'ownerName',
+			id: 'owner_name'
+		}, {
+			cite: 'assets',
+			clean: true,
+			id: 'assets',
+			items: [{
+				cite: 'assetType',
+				default: 'New',
+				id: 'asset_class'
+			}, {
+				cite: 'assetName',
+				id: 'asset_type'
+			}, {
+				delete: false,
+				cite: 'asset_type',
+				id: 'content_type',
+				transform: (val) => ASSET_TYPE_TO_CONTENT_TYPE[val]
+			}, {
+				cite: 'productName',
+				id: 'product'
+			}, {
+				cite: 'maxPermittedPrintUsagePeriod',
+				id: 'print_usage_period'
+			}, {
+				cite: 'maxPermittedPrintUsage',
+				id: 'print_usage_limit'
+			}, {
+				cite: 'maxPermittedOnlineUsagePeriod',
+				id: 'online_usage_period'
+			}, {
+				cite: 'maxPermittedOnlineUsage',
+				id: 'online_usage_limit'
+			}, {
+				cite: 'embargoPeriod',
+				id: 'embargo_period'
+			}, {
+				cite: 'content',
+				id: 'content' //,
 //			transform: (val) => typeof val === 'string' ? val.split(';').map(item => item.trim()) : Array.isArray(val) ? val : []
-		}, {
-			cite: '../articleLimit',
-			condition: (item) => item.asset_type === 'FT Article',
-			id: 'download_limit'
-		}, {
-			cite: '../podcastLimit',
-			condition: (item) => item.asset_type === 'Podcast',
-			id: 'download_limit'
-		}, {
-			cite: '../videoLimit',
-			condition: (item) => item.asset_type === 'Video',
-			id: 'download_limit'
+			}, {
+				cite: '../articleLimit',
+				condition: (item) => item.asset_type === 'FT Article',
+				id: 'download_limit'
+			}, {
+				cite: '../podcastLimit',
+				condition: (item) => item.asset_type === 'Podcast',
+				id: 'download_limit'
+			}, {
+				cite: '../videoLimit',
+				condition: (item) => item.asset_type === 'Video',
+				id: 'download_limit'
+			}]
 		}]
-	}]
 };
