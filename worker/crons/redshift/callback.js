@@ -144,9 +144,19 @@ function upload({ file, name }) {
 }
 
 async function writeCSV({ items, directory, headers, name, time }) {
+	if (!Array.isArray(items)) {
+		log.error('Items should be an array.');
+		return;
+	}
+	log.info('Items length: '+ items.length);
+
 	const CSV = [Array.from(headers).join(',')];
 
-	CSV.push(...items.map(item => headers.map(key => safe(item[key])).join(',')));
+	function safeItemKey(item, key) {
+		return item && item[key] !== null && typeof item[key] !== 'undefined' ? safe(item[key]) : '';
+	}
+
+	CSV.push(...items.map(item => headers.map(key => safeItemKey(item, key)).join(',')));
 
 	const file = path.resolve(directory, `${name}.${time}.txt`);
 
