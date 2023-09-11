@@ -153,7 +153,7 @@ async function writeCSV({ items, directory, headers, name, time }) {
 	const CSV = [Array.from(headers).join(',')];
 
 	function safeItemKey(item, key) {
-		return item && typeof item[key] !== 'undefined' ? safe(item[key]) : '';
+		return item && item[key] !== null && typeof item[key] !== 'undefined' ? safe(item[key]) : '';
 	}
 
 	CSV.push(...items.map(item => headers.map(key => safeItemKey(item, key)).join(',')));
