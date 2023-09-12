@@ -131,7 +131,7 @@ function upload({ file, name }) {
 		});
 
 		upload.on('error', err =>{
-			log.info(`${MODULE_ID} | error: ${name} => `, err);
+			log.error(`${MODULE_ID} | error: ${name} => `, err);
 			resolve(err);
 		});
 		upload.on('uploaded', res => {
