@@ -126,7 +126,10 @@ function upload({ file, name }) {
 			ServerSideEncryption: bucket.encryption_type
 		});
 
-		upload.on('error', err => reject(err));
+		upload.on('error', err =>{
+			log.error(`${MODULE_ID} | error: ${name} => `, err);
+			reject(err);
+		});
 		upload.on('uploaded', res => {
 			log.info(`${MODULE_ID} | uplodaded: ${name} => `, res);
 
