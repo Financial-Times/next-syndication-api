@@ -1,8 +1,7 @@
 'use strict';
 
-const { createReadStream/*, stat*/, writeFile } = require('fs');
 const path = require('path');
-const util = require('util');
+const fs = require('fs');
 
 const { Logger } = require('../../../server/lib/logger');
 
@@ -24,9 +23,6 @@ const S3 = new AWS.S3({
 	region: 'eu-west-1',
 	secretAccessKey: AWS_SECRET_ACCESS_KEY
 });
-
-//const statAsync = util.promisify(stat);
-const writeFileAsync = util.promisify(writeFile);
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
 const log = new Logger({source: MODULE_ID});
@@ -144,16 +140,28 @@ function upload({ file, name }) {
 }
 
 async function writeCSV({ items, directory, headers, name, time }) {
-	const CSV = [Array.from(headers).join(',')];
-
-	CSV.push(...items.map(item => headers.map(key => safe(item[key])).join(',')));
+	if (!Array.isArray(items)) {
+		log.error('Items should be an array.');
+		return;
+	}
+	log.info('Items length: ' + items.length);
 
 	const file = path.resolve(directory, `${name}.${time}.txt`);
+	const writeStream = fs.createWriteStream(file, { encoding: 'utf8' });
 
-	await writeFileAsync(file, CSV.join('\n'), 'utf8');
+	// Write headers
+	writeStream.write(Array.from(headers).join(',') + '\n');
+
+	// Write rows
+	for (const item of items) {
+		const row = headers.map(key => (item && item[key] !== null && typeof item[key] !== 'undefined') ? safe(item[key]) : '').join(',');
+		writeStream.write(row + '\n');
+	}
+
+	writeStream.end();
 
 	return {
-		file: createReadStream(file),
+		file: fs.createReadStream(file),
 		name: `${name}.${time}.txt`
 	};
 }
