@@ -120,6 +120,7 @@ function upload({ file, name }) {
     log.info(`Upload init: ${file}`);
 	return new Promise((resolve, reject) => {
 		const { bucket } = REDSHIFT;
+		log.info(`Upload bucket: ${bucket}`);
 
 		const client = new S3UploadStream(S3);
 
