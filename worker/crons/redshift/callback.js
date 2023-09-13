@@ -35,7 +35,7 @@ module.exports = exports = async () => {
 	try {
 		mkdir('-p', directory);
 
-		log.info(`${MODULE_ID} | Running redshift backup`);
+		log.info(`${MODULE_ID} | Running redshift backup | ${process.env.NODE_ENV}`);
 
 		const db = await pg();
 
