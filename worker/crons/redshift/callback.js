@@ -39,6 +39,7 @@ module.exports = exports = async () => {
 
 		const db = await pg();
 
+        log.info(`${MODULE_ID} | starting contract data`);
 		const contract_data = await writeCSV({
 			directory,
 			headers: REDSHIFT.export_headers.contract_data,
@@ -47,6 +48,7 @@ module.exports = exports = async () => {
 			time
 		});
 
+        log.info(`${MODULE_ID} | starting downloads`);
 		const downloads = await writeCSV({
 			directory,
 			headers: REDSHIFT.export_headers.downloads,
@@ -55,6 +57,7 @@ module.exports = exports = async () => {
 			time
 		});
 
+        log.info(`${MODULE_ID} | starting saved`);
 		const saved_items = await writeCSV({
 			directory,
 			headers: REDSHIFT.export_headers.saved_items,
@@ -114,6 +117,7 @@ function safe(value) {
 }
 
 function upload({ file, name }) {
+    log.info(`Upload init: ${file}`);
 	return new Promise((resolve, reject) => {
 		const { bucket } = REDSHIFT;
 
@@ -162,6 +166,8 @@ async function writeCSV({ items, directory, headers, name, time }) {
 	}
 
 	writeStream.end();
+
+    log.info(`CSV created: ${name}.${time}.txt`);
 
 	return {
 		file: fs.createReadStream(file),
