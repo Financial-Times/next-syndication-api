@@ -39,7 +39,7 @@ module.exports = exports = async () => {
 
 		const db = await pg();
 
-        log.info(`${MODULE_ID} | starting contract data`);
+		log.info(`${MODULE_ID} | starting contract data`);
 		const contract_data = await writeCSV({
 			directory,
 			headers: REDSHIFT.export_headers.contract_data,
@@ -48,7 +48,7 @@ module.exports = exports = async () => {
 			time
 		});
 
-        log.info(`${MODULE_ID} | starting downloads`);
+		log.info(`${MODULE_ID} | starting downloads`);
 		const downloads = await writeCSV({
 			directory,
 			headers: REDSHIFT.export_headers.downloads,
@@ -57,7 +57,7 @@ module.exports = exports = async () => {
 			time
 		});
 
-        log.info(`${MODULE_ID} | starting saved`);
+		log.info(`${MODULE_ID} | starting saved`);
 		const saved_items = await writeCSV({
 			directory,
 			headers: REDSHIFT.export_headers.saved_items,
@@ -67,10 +67,10 @@ module.exports = exports = async () => {
 		});
 
 		await Promise.all([
-			contract_data,
-			downloads,
-			saved_items
-		].map(async item => await upload(item)));
+			upload(contract_data),
+			upload(downloads),
+			upload(saved_items)
+		]);
 
 		log.info(`${MODULE_ID} | redshift backup uploaded to s3`);
 
@@ -148,34 +148,44 @@ function upload({ file, name }) {
 }
 
 async function writeCSV({ items, directory, headers, name, time }) {
-	try {
-		if (!Array.isArray(items)) {
-			log.error('Items should be an array.');
-			return;
+	return new Promise((resolve, reject) => {
+		try {
+			if (!Array.isArray(items)) {
+				log.error('Items should be an array.');
+				return;
+			}
+			log.info('Items length: ' + items.length);
+
+			const file = path.resolve(directory, `${name}.${time}.txt`);
+			const writeStream = fs.createWriteStream(file, {encoding: 'utf8'});
+
+			// Write headers
+			writeStream.write(Array.from(headers).join(',') + '\n');
+
+			// Write rows
+			for (const item of items) {
+				const row = headers.map(key => (item && item[key] !== null && typeof item[key] !== 'undefined') ? safe(item[key]) : '').join(',');
+				writeStream.write(row + '\n');
+			}
+
+			writeStream.on('finish', () => {
+				log.info(`CSV created: ${name}.${time}.txt`);
+				resolve({
+					file: fs.createReadStream(file),
+					name: `${name}.${time}.txt`
+				});
+			});
+
+			writeStream.on('error', (error) => {
+				log.error(`Error writing CSV: ${error}`);
+				reject(error);
+			});
+
+			writeStream.end();
+
+		} catch (e) {
+			log.error('Write csv error: ' + e);
+			reject(e);
 		}
-		log.info('Items length: ' + items.length);
-
-		const file = path.resolve(directory, `${name}.${time}.txt`);
-		const writeStream = fs.createWriteStream(file, {encoding: 'utf8'});
-
-		// Write headers
-		writeStream.write(Array.from(headers).join(',') + '\n');
-
-		// Write rows
-		for (const item of items) {
-			const row = headers.map(key => (item && item[key] !== null && typeof item[key] !== 'undefined') ? safe(item[key]) : '').join(',');
-			writeStream.write(row + '\n');
-		}
-
-		writeStream.end();
-
-		log.info(`CSV created: ${name}.${time}.txt`);
-
-		return {
-			file: fs.createReadStream(file),
-			name: `${name}.${time}.txt`
-		};
-	} catch (e) {
-		log.error('Write csv error: ' + e);
-	}
+	});
 }
