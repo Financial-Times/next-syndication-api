@@ -148,6 +148,8 @@ function upload({ file, name }) {
 }
 
 async function writeCSV({ items, directory, headers, name, time }) {
+	try {
+
 	if (!Array.isArray(items)) {
 		log.error('Items should be an array.');
 		return;
@@ -174,4 +176,7 @@ async function writeCSV({ items, directory, headers, name, time }) {
 		file: fs.createReadStream(file),
 		name: `${name}.${time}.txt`
 	};
+	} catch (e) {
+		log.error('Write csv error: ' + e);
+	}
 }
