@@ -35,7 +35,7 @@ module.exports = exports = async () => {
 	try {
 		mkdir('-p', directory);
 
-		log.info(`${MODULE_ID} | Running redshift backup`);
+		log.info(`${MODULE_ID} | Running redshift backup | ${process.env.NODE_ENV}`);
 
 		const db = await pg();
 
@@ -120,6 +120,7 @@ function upload({ file, name }) {
     log.info(`Upload init: ${file}`);
 	return new Promise((resolve, reject) => {
 		const { bucket } = REDSHIFT;
+		log.info(`Upload bucket: ${bucket}`);
 
 		const client = new S3UploadStream(S3);
 
@@ -147,30 +148,34 @@ function upload({ file, name }) {
 }
 
 async function writeCSV({ items, directory, headers, name, time }) {
-	if (!Array.isArray(items)) {
-		log.error('Items should be an array.');
-		return;
+	try {
+		if (!Array.isArray(items)) {
+			log.error('Items should be an array.');
+			return;
+		}
+		log.info('Items length: ' + items.length);
+
+		const file = path.resolve(directory, `${name}.${time}.txt`);
+		const writeStream = fs.createWriteStream(file, {encoding: 'utf8'});
+
+		// Write headers
+		writeStream.write(Array.from(headers).join(',') + '\n');
+
+		// Write rows
+		for (const item of items) {
+			const row = headers.map(key => (item && item[key] !== null && typeof item[key] !== 'undefined') ? safe(item[key]) : '').join(',');
+			writeStream.write(row + '\n');
+		}
+
+		writeStream.end();
+
+		log.info(`CSV created: ${name}.${time}.txt`);
+
+		return {
+			file: fs.createReadStream(file),
+			name: `${name}.${time}.txt`
+		};
+	} catch (e) {
+		log.error('Write csv error: ' + e);
 	}
-	log.info('Items length: ' + items.length);
-
-	const file = path.resolve(directory, `${name}.${time}.txt`);
-	const writeStream = fs.createWriteStream(file, { encoding: 'utf8' });
-
-	// Write headers
-	writeStream.write(Array.from(headers).join(',') + '\n');
-
-	// Write rows
-	for (const item of items) {
-		const row = headers.map(key => (item && item[key] !== null && typeof item[key] !== 'undefined') ? safe(item[key]) : '').join(',');
-		writeStream.write(row + '\n');
-	}
-
-	writeStream.end();
-
-    log.info(`CSV created: ${name}.${time}.txt`);
-
-	return {
-		file: fs.createReadStream(file),
-		name: `${name}.${time}.txt`
-	};
 }
