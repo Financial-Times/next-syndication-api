@@ -16,14 +16,13 @@ describe(MODULE_ID, function () {
 	let sandbox;
 	let mocks;
 	let stubs;
-	let decodeSessionMiddleware;
+	let validateSessionMiddleware;
 
 	beforeEach(function () {
 		sandbox = sinon.sandbox.create();
 		mocks = {
 			req: {
 				cookies: {
-					FTSession: '123',
 					FTSession_s: '123s'
 				}
 			},
@@ -41,14 +40,17 @@ describe(MODULE_ID, function () {
 				info: sandbox.stub(),
 				warn: sandbox.stub()
 			},
-			sessionDecoderClass: sandbox.stub(),
-			decode: sandbox.stub(),
-			next: sandbox.stub()
+			next: sandbox.stub(),
+			fetch: sandbox.stub().returns({
+				ok: true,
+				json: sandbox.stub().returns({
+					uuid: 'uuid-12345',
+				})
+			})
 		};
-		stubs.sessionDecoderClass.returns({ decode: stubs.decode });
-		decodeSessionMiddleware = proxyquire('../../../server/middleware/decode-session', {
+		validateSessionMiddleware = proxyquire('../../../server/middleware/validate-session', {
 			'../lib/logger': stubs.logger,
-			'@financial-times/session-decoder-js': stubs.sessionDecoderClass
+			'n-eager-fetch': stubs.fetch
 		});
 	});
 
@@ -56,31 +58,31 @@ describe(MODULE_ID, function () {
 		sandbox.restore();
 	});
 
-	it('should redirect the response to the sign in page', function () {
-		mocks.req.cookies.FTSession = undefined;
+	it('should redirect the response to the sign in page', async function () {
+		mocks.req.cookies.FTSession_s = undefined;
 
-		decodeSessionMiddleware(mocks.req, mocks.res, stubs.next);
+		await validateSessionMiddleware(mocks.req, mocks.res, stubs.next);
 
 		expect(mocks.res.redirect).to.have.been.calledWith(`https://accounts.ft.com/login?location=${mocks.req.originalUrl}`);
 		expect(mocks.res.locals.userUuid).to.equal(undefined);
 		expect(stubs.next).not.to.have.been.called;
 	});
 
-	it('should set a user uuid variable on res.locals', function () {
-		stubs.decode.returns('abc');
+	it('should set a user uuid variable on res.locals', async function () {
 
-		decodeSessionMiddleware(mocks.req, mocks.res, stubs.next);
-
+		await validateSessionMiddleware(mocks.req, mocks.res, stubs.next);
+		
+		expect(stubs.fetch).to.have.been.called;
 		expect(mocks.res.sendStatus).not.to.have.been.called;
-		expect(mocks.res.locals.userUuid).to.equal('abc');
+		expect(mocks.res.locals.userUuid).to.equal('uuid-12345');
 		expect(stubs.next).to.have.been.called;
 	});
 
-	it('should send an bad request status code if an invalid session token is provided', function () {
-		stubs.decode.throws();
+	it('should send an bad request status code if an invalid session token is provided', async function () {
+		stubs.fetch.throws();
 
-		decodeSessionMiddleware(mocks.req, mocks.res, stubs.next);
-
+		await validateSessionMiddleware(mocks.req, mocks.res, stubs.next);
+		expect(stubs.fetch).to.have.been.called;
 		expect(mocks.res.sendStatus).to.have.been.calledWith(400);
 		expect(mocks.res.locals.userUuid).to.equal(undefined);
 		expect(stubs.next).not.to.have.been.called;

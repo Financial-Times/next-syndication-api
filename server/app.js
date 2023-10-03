@@ -10,7 +10,7 @@ const apiKey = require('./middleware/api-key');
 const cache = require('./middleware/cache');
 const checkIfNewSyndicationUser = require('./middleware/check-if-new-syndication-user');
 const db = require('./middleware/db');
-const decodeSession = require('./middleware/decode-session');
+const validateSession = require('./middleware/validate-session');
 const expediteUserAuth = require('./middleware/expedite-user-auth');
 const flagMaintenanceMode = require('./middleware/flag-maintenance-mode');
 const getContractByIdFromSession = require('./middleware/get-contract-by-id-from-session');
@@ -52,7 +52,7 @@ const middleware = [
 	cache,
 	flagMaintenanceMode,
 	db,
-	decodeSession,
+	validateSession,
 	expediteUserAuth,
 	isSyndicationUser,
 	masquerade,
