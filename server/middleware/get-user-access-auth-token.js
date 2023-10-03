@@ -29,10 +29,11 @@ module.exports = exports = async (req, res, next) => {
 				'cookie': req.headers.cookie,
 				'content-type': 'application/json'
 			},
+			redirect: 'manual',
 			method: 'get'
 		});
-
-		const authQuery = qs.parse(authRes.url.split('#').pop());
+		const authResLocation = authRes.headers.get('location');
+		const authQuery = qs.parse(authResLocation.split('#').pop());
 
 		if (!authQuery.access_token) {
 			throw new ReferenceError(`No User Access Token returned for ${URI}`);
