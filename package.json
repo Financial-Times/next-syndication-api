@@ -120,7 +120,7 @@
     "lint-fix": "eslint . --ext .js --fix",
     "killall": "./node_modules/.bin/pm2 stop all && ./node_modules/.bin/pm2 kill",
     "monit": "./node_modules/.bin/pm2 monit",
-    "unit-test": "IGNORE_A11Y=true  NEW_SYNDICATION_USERS=testUserUuid1,testUserUuid2  NEW_SYNDICATION_USERS_AWAITING=testUserUuid3,testUserUuid4 NODE_ENV=test node ./node_modules/.bin/mocha --full-trace  --slow 15000  --timeout 30000 test/"
+    "unit-test": "IGNORE_A11Y=true  NEW_SYNDICATION_USERS=testUserUuid1,testUserUuid2  NEW_SYNDICATION_USERS_AWAITING=testUserUuid3,testUserUuid4 NODE_ENV=test node ./node_modules/.bin/mocha --full-trace --harmony --recursive --slow 15000 --sort --timeout 30000 test/"
   },
   "config": {},
   "husky": {
