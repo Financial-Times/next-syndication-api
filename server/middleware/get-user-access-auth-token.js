@@ -32,7 +32,7 @@ module.exports = exports = async (req, res, next) => {
 			redirect: 'manual',
 			method: 'get'
 		});
-		const authResLocation = authRes.headers.get('location');
+		const authResLocation = authRes.headers.get('location') || '';
 		const authQuery = qs.parse(authResLocation.split('#').pop());
 
 		if (!authQuery.access_token) {
