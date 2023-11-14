@@ -54,7 +54,7 @@ module.exports = exports = new (class DBSyncStateCheck extends nHealthCheck {
 			--command 'select syndication.reload_all();'
 \`\`\`
 
-Substituting the above \`\${PRODUCTION_DATABASE_*}\` placeholders with the correct values from vault.`,
+Substituting the above \`\${PRODUCTION_DATABASE_*}\` placeholders with the correct values from Doppler.`,
 /*eslint-enable*/
 	severity: 3,
 	technicalSummary: 'Checks the Syndication database\'s computed tables are correctly representing the base tables\' data.'
