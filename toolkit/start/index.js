@@ -1,19 +1,21 @@
 const { Task } = require('@dotcom-tool-kit/types');
 const { spawn } = require('child_process');
 const { hookFork, waitOnExit } = require('@dotcom-tool-kit/logger');
-const Vault = require('@dotcom-tool-kit/vault');
-
+const Doppler = require('@dotcom-tool-kit/doppler');
 
 class SyndicationAPITask extends Task {
 	async run() {
-		const vault = new Vault.VaultEnvVars(this.logger, {
-			environment: 'development'
-		});
-		const vaultEnv = await vault.get();
+		let dopplerEnv;
+
+		if (!process.env.CI) {
+			const doppler = new Doppler.DopplerEnvVars(this.logger, 'dev');
+			dopplerEnv = await doppler.get();
+		}
+
 		this.logger.info('running next-syndication-api');
 		const args = ['start','procfile.json'];
 
-		const env = Object.assign({}, process.env, vaultEnv);
+		const env = Object.assign({}, process.env, dopplerEnv);
 
 		const options = {
 			env,

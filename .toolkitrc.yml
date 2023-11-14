@@ -1,12 +1,12 @@
 plugins:
-  - '@dotcom-tool-kit/eslint'
-  - '@dotcom-tool-kit/secret-squirrel'
-  - '@dotcom-tool-kit/npm'
-  - '@dotcom-tool-kit/husky-npm'
-  - '@dotcom-tool-kit/mocha'
-  - './toolkit/start'
-  - './toolkit/logs'
-  - '@dotcom-tool-kit/backend-heroku-app'
+  - "@dotcom-tool-kit/eslint"
+  - "@dotcom-tool-kit/secret-squirrel"
+  - "@dotcom-tool-kit/npm"
+  - "@dotcom-tool-kit/husky-npm"
+  - "@dotcom-tool-kit/mocha"
+  - "./toolkit/start"
+  - "./toolkit/logs"
+  - "@dotcom-tool-kit/backend-heroku-app"
 
 hooks:
   test:local:
@@ -20,10 +20,10 @@ hooks:
     - SyndicationAPILogs
 
 options:
-  '@dotcom-tool-kit/mocha': {}
-  '@dotcom-tool-kit/eslint': {}
-  '@dotcom-tool-kit/circleci': { nodeVersion: 18.17-browsers }
-  '@dotcom-tool-kit/heroku':
+  "@dotcom-tool-kit/mocha": {}
+  "@dotcom-tool-kit/eslint": {}
+  "@dotcom-tool-kit/circleci": { nodeVersion: 18.17-browsers }
+  "@dotcom-tool-kit/heroku":
     pipeline: ft-next-syndication-api
     systemCode: next-syndication-api
     scaling:
@@ -31,6 +31,5 @@ options:
         web:
           size: standard-1X
           quantity: 1
-  '@dotcom-tool-kit/vault':
-    team: next
-    app: next-syndication-api
+  "@dotcom-tool-kit/doppler":
+    project: next-syndication-api
