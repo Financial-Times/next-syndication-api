@@ -113,7 +113,6 @@ module.exports = exports = class VideoDownload extends ArticleDownload {
 
 		const mediaRes = await fetch(download.url, { headers: headers });
 
-		// Inicia el proceso de lectura manual
 		const reader = mediaRes.body.getReader();
 
 		const read = async () => {
