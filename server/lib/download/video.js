@@ -72,7 +72,14 @@ module.exports = exports = class VideoDownload extends ArticleDownload {
 
 				this.captionFiles = captionFiles;
 
-				captionFiles.forEach(({ file, name }) => this.append(file, { name }));
+				captionFiles.forEach(({ file, name }) => {
+					log.info('appendCaptions', {
+						name,
+						file
+					});
+
+					return this.append(file, { name })
+				});
 
 			}
 			catch (error) {
