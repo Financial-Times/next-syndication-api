@@ -1,6 +1,5 @@
 plugins:
   - "@dotcom-tool-kit/eslint"
-  - "@dotcom-tool-kit/secret-squirrel"
   - "@dotcom-tool-kit/npm"
   - "@dotcom-tool-kit/husky-npm"
   - "@dotcom-tool-kit/mocha"
