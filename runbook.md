@@ -288,10 +288,6 @@ Manual
 This app is hosted on Heroku and released using Circle CI.
 Rollback is done manually on Heroku or Github. See [the guide on the wiki](https://customer-products.in.ft.com/wiki/How-does-deploying-our-Heroku-apps-work%3F) for instructions on how to deploy or roll back changes on Heroku.
 
-## Heroku Pipeline Name
-
-ft-next-syndication-api
-
 ## Key Management Process Type
 
 PartiallyAutomated
