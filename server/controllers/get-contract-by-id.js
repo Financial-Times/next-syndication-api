@@ -39,9 +39,10 @@ module.exports = exports = async (req, res, next) => {
 				let contract_data = reformatSalesforceContract(JSON.parse(JSON.stringify(contract)));
 				contract_data.last_updated = new Date();
 				if (contract.orders) {
-					const activeOrder = contract.orders.find(order => order.status === 'Activated');
-					contract_data.current_start_date = new Date(activeOrder.startDate);
-					contract_data.current_end_date = new Date(activeOrder.endDate);
+					const now = new Date();
+					const activeOrder = contract.orders.find(order => order?.status === 'Activated' && new Date(order?.startDate) <= now && new Date(order?.endDate) >= now);
+					contract_data.current_start_date = new Date(activeOrder?.startDate);
+					contract_data.current_end_date = new Date(activeOrder?.endDate);
 				}
 				contract_data = pgMapColumns(contract_data, contractsColumnMappings);
 
