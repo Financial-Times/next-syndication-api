@@ -39,8 +39,8 @@ module.exports = exports = async (req, res, next) => {
 				let contract_data = reformatSalesforceContract(JSON.parse(JSON.stringify(contract)));
 				contract_data.last_updated = new Date();
 				if (contract.orders) {
-					const now = new Date();
-					const activeOrder = contract.orders.find(order => order.status === 'Activated' && new Date(order.startDate) <= now && new Date(order.endDate) >= now);
+					const currentTimeInMilliseconds = new Date();
+					const activeOrder = contract.orders.find(order => order.status === 'Activated' && new Date(order.startDate) <= currentTimeInMilliseconds && new Date(order.endDate) >= currentTimeInMilliseconds);
 					contract_data.current_start_date = new Date(activeOrder.startDate);
 					contract_data.current_end_date = new Date(activeOrder.endDate);
 				}
