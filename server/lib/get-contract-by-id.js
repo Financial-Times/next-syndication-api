@@ -107,7 +107,8 @@ module.exports = exports = async (contractId, locals = {}) => {
 		contract = reformatSalesforceContract(contract);
 		contract.last_updated = new Date();
 		if (contract.orders) {
-			const activeOrder = contract.orders.find(order => order.status === 'Active');
+			const currentTimeInMilliseconds = new Date();
+			const activeOrder = contract.orders.find(order => order.status === 'Activated' && new Date(order.startDate) <= currentTimeInMilliseconds && new Date(order.endDate) >= currentTimeInMilliseconds);
 			contract.current_start_date = new Date(activeOrder.startDate);
 			contract.current_end_date = new Date(activeOrder.endDate);
 		}
