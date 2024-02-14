@@ -30,34 +30,34 @@ module.exports = exports = async (req, res, next) => {
 			return;
 		}
 
-		let contract = await getSalesforceContractByID(req.params.contract_id);
+		let sfContract = await getSalesforceContractByID(req.params.contract_id);
 
-		if (contract.success === true) {
+		if (sfContract.success === true) {
 			res.status(200);
-
+			let reformattedContract;
 			if (req.query.save !== '0') {
-				let contract_data = reformatSalesforceContract(JSON.parse(JSON.stringify(contract)));
-				contract_data.last_updated = new Date();
-				if (contract.orders) {
+				reformattedContract = reformatSalesforceContract(JSON.parse(JSON.stringify(sfContract)));
+				reformattedContract.last_updated = new Date();
+				if (sfContract.orders) {
 					const currentTimeInMilliseconds = new Date();
-					const activeOrder = contract.orders.find(order => order.status === 'Activated' && new Date(order.startDate) <= currentTimeInMilliseconds && new Date(order.endDate) >= currentTimeInMilliseconds);
-					contract_data.current_start_date = new Date(activeOrder.startDate);
-					contract_data.current_end_date = new Date(activeOrder.endDate);
+					const activeOrder = sfContract.orders.find(order => order.status === 'Activated' && new Date(order.startDate) <= currentTimeInMilliseconds && new Date(order.endDate) >= currentTimeInMilliseconds);
+					reformattedContract.current_start_date = new Date(activeOrder.startDate);
+					reformattedContract.current_end_date = new Date(activeOrder.endDate);
 				}
-				contract_data = pgMapColumns(contract_data, contractsColumnMappings);
+				let mappedContract = pgMapColumns(reformattedContract, contractsColumnMappings);
 
 				const db = await pg();
 
-				await db.syndication.upsert_contract([contract_data]);
+				await db.syndication.upsert_contract([mappedContract]);
 			}
 
 			if (req.query.format === 'db') {
-				contract.last_updated = new Date();
+				sfContract.last_updated = new Date();
 
-				contract = reformatSalesforceContract(contract);
+				reformattedContract = reformatSalesforceContract(sfContract);
 			}
 
-			res.json(contract);
+			res.json(reformattedContract);
 
 			next();
 		}
@@ -65,7 +65,7 @@ module.exports = exports = async (req, res, next) => {
 			res.status(400);
 			res.json({
 				event: 'GET_CONTRACT_BY_ID_ERROR',
-				error: contract.errorMessage
+				error: sfContract.errorMessage
 			});
 		}
 	}

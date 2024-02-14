@@ -102,29 +102,30 @@ module.exports = exports = async (contractId, locals = {}) => {
 			return decorateContract(contract_data, locals.hasGraphicSyndication);
 		}
 	}
-	let contract = await getSalesforceContractByID(contractId);
-	if (contract.success === true) {
-		contract = reformatSalesforceContract(contract);
-		contract.last_updated = new Date();
-		if (contract.orders) {
+
+	let sfContract = await getSalesforceContractByID(contractId);
+	if (sfContract.success === true) {
+		let reformattedContract = reformatSalesforceContract(sfContract);
+		reformattedContract.last_updated = new Date();
+		if (sfContract.orders) {
 			const currentTimeInMilliseconds = new Date();
-			const activeOrder = contract.orders.find(order => order.status === 'Activated' && new Date(order.startDate) <= currentTimeInMilliseconds && new Date(order.endDate) >= currentTimeInMilliseconds);
-			contract.current_start_date = new Date(activeOrder.startDate);
-			contract.current_end_date = new Date(activeOrder.endDate);
+			const activeOrder = sfContract.orders.find(order => order.status === 'Activated' && new Date(order.startDate) <= currentTimeInMilliseconds && new Date(order.endDate) >= currentTimeInMilliseconds);
+			reformattedContract.current_start_date = new Date(activeOrder.startDate);
+			reformattedContract.current_end_date = new Date(activeOrder.endDate);
 		}
 
-		contract = pgMapColumns(contract, contractsColumnMappings);
+		const mappedContract = pgMapColumns(reformattedContract, contractsColumnMappings);
 
 		if (locals.MASQUERADING !== true) {
 			// this will be the user's licence ID regardless of whether they are masquerading or not
 			// purpose of this unclear but leaving it in, this should come back from get_contract_data if the licence ID already exists
 			// I think it is to fill in the licence ID and update the database from the user's licence ID which is retrieved earlier in the middleware, so that licence IDs are populated, however it does it in a way that breaks things if you are looking at another licence's data but not masquerading as that user (which only customer support can do)
 			if (locals && locals.licence) {
-				contract.licence_id = locals.licence.id;
+				mappedContract.licence_id = locals.licence.id;
 			}
 
 			// If you get the error, Cannot set property '#<anonymous>' of undefined, try refreshing
-			[contract_data] = await db.syndication.upsert_contract([contract]);
+			await db.syndication.upsert_contract([mappedContract]);
 
 			log.info('CONTRACT_PERSISTED_TO_DB', {
 				event: 'CONTRACT_PERSISTED_TO_DB',
@@ -136,6 +137,6 @@ module.exports = exports = async (contractId, locals = {}) => {
 		return decorateContract(contract_data, locals.hasGraphicSyndication);
 	}
 	else {
-		throw new Error(contract.errorMessage);
+		throw new Error(sfContract.errorMessage);
 	}
 };
