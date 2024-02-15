@@ -1,7 +1,7 @@
 {
   "name": "ft-next-syndication-api",
   "description": "Next Syndication API",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "private": true,
   "dependencies": {
     "@dotcom-reliability-kit/crash-handler": "^2.1.1",
