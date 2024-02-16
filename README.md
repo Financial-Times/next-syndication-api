@@ -146,6 +146,7 @@ Don't worry, this is by design: the `config` directory and the `pandoc-dpkg` dir
 ## Emails
 
 Emails are sent by the `db-persist` worker using nodemailer and gmail. This is used to email the syndication team when a client interacts with an article where they would need to pay more to republish it (e.g. external contributor articles, frequently in Life & Arts section)
+The above utilizes the `EMAIL_PLATFORM_API_KEY` found in Doppler. To generate a new key, you should contact the #email-management channel on Slack and request a new key. Once received, ensure to update this key in Doppler accordingly.
 
 [Troubleshooting](runbook.md) help is in the runbook.
 
