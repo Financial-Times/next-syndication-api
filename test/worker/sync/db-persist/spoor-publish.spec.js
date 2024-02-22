@@ -130,7 +130,7 @@ describe(MODULE_ID, function () {
 		expect(fetchStub).to.be.calledWith('https://spoor-api.ft.com/ingest', {
 			body: JSON.stringify(data),
 			headers: {
-				'content-Length': new Buffer(JSON.stringify(data)).length,
+				'content-Length': Buffer.from(JSON.stringify(data)).length,
 				'cookie': event.tracking.cookie,
 				'spoor-id': event.tracking.spoor_id,
 				'spoor-ticket': event._id,

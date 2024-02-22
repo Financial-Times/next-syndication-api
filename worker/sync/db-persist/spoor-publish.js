@@ -80,7 +80,7 @@ module.exports = exports = async (event) => {
 		const headers = {
 			'accept': 'application/json',
 			'content-type': 'application/json',
-			'content-Length': new Buffer(JSON.stringify(data)).length,
+			'content-Length': Buffer.from(JSON.stringify(data)).length,
 			'cookie': event.tracking.cookie,
 			'spoor-id': event.tracking.spoor_id,
 			'spoor-ticket': event._id,
