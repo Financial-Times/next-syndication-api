@@ -38,11 +38,11 @@ module.exports = exports = async (req, res, next) => {
 			if (req.query.save !== '0') {
 				reformattedContract = reformatSalesforceContract(JSON.parse(JSON.stringify(sfContract)));
 				reformattedContract.last_updated = new Date();
-				if (sfContract.orders) {
+				if (sfContract?.orders) {
 					const currentTimeInMilliseconds = new Date();
-					const activeOrder = sfContract.orders.find(order => order.status === 'Activated' && new Date(order.startDate) <= currentTimeInMilliseconds && new Date(order.endDate) >= currentTimeInMilliseconds);
-					reformattedContract.current_start_date = new Date(activeOrder.startDate);
-					reformattedContract.current_end_date = new Date(activeOrder.endDate);
+					const activeOrder = sfContract.orders.find(order => order?.status === 'Activated' && new Date(order?.startDate) <= currentTimeInMilliseconds && new Date(order?.endDate) >= currentTimeInMilliseconds);
+					reformattedContract.current_start_date = new Date(activeOrder?.startDate);
+					reformattedContract.current_end_date = new Date(activeOrder?.endDate);
 				}
 				let mappedContract = pgMapColumns(reformattedContract, contractsColumnMappings);
 

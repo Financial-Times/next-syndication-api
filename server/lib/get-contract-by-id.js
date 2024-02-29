@@ -107,11 +107,11 @@ module.exports = exports = async (contractId, locals = {}) => {
 	if (sfContract.success === true) {
 		let reformattedContract = reformatSalesforceContract(sfContract);
 		reformattedContract.last_updated = new Date();
-		if (sfContract.orders) {
+		if (sfContract?.orders) {
 			const currentTimeInMilliseconds = new Date();
-			const activeOrder = sfContract.orders.find(order => order.status === 'Activated' && new Date(order.startDate) <= currentTimeInMilliseconds && new Date(order.endDate) >= currentTimeInMilliseconds);
-			reformattedContract.current_start_date = new Date(activeOrder.startDate);
-			reformattedContract.current_end_date = new Date(activeOrder.endDate);
+			const activeOrder = sfContract.orders.find(order => order?.status === 'Activated' && new Date(order?.startDate) <= currentTimeInMilliseconds && new Date(order?.endDate) >= currentTimeInMilliseconds);
+			reformattedContract.current_start_date = new Date(activeOrder?.startDate);
+			reformattedContract.current_end_date = new Date(activeOrder?.endDate);
 		}
 
 		const mappedContract = pgMapColumns(reformattedContract, contractsColumnMappings);
