@@ -60,7 +60,6 @@
     "proxyquire": "^1.7.4",
     "sinon": "^6.0.0",
     "sinon-chai": "^3.2.0",
-    "snyk": "^1.996.0",
     "unzipper": "^0.10.11"
   },
   "nyc": {
@@ -110,7 +109,6 @@
   "scripts": {
     "commit": "commit-wizard",
     "heroku-postbuild": "dotcom-tool-kit build:remote release:remote cleanup:remote",
-    "prepare": "npx snyk protect || npx snyk protect -d || true",
     "build": "dotcom-tool-kit build:local",
     "test": "export IGNORE_A11Y=true; export NEW_SYNDICATION_USERS=testUserUuid1,testUserUuid2;  export NEW_SYNDICATION_USERS_AWAITING=testUserUuid3,testUserUuid4; export NODE_ENV=test; dotcom-tool-kit test:local",
     "start": "dotcom-tool-kit run:local",
