@@ -25,7 +25,7 @@
     "n-eager-fetch": "6.0.0",
     "n-health": "7.0.2",
     "nforce": "^1.7.0",
-    "node-schedule": "^1.2.5",
+    "node-schedule": "^2.0.0",
     "node-slack": "^0.0.7",
     "nodemailer": "^6.0.0",
     "s3-upload-stream": "^1.0.7",
