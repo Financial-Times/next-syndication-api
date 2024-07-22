@@ -16,7 +16,7 @@
     "cookie-parser": "^1.4.3",
     "handlebars": "^4.7.7",
     "hat": "^0.0.3",
-    "js-yaml": "^3.8.4",
+    "js-yaml": "^4.0.0",
     "jsonpath": "^1.0.0",
     "massive": "^6.1.1",
     "mime-types": "^2.1.5",
