@@ -32,8 +32,7 @@ const app = module.exports = express({
 	withBackendAuthentication: false,
 	withFlags: true,
 	healthchecks: [
-		require('../health/dl-error-spikes'),
-	]// this healthcheck probably needs to be removed
+	]
 });
 
 const middleware = [
