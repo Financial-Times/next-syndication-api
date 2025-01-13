@@ -21,7 +21,7 @@
     "massive": "^6.1.1",
     "mime-types": "^2.1.5",
     "moment": "^2.29.4",
-    "moment-timezone": "^0.5.35",
+    "moment-timezone": "^0.5.46",
     "n-eager-fetch": "6.0.0",
     "n-health": "13.0.0",
     "nforce": "^1.7.0",
