@@ -53,9 +53,18 @@ See [getting started](https://financialtimes.atlassian.net/wiki/spaces/Accounts/
 
 ### Other contracts
 
-If you need to test a specific contract, since all contracts live in the production salesforce environment, in order to test certain contracts locally you will need to use the production `SALESFORCE_*` environment variables rather than the development ones (see Doppler).
-
 In development mode you should be using the FT Staff contract, which is stubbed in `stubs/CA-00001558.json`
+
+All contracts except `CA-00001558` live in the production salesforce environment. If you need to test a specific contract locally, you need to add the suffix `_PROD` to the `SALESFORCE_*` environment variables defined in `custom-environment-variables.yaml`.
+
+```yaml
+  SALESFORCE:
+    CALLBACK_URI: "SALESFORCE_CALLBACK_URI"         # no changes needed
+    CLIENT_ID: "SALESFORCE_CLIENT_ID_PROD"          # SALESFORCE_CLIENT_ID
+    CLIENT_SECRET: "SALESFORCE_CLIENT_SECRET_PROD"  # SALESFORCE_CLIENT_SECRET
+    PASSWORD: "SALESFORCE_PASSWORD_PROD"            # SALESFORCE_PASSWORD
+    USERNAME: "SALESFORCE_USERNAME_PROD"            # SALESFORCE_USERNAME
+```
 
 ---
 
