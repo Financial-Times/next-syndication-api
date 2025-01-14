@@ -87,7 +87,12 @@ You MIGHT need:
 
 If you need to use the database locally, set up the database by following the instructions in [next-syndication-db-schema](https://github.com/Financial-Times/next-syndication-db-schema).
 
-If you are using postgres in Docker, you will need to edit your `.env` file to set `DATABASE_HOST` to `192.168.99.100`
+If you are using postgres in Docker, you will need to edit your `custom-environment-variables.yaml` file to change `DATABASE_HOST` to `DATABASE_HOST_DOCKER` (variable already defined in Doppler).
+
+```yaml
+  DB:
+    host: "DATABASE_HOST_DOCKER"  # DATABASE_HOST
+```
 
 ### Running the API
 
