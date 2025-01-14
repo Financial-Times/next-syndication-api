@@ -121,9 +121,26 @@ Once you have set up the projects you want to work on, and want to run all proje
 
 ### Running against prod DB (optional)
 
-To run `next-syndication-api` against prod DB is necessary add to the environment variables defined in `custom-environment-variables.yaml` the prefix `_PROD`.  
-("DATABASE_NAME_PROD",DATABASE_HOST_PROD","DATABASE_PASSWORD_PROD","DATABASE_PORT_PROD","DATABASE_URL_PROD","DATABASE_USER_NAME_PROD").  
+To run `next-syndication-api` against prod DB you need to add the suffix `_PROD` to the `DATABASE_*` environment variables defined in `custom-environment-variables.yaml`.
+
+```yaml
+  DB:
+    database: "DATABASE_NAME_PROD"        # DATABASE_NAME
+    host: "DATABASE_HOST_PROD"            # DATABASE_HOST
+    password: "DATABASE_PASSWORD_PROD"    # DATABASE_PASSWORD
+    port: "DATABASE_PORT_PROD"            # DATABASE_PORT
+    uri: "DATABASE_URL_PROD"              # DATABASE_URL
+    user_name: "DATABASE_USER_NAME_PROD"  # DATABASE_USER_NAME
+```
+
 These variables are already defined in development Doppler folder.
+
+In addition, you need to add the `ssl: true` option in `default.yaml` to bypass the SSL authenication error.
+
+```yaml
+  DB:
+    ssl: true
+```
 
 ### Running the Syndication UI (optional)
 
