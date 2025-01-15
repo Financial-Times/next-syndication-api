@@ -12,7 +12,7 @@ All troubleshooting information is gathered in the [Syndication API Troubleshoot
 
 The API behind the FT.com/republishing tool.
 
-_NB: There is a common misconception that you need all parts of Syndication to be running locally to test a single part of it. However, `next-router` will only look for a locally-running syndication API if it has the `syn-` environmental variables in the `.env` file. You can run n-syndication or next-syn-list locally and the router will use the syndication API running in production if those variables are not there._
+_NB: There is a common misconception that you need all parts of Syndication to be running locally to test a single part of it. However, `next-router` will only look for a locally-running syndication API if it has the `syn-` environmental variables in Doppler. You can run n-syndication or next-syn-list locally and the router will use the syndication API running in production if those variables are not there._
 
 [next-syndication-api wiki page](https://financialtimes.atlassian.net/wiki/spaces/Accounts/pages/8120533017/Syndication)
 
@@ -98,17 +98,7 @@ If you are using postgres in Docker, you will need to edit your `custom-environm
 
 Once you have set up the projects you want to work on, and want to run all projects easily, you can do so from within the `next-syndication-api`, you will need to:
 
-- update your local [next-router](https://github.com/Financial-Times/next-router)'s `.env` file to include the following:
-
-  ```properties
-
-     syndication-api=3255
-     syn-contract=3984
-     syn-list=3566
-
-  ```
-
-  (request will fail on the browser because is an API and it requires `x-api-key` to be present in the request)
+- run `next-router` locally (all the `syn-` environmental variables for `next-router` are stored in Doppler)
 
   - HOWEVER if you are also running another app like `next-syn-list` or `next-article`, do not run `next-router` at the same time. Those apps run `next-router` by default so you don't need an independent instance. In fact, trying to run an independent instance of `next-router` will stop your local `next-article` app from working.
 
