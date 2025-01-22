@@ -7,7 +7,7 @@ plugins:
   - "./toolkit/logs"
   - "@dotcom-tool-kit/backend-heroku-app"
 
-hooks:
+commands:
   test:local:
     - Mocha
 
@@ -19,16 +19,23 @@ hooks:
     - SyndicationAPILogs
 
 options:
-  "@dotcom-tool-kit/mocha": {}
-  "@dotcom-tool-kit/eslint": {}
-  "@dotcom-tool-kit/circleci": { nodeVersion: 22.12-browsers }
-  "@dotcom-tool-kit/heroku":
-    pipeline: ft-next-syndication-api
-    systemCode: next-syndication-api
-    scaling:
-      ft-next-syndication-api:
-        web:
-          size: standard-1X
-          quantity: 1
-  "@dotcom-tool-kit/doppler":
-    project: next-syndication-api
+  tasks:
+    Eslint:
+      files:
+        - "**/*.{js,jsx}"
+    Mocha:
+      configPath: "./.mocharc.json"
+    HerokuProduction:
+      scaling:
+        ft-next-syndication-api:
+          web:
+            size: standard-1X
+            quantity: 1
+  plugins:
+    "@dotcom-tool-kit/circleci":
+      cimgNodeVersions: [22.12-browsers]
+    "@dotcom-tool-kit/heroku":
+      pipeline: "ft-next-syndication-api"
+      systemCode: "next-syndication-api"
+    "@dotcom-tool-kit/doppler":
+      project: next-syndication-api
