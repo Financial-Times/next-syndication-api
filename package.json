@@ -11,7 +11,7 @@
     "@financial-times/n-mask-logger": "7.2.0",
     "ajv": "^6.0.0",
     "archiver": "^6.0.0",
-    "aws-sdk": "^2.85.0",
+    "aws-sdk": "^2.1692.0",
     "config": "^1.26.1",
     "cookie-parser": "^1.4.3",
     "handlebars": "^4.7.7",
