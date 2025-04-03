@@ -1,17 +1,22 @@
-const MaskLogger = require('@financial-times/n-mask-logger');
+const { Logger: ReliabilityKitLogger, transforms } = require('@dotcom-reliability-kit/logger');
 const  { metrics } = require('@financial-times/n-express');
 
-
-const _logger = new MaskLogger([
-	'email',
-	'password',
-	'contract_id',
-	'first_name',
-	'surname',
-	'uri',
-	'user_name',
-	'x-api-key'
-]);
+const _logger = new ReliabilityKitLogger({
+	transforms: [
+		transforms.legacyMask({
+			denyList: [
+				'email',
+				'password',
+				'contract_id',
+				'first_name',
+				'surname',
+				'uri',
+				'user_name',
+				'x-api-key'
+			],
+		}),
+	],
+});
 
 class Logger {
 
