@@ -13,7 +13,7 @@
     "archiver": "^6.0.0",
     "aws-sdk": "^2.85.0",
     "config": "^1.26.1",
-    "cookie-parser": "^1.4.3",
+    "cookie-parser": "^1.4.7",
     "handlebars": "^4.7.7",
     "hat": "^0.0.3",
     "js-yaml": "^3.8.4",
