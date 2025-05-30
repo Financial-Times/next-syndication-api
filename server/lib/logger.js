@@ -66,7 +66,7 @@ class Logger {
 	 * @param {string} path Un-sanitized string
 	 */
 	_sanitizePath (path = '-') {
-		return path.replace(/[\s_.]+/g, '-');
+		return String(path).replace(/[\s_.]+/g, '-');
 	}
 
 	/**
