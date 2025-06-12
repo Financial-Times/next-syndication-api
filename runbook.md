@@ -80,14 +80,20 @@ The app connects to Salesforce to get contract details for the user, and updates
 - URLs: Logs in and uses an SDK, retrieves details from `/SCRMContract/[someContractID]`
 - Splunk: [index="heroku" source=\*syndication-api\* salesforce error](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3D%22heroku%22%20source%3D*syndication-api*%20salesforce%20error&display.page.search.mode=smart&dispatch.sample_ratio=1&workload_pool=standard_perf&earliest=-1h&latest=now&sid=1661952146.1430281), `NullApexResponse` is in the error message specifically for the call to Salesforce
 
+#### A user is seeing incorrect data in their Syndication / Republishing platform
+- For OPS team: If a user is seeing incorrect data in their platform, you will find a secure note in the OPS team 1password vault called "Syndication API Troubleshooting Information" that includes instructions and a key (x-api-key) to force-refresh a contract. This means that the contract will be synced with the latest data in SalesForce. 
+
 ## Second Line Troubleshooting
 
 _NB: There is a common misconception that you need all parts of Syndication to be running locally to test a single part of it. However, `next-router` will only look for a locally-running syndication API if it has the `syn-` environmental variables in the `.env` file. You can run n-syndication or next-syn-list locally and the router will use the syndication API running in production if those variables are not there._
 
-### Check the details of a specific contract
+### Check the details and sync a specific contract with the latest SalesForce 
 
-- **Contract check:** You can see the details of a specific contract by calling `GET https://www.ft.com/syndication/contracts/:contract_id` with a valid api key sent in `x-api-key` header. This will pull details from Salesforce and run them through the API.
-  - You can find the API key in Doppler : `next` team, `next-syndication-api` project, `production` folder, the key is called `SYNDICATION_API_KEY`.
+- **Contract check:** You can see the details of a specific contract by calling `GET https://www.ft.com/syndication/contracts/:contract_id` with a valid api key sent in `x-api-key` header. This will pull details from Salesforce and run them through the API. This will also force the Syndication database to be synced with the latest SalesForce data for that contract.
+  - You can find the API key in:
+      -  **Doppler** : `next` team, `next-syndication-api` project, `production` folder, the key is called `SYNDICATION_API_KEY`.
+      -  **OPS Vault in 1password**: under the name of `Syndication API Troubleshooting Information`.
+  - Tip for non-developers: Download the "FT Headers" chrome extension. Create a new profile on it, where the `Profile Name` is anything you want; the `Header name` is `x-api-key` and the `Header value` is the key found in doppler or on the OPS vault in 1password. Then go to `https://www.ft.com/syndication/contracts/:contract_id` on your browser where `:contract_id` is the contract you are troubleshooting. 
   - The `:contract_id` should have the `FTS-xxxxxxxx` format, unless it is the FT Staff licence which has a `CA-xxxxxxxx` format and uses a stub rather than Salesforce
 - **Article republishing permissions check:** `POST` call to `https://www.ft.com/syndication/contracts/:contract_id/resolve` with a valid api key (as above) and a json body which is an array of content ids will return the syndication permissions for each article you listed
 - **Tip:** You can reuse the [Postman collection](https://github.com/Financial-Times/next-syndication-api/blob/main/doc/syndication-api-postman.json) ([instructions](https://github.com/Financial-Times/next-syndication-api#api-endpoint-postman-collection)) for these API endpoints, you will need to adapt the `local.ft.com url:5050` to `www.ft.com`
