@@ -90,11 +90,12 @@ _NB: There is a common misconception that you need all parts of Syndication to b
 ### Check the details and sync a specific contract with the latest SalesForce 
 
 - **Contract check:** You can see the details of a specific contract by calling `GET https://www.ft.com/syndication/contracts/:contract_id` with a valid api key sent in `x-api-key` header. This will pull details from Salesforce and run them through the API. This will also force the Syndication database to be synced with the latest SalesForce data for that contract.
-  - You can find the API key in:
+  1. You can find the API key in:
       -  **Doppler** : `next` team, `next-syndication-api` project, `production` folder, the key is called `SYNDICATION_API_KEY`.
       -  **OPS Vault in 1password**: under the name of `Syndication API Troubleshooting Information`.
-  - Tip for non-developers: Download the "FT Headers" chrome extension. Create a new profile on it, where the `Profile Name` is anything you want; the `Header name` is `x-api-key` and the `Header value` is the key found in doppler or on the OPS vault in 1password. Then go to `https://www.ft.com/syndication/contracts/:contract_id` on your browser where `:contract_id` is the contract you are troubleshooting. 
-  - The `:contract_id` should have the `FTS-xxxxxxxx` format, unless it is the FT Staff licence which has a `CA-xxxxxxxx` format and uses a stub rather than Salesforce
+  2. Download the [FT Headers](https://chromewebstore.google.com/detail/ft-headers/fdnkbdakgannpblkeahoicegijeaidhl) Chrome extension. Create a new profile on it, where the `Profile Name` is anything you want; the `Header name` is `x-api-key` and the `Header value` is the key found in doppler or on the OPS vault in 1password. 
+  3. Go to `https://www.ft.com/syndication/contracts/:contract_id` on your browser where `:contract_id` is the contract you are troubleshooting. 
+    - The `:contract_id` should have the `FTS-xxxxxxxx` format, unless it is the FT Staff licence which has a `CA-xxxxxxxx` format and uses a stub rather than Salesforce
 - **Article republishing permissions check:** `POST` call to `https://www.ft.com/syndication/contracts/:contract_id/resolve` with a valid api key (as above) and a json body which is an array of content ids will return the syndication permissions for each article you listed
 - **Tip:** You can reuse the [Postman collection](https://github.com/Financial-Times/next-syndication-api/blob/main/doc/syndication-api-postman.json) ([instructions](https://github.com/Financial-Times/next-syndication-api#api-endpoint-postman-collection)) for these API endpoints, you will need to adapt the `local.ft.com url:5050` to `www.ft.com`
 
