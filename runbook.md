@@ -81,7 +81,7 @@ The app connects to Salesforce to get contract details for the user, and updates
 - Splunk: [index="heroku" source=\*syndication-api\* salesforce error](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3D%22heroku%22%20source%3D*syndication-api*%20salesforce%20error&display.page.search.mode=smart&dispatch.sample_ratio=1&workload_pool=standard_perf&earliest=-1h&latest=now&sid=1661952146.1430281), `NullApexResponse` is in the error message specifically for the call to Salesforce
 
 #### A user is seeing incorrect data in their Syndication / Republishing platform
-- For OPS team: If a user is seeing incorrect data in their platform, you will find a secure note in the OPS team 1password vault called "Syndication API Troubleshooting Information" that includes instructions and a key (x-api-key) to force-refresh a contract. This means that the contract will be synced with the latest data in SalesForce. 
+- For OPS team: If a user is seeing incorrect data in their platform, you will find a secure note in your or other OPS team member's 1password vault called "Syndication API Troubleshooting Information" that includes instructions and a key (x-api-key) to force-refresh a contract. This means that the contract will be synced with the latest data in SalesForce. 
 
 ## Second Line Troubleshooting
 
