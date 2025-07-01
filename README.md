@@ -12,7 +12,7 @@ All troubleshooting information is gathered in the [Syndication API Troubleshoot
 
 The API behind the FT.com/republishing tool.
 
-_NB: There is a common misconception that you need all parts of Syndication to be running locally to test a single part of it. However, `next-router` will only look for a locally-running syndication API if it has the `syn-` environmental variables in the `.env` file. You can run n-syndication or next-syn-list locally and the router will use the syndication API running in production if those variables are not there._
+_NB: There is a common misconception that you need all parts of Syndication to be running locally to test a single part of it. However, `next-router` will only look for a locally-running syndication API if it has the `syn-` environmental variables in Doppler. You can run n-syndication or next-syn-list locally and the router will use the syndication API running in production if those variables are not there._
 
 [next-syndication-api wiki page](https://financialtimes.atlassian.net/wiki/spaces/Accounts/pages/8120533017/Syndication)
 
@@ -53,9 +53,18 @@ See [getting started](https://financialtimes.atlassian.net/wiki/spaces/Accounts/
 
 ### Other contracts
 
-If you need to test a specific contract, since all contracts live in the production salesforce environment, in order to test certain contracts locally you will need to use the production `SALESFORCE_*` environment variables rather than the development ones (see Doppler).
-
 In development mode you should be using the FT Staff contract, which is stubbed in `stubs/CA-00001558.json`
+
+All contracts except `CA-00001558` live in the production salesforce environment. If you need to test a specific contract locally, you need to add the suffix `_PROD` to the `SALESFORCE_*` environment variables defined in `custom-environment-variables.yaml`.
+
+```yaml
+  SALESFORCE:
+    CALLBACK_URI: "SALESFORCE_CALLBACK_URI"         # no changes needed
+    CLIENT_ID: "SALESFORCE_CLIENT_ID_PROD"          # SALESFORCE_CLIENT_ID
+    CLIENT_SECRET: "SALESFORCE_CLIENT_SECRET_PROD"  # SALESFORCE_CLIENT_SECRET
+    PASSWORD: "SALESFORCE_PASSWORD_PROD"            # SALESFORCE_PASSWORD
+    USERNAME: "SALESFORCE_USERNAME_PROD"            # SALESFORCE_USERNAME
+```
 
 ---
 
@@ -78,23 +87,18 @@ You MIGHT need:
 
 If you need to use the database locally, set up the database by following the instructions in [next-syndication-db-schema](https://github.com/Financial-Times/next-syndication-db-schema).
 
-If you are using postgres in Docker, you will need to edit your `.env` file to set `DATABASE_HOST` to `192.168.99.100`
+If you are using postgres in Docker, you will need to edit your `custom-environment-variables.yaml` file to change `DATABASE_HOST` to `DATABASE_HOST_DOCKER` (variable already defined in Doppler).
+
+```yaml
+  DB:
+    host: "DATABASE_HOST_DOCKER"  # DATABASE_HOST
+```
 
 ### Running the API
 
 Once you have set up the projects you want to work on, and want to run all projects easily, you can do so from within the `next-syndication-api`, you will need to:
 
-- update your local [next-router](https://github.com/Financial-Times/next-router)'s `.env` file to include the following:
-
-  ```properties
-
-     syndication-api=3255
-     syn-contract=3984
-     syn-list=3566
-
-  ```
-
-  (request will fail on the browser because is an API and it requires `x-api-key` to be present in the request)
+- run `next-router` locally (all the `syn-` environmental variables for `next-router` are stored in Doppler)
 
   - HOWEVER if you are also running another app like `next-syn-list` or `next-article`, do not run `next-router` at the same time. Those apps run `next-router` by default so you don't need an independent instance. In fact, trying to run an independent instance of `next-router` will stop your local `next-article` app from working.
 
@@ -107,9 +111,26 @@ Once you have set up the projects you want to work on, and want to run all proje
 
 ### Running against prod DB (optional)
 
-To run `next-syndication-api` against prod DB is necessary add to the environment variables defined in `custom-environment-variables.yaml` the prefix `_PROD`.  
-("DATABASE_NAME_PROD",DATABASE_HOST_PROD","DATABASE_PASSWORD_PROD","DATABASE_PORT_PROD","DATABASE_URL_PROD","DATABASE_USER_NAME_PROD").  
+To run `next-syndication-api` against prod DB you need to add the suffix `_PROD` to the `DATABASE_*` environment variables defined in `custom-environment-variables.yaml`.
+
+```yaml
+  DB:
+    database: "DATABASE_NAME_PROD"        # DATABASE_NAME
+    host: "DATABASE_HOST_PROD"            # DATABASE_HOST
+    password: "DATABASE_PASSWORD_PROD"    # DATABASE_PASSWORD
+    port: "DATABASE_PORT_PROD"            # DATABASE_PORT
+    uri: "DATABASE_URL_PROD"              # DATABASE_URL
+    user_name: "DATABASE_USER_NAME_PROD"  # DATABASE_USER_NAME
+```
+
 These variables are already defined in development Doppler folder.
+
+In addition, you need to add the `ssl: true` option in `default.yaml` to bypass the SSL authenication error.
+
+```yaml
+  DB:
+    ssl: true
+```
 
 ### Running the Syndication UI (optional)
 
