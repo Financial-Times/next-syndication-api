@@ -34,7 +34,7 @@ function extractFourishEmbeds(contentHTMLBody) {
 			type: 'http://www.ft.com/ontology/content/Graphic'
 		});
 		}
-		return flourishEmbeds
+		return flourishEmbeds;
 		
 	} catch(error){
 		return null;
@@ -58,9 +58,11 @@ module.exports = exports = function article(content, contract, graphicSyndicatio
 
 	const flourishEmbeds = extractFourishEmbeds(content.bodyHTML);
 	if(flourishEmbeds) {
+		content.embeds = content.embeds ?? [];
 		content.embeds.push(...flourishEmbeds);
-		content.contentStats.graphics += flourishEmbeds.length; 
-		
+		if(content.contentStats){
+			content.contentStats.graphics += flourishEmbeds.length; 
+		}
 	}
 
 	content.wordCount = getWordCount(content);
