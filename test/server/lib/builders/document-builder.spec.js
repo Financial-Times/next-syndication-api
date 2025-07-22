@@ -21,6 +21,7 @@ const MODULE_ID =
 
 describe(MODULE_ID, function () {
 	const CONTENT_ID = '42ad255a-99f9-11e7-b83c-9588e51488a0';
+	const CONTENT_WITH_FLOURISH_GRAPHICS_ID = 'e5f23433-e435-4c81-88c3-4285b12f0d6a';
 
 	let content;
 	let documentBuilder;
@@ -140,6 +141,42 @@ describe(MODULE_ID, function () {
 				'DocumentBuilder'
 			);
 		});
+
+		it('contentDocument should contain flourish graphics', function () {
+			content = Object.assign({}, require(path.resolve(
+				`${FIXTURES_DIRECTORY}/content/${CONTENT_WITH_FLOURISH_GRAPHICS_ID}.json`
+			))); // Clone Content
+			content.lang = 'en';
+			content.extension = DEFAULT_FORMAT;
+			const contract = {
+				allowed: {
+					rich_articles: true,
+				},
+			};
+			enrich(content, contract);
+			documentBuilder = new DocumentBuilder(content);
+			
+			documentBuilder.removeNonSyndicatableImages();
+
+			const document = documentBuilder.getDocument();
+			const hasAllSyndicatableImage = Array.from(document.getElementsByTagName('img')).every((el) => {
+
+				const elementSrc = el.getAttribute('src');
+				if(!elementSrc?.includes('public.flourish.studio/')) {
+					return false;
+				}
+				const match = elementSrc.match(/\/visualisation\/(\d+)\//);
+				const imageId = match ? match[1] : null;
+				const imageDetails = embedsMap[imageId];
+				if(!imageDetails){
+					return false;
+				}
+				return imageDetails.canBeSyndicated === 'yes'
+			});
+
+			expect(hasAllSyndicatableImage).and.to.equal(true);
+		});
+
 	});
 
 	describe('decorateArticle', function () {
