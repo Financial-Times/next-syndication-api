@@ -88,18 +88,31 @@ module.exports = exports = class DocumentBuilder {
 	removeNonSyndicatableImages() {
 
 		const embedsMap = arrayToMap(this.content.embeds);
-
 		Array.from(this.contentDocument.getElementsByTagName('img')).forEach(
 			(el) => {
-				const imageType = el.getAttribute('data-image-type');
-
+				let isFlourishElement = false;
+				// identify flourish element
+				const elementSrc = el.getAttribute('src');
+				if(elementSrc?.includes('public.flourish.studio/')) {
+					isFlourishElement = true;
+				}
+				
+				let imageType = el.getAttribute('data-image-type');
+				if(isFlourishElement) {
+					imageType = 'graphic';
+				}
+				
 				let imageId =
 					el.getAttribute('data-id') ||
 					el.getAttribute('data-content-id');
-
 				// to handle ids in this format (https://api.ft.com/content/{content_id}})
 				imageId = imageId.split('/').pop();
-
+				
+				if(isFlourishElement) {
+					const match = elementSrc.match(/\/visualisation\/(\d+)\//);
+					imageId = match ? match[1] : null;
+				}
+				
 				const imageDetails = embedsMap[imageId];
 
 				if (imageType !== 'graphic' || !imageDetails || imageDetails.canBeSyndicated !== 'yes') {

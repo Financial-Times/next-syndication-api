@@ -13,6 +13,34 @@ const {
 const RE_BAD_CHARS = /[^A-Za-z0-9_]/gm;
 const RE_SPACE = /\s/gm;
 
+function extractFourishEmbeds(contentHTMLBody) {
+	try {
+		// Regex to extract Flourish IDs
+		const flourishIdRegex = /data-flourish-id="(\d+)"/g;
+
+		const flourishEmbeds = [];
+		let match;
+
+		while ((match = flourishIdRegex.exec(contentHTMLBody)) !== null) {
+		const id = match[1];
+		const flourishContentUrl = encodeURIComponent(`https://public.flourish.studio/visualisation/${id}/thumbnail?cacheBuster=`);
+		const proxyUrl = `https://www.ft.com/__origami/service/image/v2/images/raw/${flourishContentUrl}?source=cp-content-pipeline&fit=scale-down&quality=highest&width=1020&dpr=1`;
+
+		flourishEmbeds.push({
+			apiUrl: proxyUrl,
+			binaryUrl: proxyUrl,
+			canBeSyndicated: 'yes',
+			id: id,
+			type: 'http://www.ft.com/ontology/content/Graphic'
+		});
+		}
+		return flourishEmbeds
+		
+	} catch(error){
+		return null;
+	}
+}
+
 module.exports = exports = function article(content, contract, graphicSyndicationFlag) {
 	if (!content.content_id) {
 		content.content_id = path.basename(content.id);
@@ -26,6 +54,13 @@ module.exports = exports = function article(content, contract, graphicSyndicatio
 
 	if (content.body && !content.bodyHTML) {
 		content.bodyHTML = content.body;
+	}
+
+	const flourishEmbeds = extractFourishEmbeds(content.bodyHTML);
+	if(flourishEmbeds) {
+		content.embeds.push(...flourishEmbeds);
+		content.contentStats.graphics += flourishEmbeds.length; 
+		
 	}
 
 	content.wordCount = getWordCount(content);
@@ -84,33 +119,5 @@ module.exports = exports = function article(content, contract, graphicSyndicatio
 
 	content.fileName = DOWNLOAD_FILENAME_PREFIX + content.title.replace(RE_SPACE, '_').replace(RE_BAD_CHARS, '').substring(0, 12);
 
-	// add flourush graphics in embeds
-	try {
-		// Regex to extract Flourish IDs
-		const flourishIdRegex = /data-flourish-id="(\d+)"/g;
-
-		const flourishEmbeds = [];
-		let match;
-
-		while ((match = flourishIdRegex.exec(content.bodyHTML)) !== null) {
-		const id = match[1];
-		const flourishContentUrl = encodeURIComponent(`https://public.flourish.studio/visualisation/${id}/thumbnail?cacheBuster=`);
-		const proxyUrl = `https://www.ft.com/__origami/service/image/v2/images/raw/${flourishContentUrl}?source=cp-content-pipeline&fit=scale-down&quality=highest&width=1020&dpr=1`;
-
-		flourishEmbeds.push({
-			apiUrl: proxyUrl,
-			binaryUrl: proxyUrl,
-			canBeSyndicated: 'yes',
-			id: id,
-			type: 'http://www.ft.com/ontology/content/Image'
-		});
-		}
-
-		content.embeds.push(...flourishEmbeds);
-		content.hasGraphics = true;
-		content.canAllGraphicsBeSyndicated = true;
-		content.canAtLeastOneGraphicBeSyndicated = true;
-	} catch(error){
-	}
 	return content;
 };
