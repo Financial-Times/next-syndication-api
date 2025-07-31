@@ -1,17 +1,21 @@
 'use strict';
 
 const { Logger } = require('../logger');
-const log = new Logger({source: 'lib/enrich/index'});
+const log = new Logger({ source: 'lib/enrich/index' });
 
-module.exports = exports = function enrich(content, contract, graphicSyndicationFlag) {
+module.exports = exports = function enrich(content, contract) {
 	if (!content.type && content.content_type) {
 		content.type = content.content_type;
 	}
 
-	if (Object.prototype.toString.call(content) === '[object Object]' && !(content instanceof Error) && content.type in exports) {
+	if (
+		Object.prototype.toString.call(content) === '[object Object]' &&
+		!(content instanceof Error) &&
+		content.type in exports
+	) {
 		const START = Date.now();
 
-		content = exports[content.type](content, contract, graphicSyndicationFlag);
+		content = exports[content.type](content, contract);
 
 		log.debug(`Enrich ${content.type} in ${Date.now() - START}ms`);
 
