@@ -83,7 +83,7 @@ describe(MODULE_ID, function () {
 	});
 
 	describe('Handling flourish content', () => {
-		it('if article doesn\'t contain flourish graphics then hasFlourishGraphics is set to false', () => {
+		context('if article doesn\'t contain flourish graphics then hasFlourishGraphics is set to false', () => {
 			const FLOURISH_CONTENT_ID = '42ad255a-99f9-11e7-b83c-9588e51488a0';
 			const item = require(path.resolve(`${FIXTURES_DIRECTORY}/content/${FLOURISH_CONTENT_ID}.json`));
 			item.lang = 'en';
@@ -99,7 +99,7 @@ describe(MODULE_ID, function () {
 			expect(item.hasFlourishGraphics).to.equal(false);
 		});
 
-		it('if article contains flourish graphics then hasFlourishGraphics is set to true', () => {
+		context('if article contains flourish graphics then hasFlourishGraphics is set to true', () => {
 			const FLOURISH_CONTENT_ID = 'e5f23433-e435-4c81-88c3-4285b12f0d6a';
 			const item = require(path.resolve(`${FIXTURES_DIRECTORY}/content/${FLOURISH_CONTENT_ID}.json`));
 			item.lang = 'en';
