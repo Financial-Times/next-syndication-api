@@ -49,6 +49,10 @@ module.exports = exports = function article(content, contract) {
 		(graphicEmbeds &&
 			graphicEmbeds.some((item) => item.canBeSyndicated === 'yes'));
 
+	// check whether content has flourish graphics or not
+	const FLOURISH_ID_REGEX = /data-flourish-id="(\d+)"/;
+	content.hasFlourishGraphics = FLOURISH_ID_REGEX.test(content.bodyHTML);
+		
 	if (content.bodyHTML && contract) {
 		const documentBuilder = new DocumentBuilder(content)
 			.removeElementsByTagName()
