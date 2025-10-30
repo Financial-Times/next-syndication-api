@@ -11,10 +11,8 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
+      - tool-kit/persist-workspace:
+          path: .
   envTest:
     executor: tool-kit/default
     steps:
@@ -62,21 +60,25 @@ workflows:
       - tool-kit/deploy-review:
           executor: node
           requires:
-            - tool-kit/setup
+            - tool-kit/build
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
             branches:
               ignore: main
+          cloudsmith-org: financial-times
+          cloudsmith-service-account: cp-lifecycle-read-write
       - tool-kit/deploy-staging:
           executor: node
           requires:
-            - tool-kit/setup
+            - tool-kit/build
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
             branches:
               only: main
+          cloudsmith-org: financial-times
+          cloudsmith-service-account: cp-lifecycle-read-write
       - tool-kit/e2e-test-review:
           executor: node
           requires:
@@ -102,6 +104,8 @@ workflows:
               only: /^v\d+\.\d+\.\d+(-.+)?/
             branches:
               only: main
+          cloudsmith-org: financial-times
+          cloudsmith-service-account: cp-lifecycle-read-write
   nightly:
     when:
       and:
@@ -128,7 +132,9 @@ workflows:
       - tool-kit/deploy-review:
           executor: node
           requires:
-            - tool-kit/setup
+            - tool-kit/build
           filters:
             branches:
               ignore: main
+          cloudsmith-org: financial-times
+          cloudsmith-service-account: cp-lifecycle-read-write
