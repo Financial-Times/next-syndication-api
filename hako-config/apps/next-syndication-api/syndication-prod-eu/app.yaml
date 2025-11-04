@@ -1,0 +1,25 @@
+application: next-syndication-api
+environment: syndication-prod-eu
+
+stacks:
+  web:
+    type: public-load-balanced-web-service
+    parameters:
+      TaskCount: 1
+      TaskCpu: 256
+      TaskCpuArchitecture: ARM64
+      TaskMemory: 512
+      ContainerRegistry: docker.packages.ft.com/cp-container-registry
+      ContainerRegistryCredentialsSecretName: /hako/registry-credential/cloudsmith/cp-lifecycle-read-only
+      ContainerGoodToGoEndpoint: /__gtg
+      # Log to Splunk
+      LogDestination: splunk
+
+  circleci-deployment-role:
+    type: circleci-deployment-role
+    parameters:
+      CircleciProjectId: 3e18a13d-8855-4366-be5e-08b9a9474f89
+
+tags:
+  systemCode: next-syndication-api
+  environment: p
