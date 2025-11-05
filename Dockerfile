@@ -1,7 +1,7 @@
 FROM node:22-alpine
 
 RUN apk add pandoc-cli=3.6.4-r0
-RUN apk add postgresql15-client=15.14-r0 # Provides pg_dump for database backup worker process
+RUN apk add postgresql17-client=17.6-r0 # Provides pg_dump for database backup worker process
 
 WORKDIR /app
 RUN chown node:node /app
