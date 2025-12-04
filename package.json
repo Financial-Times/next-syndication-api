@@ -11,7 +11,7 @@
     "@financial-times/n-express": "^31.9.4",
     "ajv": "^6.0.0",
     "archiver": "^6.0.0",
-    "aws-sdk": "^2.85.0",
+    "aws-sdk": "^2.1692.0",
     "config": "^1.26.1",
     "cookie-parser": "^1.4.3",
     "handlebars": "^4.7.7",
