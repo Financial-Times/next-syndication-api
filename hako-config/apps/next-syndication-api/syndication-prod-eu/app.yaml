@@ -24,6 +24,9 @@ stacks:
       TaskCpuArchitecture: ARM64
       TaskMemory: 512
       ContainerCommand: node --no-experimental-fetch /app/worker/crons/index.js
+      # Healthcheck command uses `df` to check if there is at least 1GB of disk space available
+      # Default Hako image provides 20GB of ephemeral storage
+      ContainerHealthCheckCommand: "df -P / | awk 'NR==2 {exit ($4 < 1000000)}'"
       ContainerRegistry: docker.packages.ft.com/cp-container-registry
       ContainerRegistryCredentialsSecretName: /hako/registry-credential/cloudsmith/cp-lifecycle-read-only
       LogDestination: splunk
