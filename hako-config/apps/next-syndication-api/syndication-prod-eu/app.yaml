@@ -27,6 +27,17 @@ stacks:
       ContainerRegistry: docker.packages.ft.com/cp-container-registry
       ContainerRegistryCredentialsSecretName: /hako/registry-credential/cloudsmith/cp-lifecycle-read-only
       LogDestination: splunk
+  worker-service-sync:
+    type: worker-service
+    parameters:
+      TaskCount: 1
+      TaskCpu: 256
+      TaskCpuArchitecture: ARM64
+      TaskMemory: 512
+      ContainerCommand: node --no-experimental-fetch /app/worker/sync/index.js
+      ContainerRegistry: docker.packages.ft.com/cp-container-registry
+      ContainerRegistryCredentialsSecretName: /hako/registry-credential/cloudsmith/cp-lifecycle-read-only
+      LogDestination: splunk
 
   circleci-deployment-role:
     type: circleci-deployment-role
