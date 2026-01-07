@@ -56,9 +56,34 @@ Here is a diagram for the high level architecture of Syndication
 
 ## First Line Troubleshooting
 
-### The app is erroring
+### Syndication hourly database backups alert
 
-This is a standard Heroku app, so try all the normal things here (bounce the dynos etc). For localised errors, check the user trying to access the application is actually on a syndication licence.
+### Summary and temporary workaround
+This alert may trigger when the cron worker task encounters issues, such as low disk space.
+A temporary workaround is to restart the ECS task so a fresh task is started.
+
+Restart the next-syndication-api-worker-service-crons ECS task in the Syndication Prod AWS account.
+
+### Steps
+1. Go to **ECS** in the AWS console
+2. Select the **syndication-prod-eu** cluster
+3. Under **Services**, search for `next-syndication-api-worker-service-crons`
+4. Click the service name
+5. Click **Update service**
+6. Change **Desired tasks** from **1** to **0**, then click **Update**
+7. Wait a few seconds
+8. Change **Desired tasks** from **0** back to **1**, then click **Update**
+9. ECS will automatically start a new task
+
+### After action
+- Inform the **#cp-customer-lifecycle-public** Slack channel that the task has been restarted
+- The alert should clear within approximately **1 hour after the task restart**
+- Continue monitoring
+- If the alert persists or reoccurs, escalate to the second-line/support team for further investigation
+
+### Longer-term improvement
+A longer-term fix would be to add a container health check that detects low disk space,
+allowing ECS to automatically restart the task when needed.
 
 ### People can't see their syndication icons (first line)
 
