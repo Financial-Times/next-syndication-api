@@ -328,3 +328,7 @@ PartiallyAutomated
 
 You can read about how to rotate an AWS key [over on the Customer Products Wiki](https://customer-products.in.ft.com/wiki/Rotating-AWS-Keys)
 See the Customer Products [key management and troubleshooting wiki page](https://customer-products.in.ft.com/wiki/Key-Management-and-Troubleshooting)
+
+### Self-service via API Gateway Portal
+
+There are currently no keys in this app that are self-serve via the API Gateway Portal.
