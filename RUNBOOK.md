@@ -59,12 +59,14 @@ Here is a diagram for the high level architecture of Syndication
 ### Syndication hourly database backups alert
 
 ### Summary and temporary workaround
+
 This alert may trigger when the cron worker task encounters issues, such as low disk space.
 A temporary workaround is to restart the ECS task so a fresh task is started.
 
 Restart the next-syndication-api-worker-service-crons ECS task in the Syndication Prod AWS account.
 
 ### Steps
+
 1. Go to **ECS** in the AWS console
 2. Select the **syndication-prod-eu** cluster
 3. Under **Services**, search for `next-syndication-api-worker-service-crons`
@@ -76,12 +78,14 @@ Restart the next-syndication-api-worker-service-crons ECS task in the Syndicatio
 9. ECS will automatically start a new task
 
 ### After action
+
 - Inform the **#cp-customer-lifecycle-public** Slack channel that the task has been restarted
 - The alert should clear within approximately **1 hour after the task restart**
 - Continue monitoring
 - If the alert persists or reoccurs, escalate to the second-line/support team for further investigation
 
 ### Longer-term improvement
+
 A longer-term fix would be to add a container health check that detects low disk space,
 allowing ECS to automatically restart the task when needed.
 
@@ -106,20 +110,21 @@ The app connects to Salesforce to get contract details for the user, and updates
 - Splunk: [index="heroku" source=\*syndication-api\* salesforce error](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3D%22heroku%22%20source%3D*syndication-api*%20salesforce%20error&display.page.search.mode=smart&dispatch.sample_ratio=1&workload_pool=standard_perf&earliest=-1h&latest=now&sid=1661952146.1430281), `NullApexResponse` is in the error message specifically for the call to Salesforce
 
 #### A user is seeing incorrect data in their Syndication / Republishing platform
-- For OPS team: If a user is seeing incorrect data in their platform, you will find a secure note in your or other OPS team member's 1password vault called "Syndication API Troubleshooting Information" that includes instructions and a key (x-api-key) to force-refresh a contract. This means that the contract will be synced with the latest data in SalesForce. 
+
+- For OPS team: If a user is seeing incorrect data in their platform, you will find a secure note in your or other OPS team member's 1password vault called "Syndication API Troubleshooting Information" that includes instructions and a key (x-api-key) to force-refresh a contract. This means that the contract will be synced with the latest data in SalesForce.
 
 ## Second Line Troubleshooting
 
 _NB: There is a common misconception that you need all parts of Syndication to be running locally to test a single part of it. However, `next-router` will only look for a locally-running syndication API if it has the `syn-` environmental variables in the `.env` file. You can run n-syndication or next-syn-list locally and the router will use the syndication API running in production if those variables are not there._
 
-### Check the details and sync a specific contract with the latest SalesForce 
+### Check the details and sync a specific contract with the latest SalesForce
 
 - **Contract check:** You can see the details of a specific contract by calling `GET https://www.ft.com/syndication/contracts/:contract_id` with a valid api key sent in `x-api-key` header. This will pull details from Salesforce and run them through the API. This will also force the Syndication database to be synced with the latest SalesForce data for that contract.
   1. You can find the API key in:
-      -  **Doppler** : `next` team, `next-syndication-api` project, `production` folder, the key is called `SYNDICATION_API_KEY`.
-  2. Download the [FT Headers](https://chromewebstore.google.com/detail/ft-headers/fdnkbdakgannpblkeahoicegijeaidhl) Chrome extension. Create a new profile on it, where the `Profile Name` is anything you want; the `Header name` is `x-api-key` and the `Header value` is the key found in doppler. 
-  3. Go to `https://www.ft.com/syndication/contracts/:contract_id` on your browser where `:contract_id` is the contract you are troubleshooting. 
-    - The `:contract_id` should have the `FTS-xxxxxxxx` format, unless it is the FT Staff licence which has a `CA-xxxxxxxx` format and uses a stub rather than Salesforce
+     - **Doppler** : `next` team, `next-syndication-api` project, `production` folder, the key is called `SYNDICATION_API_KEY`.
+  2. Download the [FT Headers](https://chromewebstore.google.com/detail/ft-headers/fdnkbdakgannpblkeahoicegijeaidhl) Chrome extension. Create a new profile on it, where the `Profile Name` is anything you want; the `Header name` is `x-api-key` and the `Header value` is the key found in doppler.
+  3. Go to `https://www.ft.com/syndication/contracts/:contract_id` on your browser where `:contract_id` is the contract you are troubleshooting.
+  - The `:contract_id` should have the `FTS-xxxxxxxx` format, unless it is the FT Staff licence which has a `CA-xxxxxxxx` format and uses a stub rather than Salesforce
 - **Article republishing permissions check:** `POST` call to `https://www.ft.com/syndication/contracts/:contract_id/resolve` with a valid api key (as above) and a json body which is an array of content ids will return the syndication permissions for each article you listed
 - **Tip:** You can reuse the [Postman collection](https://github.com/Financial-Times/next-syndication-api/blob/main/doc/syndication-api-postman.json) ([instructions](https://github.com/Financial-Times/next-syndication-api#api-endpoint-postman-collection)) for these API endpoints, you will need to adapt the `local.ft.com url:5050` to `www.ft.com`
 
@@ -332,3 +337,44 @@ See the Customer Products [key management and troubleshooting wiki page](https:/
 ### Self-service via API Gateway Portal
 
 There are currently no keys in this app that are self-serve via the API Gateway Portal.
+
+### Custom rotation process
+
+- `DATABASE_PASSWORD`
+
+  - **For querying:** Syndication Postgres AWS RDS Database
+  - **Usage:** Querying and updating contract usage and running health-checks against the database.
+  - **How to rotate:** DB passwords can be changed with the psql command `ALTER ROLE username WITH PASSWORD 'new_password'`. The is secret `DATABASE_PASSWORD` is shared with the `next-syndication-dl` project, so this will need to be updated at the same time.
+  - **Comment:** Details of the Postgres Database can be found in `FT Tech Syndication Prod` AWS Role under `Aurora and RDS` services.
+
+- `EMAIL_PLATFORM_API_KEY`
+
+  - **For querying:** [Send Email API](https://biz-ops.in.ft.com/System/send-email-api)
+  - **Usage:** To send an email when a client interacts with an article where they would need to pay more to republish it. This is sent to the email addresses defined as `ACCOUNTS_EMAIL` and `GOOGLE_EMAIL_TO_ADDRESS`.
+  - **How to rotate:** Contact [#email-management](https://financialtimes.enterprise.slack.com/archives/C04TF7NSP1N) and request a new key
+
+- `EXTERNAL_SYNDICATION_API_KEY`
+
+  - **For querying:** Not applicable
+  - **Usage:** To validate requests made to this system (next-syndication-api)
+  - **How to rotate:** It has not been confirmed who uses this key, it may be accessed by an external organisation. It may not be used at all. To rotate this, a new key would need to be generated, issued to any consuming users and updated in Doppler
+
+- `SALESFORCE_CLIENT_SECRET` / `SALESFORCE_PASSWORD`
+
+  - **For querying:** [Salesforce CRM - Global Org](https://biz-ops.in.ft.com/System/salesforce-global)
+  - **Usage:** Used to query (syndication) contracts by id
+  - **How to rotate:** New secret & password needs to be issued by someone with salesforce administrator rights, contact [#crm-enablement-team](https://financialtimes.enterprise.slack.com/archives/C01AVQQJP7C)
+  - **Comment:** The moment new the secret/password are activated, the old ones become invalid. Therefore any change needs to be done synchronously to avoid outages.
+
+- `SESSION_PUBLIC_KEY`
+
+  - **For querying:** Unknown - this key is not found directly within the codebase.
+  - **Usage:** Unknown
+  - **How to rotate:** Unknown
+  - **Comment:** The values of VERIFY_SESSION_API_KEY & SESSION_API_KEY have been revoked and removed. We are unsure about `SESSION_PUBLIC_KEY`
+
+- `SYNDICATION_API_KEY`
+
+  - **For querying:** Not applicable.
+  - **Usage:** Used to validate api requests made to next-syndication-api by next-syndication-dl.
+  - **How to rotate:** next-syndication-dl has the same value saved as `SYNDICATION_API_KEY`. Keys would need to be generated and changed for both the -api and -dl at the same time.
