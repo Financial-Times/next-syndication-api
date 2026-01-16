@@ -21,3 +21,4 @@ tmp/*
 health/history/
 
 next-syndication-api-*.json
+.toolkitstate

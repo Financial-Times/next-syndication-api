@@ -2,8 +2,8 @@
 
 const article = require('./article');
 
-module.exports = exports = function package_(content, contract, graphicSyndicationFlag) {
-	content = article(content, contract, graphicSyndicationFlag);
+module.exports = exports = function package_(content, contract) {
+  content = article(content, contract);
 
-	return content;
+  return content;
 };
