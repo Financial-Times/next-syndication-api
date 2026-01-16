@@ -7,43 +7,48 @@ const prepareDownloadResponse = require('../lib/prepare-download-response');
 
 const download = require('../lib/download');
 const isDownloadDisabled = require('../helpers/is-download-disabled');
-const flagIsOn = require('../helpers/flag-is-on');
 
 const {
 	DEFAULT_DOWNLOAD_FORMAT,
-	DEFAULT_DOWNLOAD_LANGUAGE
+	DEFAULT_DOWNLOAD_LANGUAGE,
 } = require('config');
 
 module.exports = exports = async (req, res, next) => {
-	const log = new Logger({req, res, source: 'controllers/download-by-content-id'});
-	const {
-		contract,
-		licence,
-		user,
-		hasGraphicSyndication,
-		flags
-	} = res.locals;
+	const log = new Logger({
+		req,
+		res,
+		source: 'controllers/download-by-content-id',
+	});
+	const { contract, licence, user } = res.locals;
 
 	const { download_format } = user;
 
-	const format = req.query.format
-				|| download_format
-				|| DEFAULT_DOWNLOAD_FORMAT;
-
+	const format =
+		req.query.format || download_format || DEFAULT_DOWNLOAD_FORMAT;
 
 	const referrer = String(req.get('referrer'));
 
-	const lang = String(req.query.lang || (referrer.includes('/republishing/spanish') ? 'es' : DEFAULT_DOWNLOAD_LANGUAGE)).toLowerCase();
+	const lang = String(
+		req.query.lang ||
+			(referrer.includes('/republishing/spanish')
+				? 'es'
+				: DEFAULT_DOWNLOAD_LANGUAGE)
+	).toLowerCase();
 
-	const content = await getContentById(req.params.content_id, format, lang, contract, flags.graphicSyndication && flagIsOn(flags.graphicSyndication));
+	const content = await getContentById(
+		req.params.content_id,
+		format,
+		lang,
+		contract
+	);
 
 	if (Object.prototype.toString.call(content) !== '[object Object]') {
 		res.sendStatus(404);
 		return;
 	}
 
-	if(isDownloadDisabled(content, contract)){
-		log.error('DOWNLOAD_DISABLED_ERROR',contract );
+	if (isDownloadDisabled(content, contract)) {
+		log.error('DOWNLOAD_DISABLED_ERROR', contract);
 		res.sendStatus(403);
 		return;
 	}
@@ -55,7 +60,6 @@ module.exports = exports = async (req, res, next) => {
 		licence,
 		req,
 		user,
-		hasGraphicSyndication
 	});
 
 	res.locals.content = content;
@@ -73,7 +77,7 @@ module.exports = exports = async (req, res, next) => {
 	dl.on('error', (err) => {
 		log.error(`DOWNLOAD_${articleOrArchive.toUpperCase()}_ERROR`, {
 			event: `DOWNLOAD_${articleOrArchive.toUpperCase()}_ERROR`,
-			error: err.stack || err
+			error: err.stack || err,
 		});
 		log.count(`${articleOrArchive.toLowerCase()}-download-error`);
 		res.status(500).end();
@@ -92,7 +96,11 @@ module.exports = exports = async (req, res, next) => {
 
 	if (articleOrArchive === 'Archive') {
 		dl.on('end', () => {
-			log.debug(`DownloadArchiveEnd => ${content.id} in ${Date.now() - dl.START}ms`);
+			log.debug(
+				`DownloadArchiveEnd => ${content.id} in ${
+					Date.now() - dl.START
+				}ms`
+			);
 
 			if (dl.cancelled !== true) {
 				res.end();
@@ -103,8 +111,7 @@ module.exports = exports = async (req, res, next) => {
 		dl.pipe(res);
 
 		await dl.appendAll();
-	}
-	else {
+	} else {
 		const file = await dl.convertArticle();
 
 		res.set('content-length', file.length);
