@@ -5,7 +5,7 @@
       debug: false
       logger: true
 
-  CONVERT_FORMAT_COMMAND: "/app/pandoc-dpkg/usr/bin/pandoc"
+  CONVERT_FORMAT_COMMAND: "pandoc"
 
   DEFAULT_DB_ENDPOINT: https://dynamodb.eu-west-1.amazonaws.com
 
