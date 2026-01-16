@@ -81,4 +81,42 @@ describe(MODULE_ID, function () {
 			});
 		});
 	});
+
+	describe('Handling flourish content', () => {
+		context('article doesn\'t contain Flourish graphics', () => {
+			it('sets hasFlourishGraphics to false', () => {
+				const FLOURISH_CONTENT_ID = '42ad255a-99f9-11e7-b83c-9588e51488a0';
+				const item = require(path.resolve(`${FIXTURES_DIRECTORY}/content/${FLOURISH_CONTENT_ID}.json`));
+				item.lang = 'en';
+				item.extension = DEFAULT_FORMAT;
+
+				const contract = {
+					allowed: {
+						rich_articles: true
+					}
+				}
+				underTest(item, contract);
+
+				expect(item.hasFlourishGraphics).to.equal(false);
+			});
+		});
+
+		context('article contains Flourish graphics', () => {
+			it('sets hasFlourishGraphics to true', () => {
+				const FLOURISH_CONTENT_ID = 'e5f23433-e435-4c81-88c3-4285b12f0d6a';
+				const item = require(path.resolve(`${FIXTURES_DIRECTORY}/content/${FLOURISH_CONTENT_ID}.json`));
+				item.lang = 'en';
+				item.extension = DEFAULT_FORMAT;
+
+				const contract = {
+					allowed: {
+						rich_articles: true
+					}
+				}
+				underTest(item, contract);
+
+				expect(item.hasFlourishGraphics).to.equal(true);
+			});
+		});
+	});
 });
