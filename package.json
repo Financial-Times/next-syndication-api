@@ -1,7 +1,7 @@
 {
   "name": "ft-next-syndication-api",
   "description": "Next Syndication API",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "private": true,
   "dependencies": {
     "@dotcom-reliability-kit/crash-handler": "^5.0.0",
@@ -33,7 +33,7 @@
     "xmldom": "^0.6.0"
   },
   "devDependencies": {
-    "@dotcom-tool-kit/backend-heroku-app": "^4.1.4",
+    "@dotcom-tool-kit/containerised-app": "^0.3.6",
     "@dotcom-tool-kit/eslint": "^4.2.4",
     "@dotcom-tool-kit/husky-npm": "^5.1.4",
     "@dotcom-tool-kit/mocha": "^4.2.4",

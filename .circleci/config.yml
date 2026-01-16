@@ -11,16 +11,8 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
-  envTest:
-    executor: tool-kit/default
-    steps:
-      - checkout
-      - run:
-          command: node ~/project/scripts/env_check.js
+      - tool-kit/persist-workspace:
+          path: .
 workflows:
   tool-kit:
     when:
@@ -40,14 +32,9 @@ workflows:
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
-      - envTest:
-          requires:
-            - checkout
-            - tool-kit/setup
       - tool-kit/build:
           executor: node
           requires:
-            - envTest
             - tool-kit/setup
           filters:
             tags:
@@ -62,21 +49,25 @@ workflows:
       - tool-kit/deploy-review:
           executor: node
           requires:
-            - tool-kit/setup
+            - tool-kit/build
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
             branches:
               ignore: main
+          cloudsmith-org: financial-times
+          cloudsmith-service-account: cp-lifecycle-read-write
       - tool-kit/deploy-staging:
           executor: node
           requires:
-            - tool-kit/setup
+            - tool-kit/build
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
             branches:
               only: main
+          cloudsmith-org: financial-times
+          cloudsmith-service-account: cp-lifecycle-read-write
       - tool-kit/e2e-test-review:
           executor: node
           requires:
@@ -94,7 +85,6 @@ workflows:
       - tool-kit/deploy-production:
           executor: node
           requires:
-            - envTest
             - tool-kit/test
             - tool-kit/e2e-test-staging
           filters:
@@ -102,6 +92,8 @@ workflows:
               only: /^v\d+\.\d+\.\d+(-.+)?/
             branches:
               only: main
+          cloudsmith-org: financial-times
+          cloudsmith-service-account: cp-lifecycle-read-write
   nightly:
     when:
       and:
@@ -128,7 +120,9 @@ workflows:
       - tool-kit/deploy-review:
           executor: node
           requires:
-            - tool-kit/setup
+            - tool-kit/build
           filters:
             branches:
               ignore: main
+          cloudsmith-org: financial-times
+          cloudsmith-service-account: cp-lifecycle-read-write

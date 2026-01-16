@@ -1,11 +1,11 @@
 plugins:
+  - '@dotcom-tool-kit/containerised-app'
   - "@dotcom-tool-kit/eslint"
   - "@dotcom-tool-kit/npm"
   - "@dotcom-tool-kit/husky-npm"
   - "@dotcom-tool-kit/mocha"
   - "./toolkit/start"
   - "./toolkit/logs"
-  - "@dotcom-tool-kit/backend-heroku-app"
 
 commands:
   test:local:
@@ -25,17 +25,23 @@ options:
         - "**/*.{js,jsx}"
     Mocha:
       configPath: "./.mocharc.json"
-    HerokuProduction:
-      scaling:
-        ft-next-syndication-api:
-          web:
-            size: standard-1X
-            quantity: 1
   plugins:
+    "@dotcom-tool-kit/cloudsmith":
+      serviceAccount: cp-lifecycle-read-write
+    "@dotcom-tool-kit/containerised-app":
+      awsRoleArnStaging: arn:aws:iam::893061507174:role/hako/next-syndication-api-syndication-test-eu-CI
+      awsRoleArnProduction: arn:aws:iam::699535799529:role/hako/next-syndication-api-syndication-prod-eu-CI
+      hakoReviewEnvironments:
+        - syndication-test-eu
+      hakoStagingEnvironments:
+        - syndication-test-eu
+      hakoProductionEnvironments:
+        - syndication-prod-eu
+    "@dotcom-tool-kit/docker":
+      images:
+        web:
+          name: next-syndication-api
     "@dotcom-tool-kit/circleci":
       cimgNodeVersions: [22.12-browsers]
-    "@dotcom-tool-kit/heroku":
-      pipeline: "ft-next-syndication-api"
-      systemCode: "next-syndication-api"
     "@dotcom-tool-kit/doppler":
       project: next-syndication-api
