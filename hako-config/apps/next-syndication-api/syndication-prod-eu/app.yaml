@@ -1,0 +1,52 @@
+application: next-syndication-api
+environment: syndication-prod-eu
+
+stacks:
+  web:
+    type: public-load-balanced-web-service
+    parameters:
+      TaskCount: 1
+      TaskCpu: 256
+      TaskCpuArchitecture: ARM64
+      TaskMemory: 512
+      ContainerRegistry: docker.packages.ft.com/cp-container-registry
+      ContainerRegistryCredentialsSecretName: /hako/registry-credential/cloudsmith/cp-lifecycle-read-only
+      ContainerGoodToGoEndpoint: /__gtg
+      # Log to Splunk
+      LogDestination: splunk
+  # Ideally this service would be invoked on a cron basis rather than constantly running,
+  # but we're not going to rearchitect it while setting it up on AWS for the first time.
+  worker-service-crons:
+    type: worker-service
+    parameters:
+      TaskCount: 1
+      TaskCpu: 256
+      TaskCpuArchitecture: ARM64
+      TaskMemory: 512
+      ContainerCommand: node --no-experimental-fetch /app/worker/crons/index.js
+      # Healthcheck command uses `df` to check if there is at least 1GB of disk space available
+      # Default Hako image provides 20GB of ephemeral storage
+      ContainerHealthCheckCommand: "df -P / | awk 'NR==2 {exit ($4 < 1000000)}'"
+      ContainerRegistry: docker.packages.ft.com/cp-container-registry
+      ContainerRegistryCredentialsSecretName: /hako/registry-credential/cloudsmith/cp-lifecycle-read-only
+      LogDestination: splunk
+  worker-service-sync:
+    type: worker-service
+    parameters:
+      TaskCount: 1
+      TaskCpu: 256
+      TaskCpuArchitecture: ARM64
+      TaskMemory: 512
+      ContainerCommand: node --no-experimental-fetch /app/worker/sync/index.js
+      ContainerRegistry: docker.packages.ft.com/cp-container-registry
+      ContainerRegistryCredentialsSecretName: /hako/registry-credential/cloudsmith/cp-lifecycle-read-only
+      LogDestination: splunk
+
+  circleci-deployment-role:
+    type: circleci-deployment-role
+    parameters:
+      CircleciProjectId: 3e18a13d-8855-4366-be5e-08b9a9474f89
+
+tags:
+  systemCode: next-syndication-api
+  environment: p

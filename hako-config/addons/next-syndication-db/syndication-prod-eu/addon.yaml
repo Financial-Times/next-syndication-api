@@ -1,0 +1,17 @@
+---
+
+type: postgres-db-instance
+addon: next-syndication-db
+environment: syndication-prod-eu
+
+parameters:
+  DBAllocatedStorage: 20
+  DBInstanceClass: db.t4g.medium
+  DatabaseInsightsMode: advanced
+  EngineVersion: 15.13
+  CustomSecurityGroupIds:
+    - sg-0988eff489da85d98 # FT-Syndication-Prod-eu-west-1-Resources-SG provides access from the FT VPN
+
+tags:
+  systemCode: next-syndication-api
+  environment: p
