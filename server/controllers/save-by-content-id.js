@@ -10,33 +10,39 @@ const getContentById = require('../lib/get-content-by-id');
 
 const {
 	DEFAULT_DOWNLOAD_FORMAT,
-	DEFAULT_DOWNLOAD_LANGUAGE
+	DEFAULT_DOWNLOAD_LANGUAGE,
 } = require('config');
 
 module.exports = exports = async (req, res, next) => {
-	const log = new Logger({req, res, source: 'controllers/save-by-content-id'});
+	const log = new Logger({
+		req,
+		res,
+		source: 'controllers/save-by-content-id',
+	});
 	try {
-		const {
-			licence,
-			syndication_contract,
-			hasGraphicSyndication,
-			user
-		} = res.locals;
+		const { licence, syndication_contract, user } = res.locals;
 
 		const { download_format } = user;
 
-		const format = req.query.format
-					|| download_format
-					|| DEFAULT_DOWNLOAD_FORMAT;
+		const format =
+			req.query.format || download_format || DEFAULT_DOWNLOAD_FORMAT;
 
 		const referrer = String(req.get('referrer'));
 
-		const lang = String(req.query.lang || (referrer.includes('/republishing/spanish') ? 'es' : DEFAULT_DOWNLOAD_LANGUAGE)).toLowerCase();
+		const lang = String(
+			req.query.lang ||
+				(referrer.includes('/republishing/spanish')
+					? 'es'
+					: DEFAULT_DOWNLOAD_LANGUAGE)
+		).toLowerCase();
 
-		const content = await getContentById(req.params.content_id, format, lang);
+		const content = await getContentById(
+			req.params.content_id,
+			format,
+			lang
+		);
 
 		if (Object.prototype.toString.call(content) !== '[object Object]') {
-
 			res.sendStatus(404);
 
 			return;
@@ -46,12 +52,13 @@ module.exports = exports = async (req, res, next) => {
 			event: {
 				content_id: content.id,
 				content_type: content.content_type,
-				has_graphics: Boolean(hasGraphicSyndication && content.hasGraphics),
+				has_graphics: Boolean(content.hasGraphics),
 				content_url: content.webUrl,
 				contract_id: syndication_contract.id,
 				iso_lang_code: lang,
 				licence_id: licence.id,
-				published_date: content.firstPublishedDate || content.publishedDate,
+				published_date:
+					content.firstPublishedDate || content.publishedDate,
 				state: 'saved',
 				syndication_state: String(content.canBeSyndicated),
 				time: moment().toDate(),
@@ -63,15 +70,15 @@ module.exports = exports = async (req, res, next) => {
 					session: req.cookies.FTSession,
 					spoor_id: req.cookies['spoor-id'],
 					url: req.originalUrl,
-					user_agent: req.get('user-agent')
+					user_agent: req.get('user-agent'),
 				},
 				user: {
 					email: user.email,
 					first_name: user.first_name,
 					id: user.user_id,
-					surname: user.surname
-				}
-			}
+					surname: user.surname,
+				},
+			},
 		});
 
 		await res.locals.__event.publish();
@@ -79,12 +86,11 @@ module.exports = exports = async (req, res, next) => {
 		res.sendStatus(204);
 
 		next();
-	}
-	catch(error) {
+	} catch (error) {
 		log.error('CONTENT_NOT_FOUND_ERROR', {
 			event: 'CONTENT_NOT_FOUND_ERROR',
 			contentId: req.params.content_id,
-			error
+			error,
 		});
 
 		res.sendStatus(500);

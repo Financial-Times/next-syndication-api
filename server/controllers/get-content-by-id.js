@@ -2,38 +2,50 @@
 
 const {
 	DEFAULT_DOWNLOAD_FORMAT,
-	DEFAULT_DOWNLOAD_LANGUAGE
+	DEFAULT_DOWNLOAD_LANGUAGE,
 } = require('config');
 const { Logger } = require('../lib/logger');
 const syndicate = require('../lib/syndicate-content');
 const getContentById = require('../lib/get-content-by-id');
-const flagIsOn = require('../helpers/flag-is-on');
-
 
 module.exports = exports = async (req, res, next) => {
-	const log = new Logger({req, res, source: 'controllers/get-content-by-id'});
+	const log = new Logger({
+		req,
+		res,
+		source: 'controllers/get-content-by-id',
+	});
 	try {
+		const {
+			locals: { $DB: db, /*allowed,*/ contract, user },
+		} = res;
+		const { download_format } = user;
 
+		const format =
+			req.query.format || download_format || DEFAULT_DOWNLOAD_FORMAT;
 
-		const {locals: {$DB: db, /*allowed,*/ contract, user, flags}} = res;
-		const {download_format} = user;
+		const lang = String(
+			req.query.lang || DEFAULT_DOWNLOAD_LANGUAGE
+		).toLowerCase();
 
-		const format = req.query.format
-			|| download_format
-			|| DEFAULT_DOWNLOAD_FORMAT;
+		let content = await getContentById(
+			req.params.content_id,
+			format,
+			lang,
+			contract
+		);
 
-		const lang = String(req.query.lang || DEFAULT_DOWNLOAD_LANGUAGE).toLowerCase();
-
-		let content = await getContentById(req.params.content_id, format, lang, contract, flags.graphicSyndication && flagIsOn(flags.graphicSyndication));
-
-		const [{get_content_state_for_contract: state}] = await db.syndication.get_content_state_for_contract([contract.contract_id, req.params.content_id]);
+		const [{ get_content_state_for_contract: state }] =
+			await db.syndication.get_content_state_for_contract([
+				contract.contract_id,
+				req.params.content_id,
+			]);
 
 		if (content) {
 			content = syndicate({
 				contract,
 				item: content,
 				src: content,
-				state
+				state,
 			});
 
 			res.status(200);
@@ -47,7 +59,7 @@ module.exports = exports = async (req, res, next) => {
 	} catch (error) {
 		log.error('FAILED_TO_GET_CONTENT_BY_ID', {
 			event: 'FAILED_TO_GET_CONTENT_BY_ID',
-			error
-		})
+			error,
+		});
 	}
 };

@@ -1,14 +1,14 @@
-const { Task } = require('@dotcom-tool-kit/types');
+const { Task } = require('@dotcom-tool-kit/base');
 const { spawn } = require('child_process');
 const { hookFork, waitOnExit } = require('@dotcom-tool-kit/logger');
 const Doppler = require('@dotcom-tool-kit/doppler');
 
 class SyndicationAPITask extends Task {
-	async run() {
+  async run({ config }) {
 		let dopplerEnv;
 
 		if (!process.env.CI) {
-			const doppler = new Doppler.DopplerEnvVars(this.logger, 'dev');
+      const doppler = new Doppler.DopplerEnvVars(this.logger, 'dev', config.pluginOptions['@dotcom-tool-kit/doppler']?.options);
 			dopplerEnv = await doppler.get();
 		}
 
@@ -28,4 +28,4 @@ class SyndicationAPITask extends Task {
 	}
 }
 
-exports.tasks = [SyndicationAPITask];
+module.exports = SyndicationAPITask;

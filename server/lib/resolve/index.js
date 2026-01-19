@@ -1,16 +1,17 @@
 'use strict';
 
 exports.id = require('./id');
-exports.canAllGraphicsBeSyndicated = require('./canAllGraphicsBeSyndicated');
+exports.canAllGraphicsBeSyndicated = require('./defaultResolver');
 exports.canDownload = require('./canDownload');
 exports.canBeSyndicated = require('./canBeSyndicated');
 exports.downloaded = require('./downloaded');
 exports.embargoPeriod = require('./embargoPeriod');
-exports.hasGraphics = require('./hasGraphics');
+exports.hasFlourishGraphics = require('./defaultResolver');
+exports.hasGraphics = require('./defaultResolver');
 exports.lang = require('./lang');
-exports.publishedDate = require('./publishedDate');
+exports.publishedDate = require('./defaultResolver');
 exports.publishedDateDisplay = require('./publishedDateDisplay');
 exports.saved = require('./saved');
-exports.title = require('./title');
+exports.title = require('./defaultResolver');
 exports.type = require('./type');
 exports.wordCount = require('./wordCount');
