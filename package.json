@@ -1,14 +1,14 @@
 {
   "name": "ft-next-syndication-api",
   "description": "Next Syndication API",
-  "version": "2.0.9",
+  "version": "4.0.0",
   "private": true,
   "dependencies": {
-    "@dotcom-reliability-kit/crash-handler": "^2.1.1",
-    "@dotcom-reliability-kit/middleware-log-errors": "^1.2.5",
-    "@financial-times/n-es-client": "4.1.0",
+    "@dotcom-reliability-kit/crash-handler": "^5.0.0",
+    "@dotcom-reliability-kit/logger": "^4.1.0",
+    "@dotcom-reliability-kit/middleware-log-errors": "^5.0.0",
+    "@financial-times/n-es-client": "^6.0.1",
     "@financial-times/n-express": "^31.9.4",
-    "@financial-times/n-mask-logger": "7.2.0",
     "ajv": "^6.0.0",
     "archiver": "^6.0.0",
     "aws-sdk": "^2.85.0",
@@ -23,28 +23,28 @@
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.35",
     "n-eager-fetch": "6.0.0",
-    "n-health": "13.0.0",
+    "n-health": "^13.1.4",
     "nforce": "^1.7.0",
     "node-schedule": "^1.2.5",
     "node-slack": "^0.0.7",
-    "nodemailer": "^6.0.0",
+    "nodemailer": "^6.9.9",
     "s3-upload-stream": "^1.0.7",
     "shelljs": "^0.8.5",
     "xmldom": "^0.6.0"
   },
   "devDependencies": {
-    "@dotcom-tool-kit/backend-heroku-app": "^3.0.8",
-    "@dotcom-tool-kit/eslint": "^3.1.5",
-    "@dotcom-tool-kit/husky-npm": "^4.1.0",
-    "@dotcom-tool-kit/mocha": "^3.1.5",
-    "@dotcom-tool-kit/npm": "^3.2.2",
+    "@dotcom-tool-kit/containerised-app": "^0.3.6",
+    "@dotcom-tool-kit/eslint": "^4.2.4",
+    "@dotcom-tool-kit/husky-npm": "^5.1.4",
+    "@dotcom-tool-kit/mocha": "^4.2.4",
+    "@dotcom-tool-kit/npm": "^4.2.4",
     "@financial-times/eslint-config-next": "^6.0.0",
-    "@financial-times/n-test": "^4.0.0",
+    "@financial-times/n-test": "^8.0.0",
     "chai": "^4.0.2",
     "chai-http": "^4.3.0",
     "check-engine": "^1.10.1",
     "coveralls": "^2.13.1",
-    "dotcom-tool-kit": "^3.3.7",
+    "dotcom-tool-kit": "^4.3.7",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -104,7 +104,8 @@
     ]
   },
   "engines": {
-    "node": "18.x"
+    "node": "22.x",
+    "npm": "10.x"
   },
   "scripts": {
     "commit": "commit-wizard",
@@ -127,6 +128,6 @@
     }
   },
   "volta": {
-    "node": "18.17.0"
+    "node": "22.12.0"
   }
 }

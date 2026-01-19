@@ -1,4 +1,4 @@
-const { Task } = require('@dotcom-tool-kit/types');
+const { Task } = require('@dotcom-tool-kit/base');
 const { spawn } = require('child_process');
 const { hookFork, waitOnExit } = require('@dotcom-tool-kit/logger');
 
@@ -17,4 +17,4 @@ class SyndicationAPILogs extends Task {
 	}
 }
 
-exports.tasks = [SyndicationAPILogs];
+module.exports = SyndicationAPILogs;

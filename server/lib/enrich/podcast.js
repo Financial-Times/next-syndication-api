@@ -6,22 +6,31 @@ const article = require('./article');
 
 const { DOWNLOAD_ARCHIVE_EXTENSION, DOWNLOAD_MEDIA_TYPES } = require('config');
 
-module.exports = exports = function podcast(content, contract, graphicSyndicationFlag) {
-	content = article(content, contract, graphicSyndicationFlag);
+module.exports = exports = function podcast(content, contract) {
+	content = article(content, contract);
 
-	content.hasTranscript = !!(content.bodyHTML__CLEAN && content.bodyHTML__CLEAN.length);
+	content.hasTranscript = !!(
+		content.bodyHTML__CLEAN && content.bodyHTML__CLEAN.length
+	);
 	content.transcriptExtension = content.extension;
 
 	content.extension = DOWNLOAD_ARCHIVE_EXTENSION;
 
-	if (content.canBeSyndicated === null || typeof content.canBeSyndicated === 'undefined') {
+	if (
+		content.canBeSyndicated === null ||
+		typeof content.canBeSyndicated === 'undefined'
+	) {
 		content.canBeSyndicated = 'yes';
 	}
 
-	content.download = Array.from(content.attachments).reverse().find(item => item.mediaType === DOWNLOAD_MEDIA_TYPES.podcast);
+	content.download = Array.from(content.attachments)
+		.reverse()
+		.find((item) => item.mediaType === DOWNLOAD_MEDIA_TYPES.podcast);
 	content.download.extension = mime.extension(content.download.mediaType);
 
-	content.captions = content.attachments.filter(item => item.mediaType === DOWNLOAD_MEDIA_TYPES.caption);
+	content.captions = content.attachments.filter(
+		(item) => item.mediaType === DOWNLOAD_MEDIA_TYPES.caption
+	);
 
 	return content;
 };

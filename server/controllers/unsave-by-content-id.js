@@ -10,35 +10,47 @@ const getContentById = require('../lib/get-content-by-id');
 
 const {
 	DEFAULT_DOWNLOAD_FORMAT,
-	DEFAULT_DOWNLOAD_LANGUAGE
+	DEFAULT_DOWNLOAD_LANGUAGE,
 } = require('config');
 
 module.exports = exports = async (req, res, next) => {
-	const log = new Logger({req, res, source: 'controllers/unsave-by-content-id'});
+	const log = new Logger({
+		req,
+		res,
+		source: 'controllers/unsave-by-content-id',
+	});
 	try {
 		const referrer = String(req.get('referrer'));
 
-		const lang = String(req.query.lang || (referrer.includes('/republishing/spanish') ? 'es' : DEFAULT_DOWNLOAD_LANGUAGE)).toLowerCase();
+		const lang = String(
+			req.query.lang ||
+				(referrer.includes('/republishing/spanish')
+					? 'es'
+					: DEFAULT_DOWNLOAD_LANGUAGE)
+		).toLowerCase();
 
-		const content = await getContentById(req.params.content_id, DEFAULT_DOWNLOAD_FORMAT, lang);
+		const content = await getContentById(
+			req.params.content_id,
+			DEFAULT_DOWNLOAD_FORMAT,
+			lang
+		);
 
 		if (Object.prototype.toString.call(content) !== '[object Object]') {
-
 			res.sendStatus(404);
 
 			return;
 		}
-		const {	hasGraphicSyndication  } = res.locals;
 		res.locals.__event = new MessageQueueEvent({
 			event: {
 				content_id: content.id,
 				content_type: content.content_type,
-				has_graphics: Boolean(hasGraphicSyndication && content.hasGraphics),
+				has_graphics: Boolean(content.hasGraphics),
 				content_url: content.webUrl,
 				contract_id: res.locals.syndication_contract.id,
 				iso_lang_code: lang,
 				licence_id: res.locals.licence.id,
-				published_date: content.firstPublishedDate || content.publishedDate,
+				published_date:
+					content.firstPublishedDate || content.publishedDate,
 				state: 'deleted',
 				syndication_state: String(content.canBeSyndicated),
 				time: moment().toDate(),
@@ -50,41 +62,48 @@ module.exports = exports = async (req, res, next) => {
 					session: req.cookies.FTSession,
 					spoor_id: req.cookies['spoor-id'],
 					url: req.originalUrl,
-					user_agent: req.get('user-agent')
+					user_agent: req.get('user-agent'),
 				},
 				user: {
 					email: res.locals.user.email,
 					first_name: res.locals.user.first_name,
 					id: res.locals.user.user_id,
-					surname: res.locals.user.surname
-				}
-			}
+					surname: res.locals.user.surname,
+				},
+			},
 		});
 
 		await res.locals.__event.publish();
 
-		const { locals: { $DB: db, syndication_contract } } = res;
+		const {
+			locals: { $DB: db, syndication_contract },
+		} = res;
 
-		await db.syndication.delete_save_history_by_contract_id([syndication_contract.id, content.id]);
+		await db.syndication.delete_save_history_by_contract_id([
+			syndication_contract.id,
+			content.id,
+		]);
 
 		const requestedWith = String(req.get('x-requested-with')).toLowerCase();
 
-		if (referrer.includes('/republishing/save') && (requestedWith !== 'xmlhttprequest' && !requestedWith.includes('fetch'))) {
+		if (
+			referrer.includes('/republishing/save') &&
+			requestedWith !== 'xmlhttprequest' &&
+			!requestedWith.includes('fetch')
+		) {
 			res.redirect(referrer);
 
 			return;
-		}
-		else {
+		} else {
 			res.sendStatus(204);
 		}
 
 		next();
-	}
-	catch (error) {
+	} catch (error) {
 		log.error('CONTENT_NOT_FOUND_ERROR', {
 			event: 'CONTENT_NOT_FOUND_ERROR',
 			contentId: req.params.content_id,
-			error
+			error,
 		});
 
 		res.sendStatus(500);

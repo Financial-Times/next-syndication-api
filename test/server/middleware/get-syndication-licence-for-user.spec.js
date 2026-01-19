@@ -13,10 +13,12 @@ chai.use(sinonChai);
 
 const {
 	BASE_URI_FT_API,
-	TEST: { FIXTURES_DIRECTORY }
+	TEST: { FIXTURES_DIRECTORY },
 } = require('config');
 
-const MODULE_ID = path.relative(`${process.cwd()}/test`, module.id) || require(path.resolve('./package.json')).name;
+const MODULE_ID =
+	path.relative(`${process.cwd()}/test`, module.id) ||
+	require(path.resolve('./package.json')).name;
 
 describe(MODULE_ID, function () {
 	let sandbox;
@@ -29,16 +31,16 @@ describe(MODULE_ID, function () {
 		mocks = {
 			req: {
 				cookies: {
-					FTSession: '123'
+					FTSession: '123',
 				},
-				headers: {}
+				headers: {},
 			},
 			res: {
 				locals: {
-					userUuid: 'abc'
+					userUuid: 'abc',
 				},
-				sendStatus: sandbox.stub()
-			}
+				sendStatus: sandbox.stub(),
+			},
 		};
 		stubs = {
 			logger: {
@@ -46,14 +48,17 @@ describe(MODULE_ID, function () {
 				error: sandbox.stub(),
 				fatal: sandbox.stub(),
 				info: sandbox.stub(),
-				warn: sandbox.stub()
+				warn: sandbox.stub(),
 			},
-			next: sandbox.stub()
+			next: sandbox.stub(),
 		};
 
-		underTest = proxyquire('../../../server/middleware/get-syndication-licence-for-user', {
-			'../lib/logger': stubs.logger
-		});
+		underTest = proxyquire(
+			'../../../server/middleware/get-syndication-licence-for-user',
+			{
+				'../lib/logger': stubs.logger,
+			}
+		);
 	});
 
 	afterEach(function () {
@@ -66,58 +71,24 @@ describe(MODULE_ID, function () {
 			.reply(() => {
 				return [
 					200,
-					require(path.resolve(`${FIXTURES_DIRECTORY}/licenceList.json`)),
-					{}
+					require(path.resolve(
+						`${FIXTURES_DIRECTORY}/licenceList.json`
+					)),
+					{},
 				];
 			});
 
 		await underTest(mocks.req, mocks.res, stubs.next);
 
 		const { licence } = mocks.res.locals;
-		const {hasGraphicSyndication} = mocks.res.locals;
 
-		expect(licence).to.be.an('object')
+		expect(licence)
+			.to.be.an('object')
 			.and.have.property('products')
 			.and.to.be.an('array')
 			.and.to.deep.include({
 				code: 'S1',
-				name: 'Syndication'
+				name: 'Syndication',
 			});
-
-		expect(hasGraphicSyndication).to.be.false;
 	});
-
-	it('should set `res.locals.hasGraphicSyndication` if S2 product is present', async function () {
-		const licenceMockRes = require(path.resolve(`${FIXTURES_DIRECTORY}/licenceList.json`));
-		licenceMockRes.accessLicences[2].products.push({code: 'S2', name: 'Graphics'});
-
-		nock(BASE_URI_FT_API)
-			.get(`/licences?userid=${mocks.res.locals.userUuid}`)
-			.reply(() => {
-				return [
-					200,
-					licenceMockRes,
-					{}
-				];
-			});
-
-		await underTest(mocks.req, mocks.res, stubs.next);
-
-		const { licence } = mocks.res.locals;
-		const {hasGraphicSyndication} = mocks.res.locals;
-
-		expect(licence).to.be.an('object')
-			.and.have.property('products')
-			.and.to.be.an('array')
-			.and.to.deep.include({
-				code: 'S1',
-				name: 'Syndication'
-			})
-			.and.to.deep.include({
-				code: 'S2',
-				name: 'Graphics'
-			});
-		expect(hasGraphicSyndication).to.equal(true);
-	});
-
 });

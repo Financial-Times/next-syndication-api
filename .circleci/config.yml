@@ -1,10 +1,10 @@
 version: 2.1
 orbs:
-  tool-kit: financial-times/dotcom-tool-kit@4
+  tool-kit: financial-times/dotcom-tool-kit@5
 executors:
   node:
     docker:
-      - image: cimg/node:18.17-browsers
+      - image: cimg/node:22.12-browsers
 jobs:
   checkout:
     docker:
@@ -13,12 +13,6 @@ jobs:
       - checkout
       - tool-kit/persist-workspace:
           path: .
-  envTest:
-    executor: tool-kit/default
-    steps:
-      - checkout
-      - run:
-          command: node ~/project/scripts/env_check.js
 workflows:
   tool-kit:
     when:
@@ -30,101 +24,76 @@ workflows:
       - checkout:
           filters:
             tags:
-               only: /^v\d+\.\d+\.\d+(-.+)?/
-      - waiting-for-approval:
-          type: approval
-          filters:
-            branches:
-              only: /(^renovate-.*|^nori/.*)/
+              only: /^v\d+\.\d+\.\d+(-.+)?/
       - tool-kit/setup:
-          name: tool-kit/setup-<< matrix.executor >>
+          executor: node
           requires:
             - checkout
-            - waiting-for-approval
-          matrix:
-            parameters:
-              executor:
-                - node
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
-      - envTest:
-          requires:
-            - checkout
-            - waiting-for-approval
-            - tool-kit/setup
       - tool-kit/build:
-          name: tool-kit/build-<< matrix.executor >>
+          executor: node
           requires:
-            - envTest
-            - tool-kit/setup-<< matrix.executor >>
-          matrix:
-            parameters:
-              executor:
-                - node
+            - tool-kit/setup
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
       - tool-kit/test:
-          name: tool-kit/test-<< matrix.executor >>
+          executor: node
           requires:
-            - tool-kit/build-<< matrix.executor >>
-          matrix:
-            parameters:
-              executor:
-                - node
+            - tool-kit/build
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
       - tool-kit/deploy-review:
-          requires:
-            - tool-kit/setup-node
-            - waiting-for-approval
-          name: tool-kit/deploy-review-node
           executor: node
+          requires:
+            - tool-kit/build
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
             branches:
               ignore: main
+          cloudsmith-org: financial-times
+          cloudsmith-service-account: cp-lifecycle-read-write
       - tool-kit/deploy-staging:
-          requires:
-            - tool-kit/setup-node
-          name: tool-kit/deploy-staging-node
           executor: node
+          requires:
+            - tool-kit/build
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
             branches:
               only: main
+          cloudsmith-org: financial-times
+          cloudsmith-service-account: cp-lifecycle-read-write
       - tool-kit/e2e-test-review:
-          requires:
-            - tool-kit/deploy-review-node
-          name: tool-kit/e2e-test-review-node
           executor: node
+          requires:
+            - tool-kit/deploy-review
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
       - tool-kit/e2e-test-staging:
-          requires:
-            - tool-kit/deploy-staging-node
-          name: tool-kit/e2e-test-staging-node
           executor: node
+          requires:
+            - tool-kit/deploy-staging
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
       - tool-kit/deploy-production:
-          requires:
-            - envTest
-            - tool-kit/e2e-test-staging-node
-            - tool-kit/test-node
-          name: tool-kit/deploy-production-node
           executor: node
+          requires:
+            - tool-kit/test
+            - tool-kit/e2e-test-staging
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
             branches:
               only: main
+          cloudsmith-org: financial-times
+          cloudsmith-service-account: cp-lifecycle-read-write
   nightly:
     when:
       and:
@@ -137,34 +106,23 @@ workflows:
     jobs:
       - checkout
       - tool-kit/setup:
-          name: tool-kit/setup-<< matrix.executor >>
+          executor: node
           requires:
             - checkout
-          matrix:
-            parameters:
-              executor:
-                - node
       - tool-kit/build:
-          name: tool-kit/build-<< matrix.executor >>
-          requires:
-            - tool-kit/setup-<< matrix.executor >>
-          matrix:
-            parameters:
-              executor:
-                - node
-      - tool-kit/test:
-          name: tool-kit/test-<< matrix.executor >>
-          requires:
-            - tool-kit/build-<< matrix.executor >>
-          matrix:
-            parameters:
-              executor:
-                - node
-      - tool-kit/deploy-review:
-          requires:
-            - tool-kit/setup-node
-          name: tool-kit/deploy-review-node
           executor: node
+          requires:
+            - tool-kit/setup
+      - tool-kit/test:
+          executor: node
+          requires:
+            - tool-kit/build
+      - tool-kit/deploy-review:
+          executor: node
+          requires:
+            - tool-kit/build
           filters:
             branches:
               ignore: main
+          cloudsmith-org: financial-times
+          cloudsmith-service-account: cp-lifecycle-read-write
