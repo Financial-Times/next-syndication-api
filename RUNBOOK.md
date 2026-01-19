@@ -366,13 +366,6 @@ There are currently no keys in this app that are self-serve via the API Gateway 
   - **How to rotate:** New secret & password needs to be issued by someone with salesforce administrator rights, contact [#crm-enablement-team](https://financialtimes.enterprise.slack.com/archives/C01AVQQJP7C)
   - **Comment:** The moment new the secret/password are activated, the old ones become invalid. Therefore any change needs to be done synchronously to avoid outages.
 
-- `SESSION_PUBLIC_KEY`
-
-  - **For querying:** Unknown - this key is not found directly within the codebase.
-  - **Usage:** Unknown
-  - **How to rotate:** Unknown
-  - **Comment:** The values of VERIFY_SESSION_API_KEY & SESSION_API_KEY have been revoked and removed. We are unsure about `SESSION_PUBLIC_KEY`
-
 - `SYNDICATION_API_KEY`
 
   - **For querying:** Not applicable.
