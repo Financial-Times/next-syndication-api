@@ -49,7 +49,7 @@ module.exports = exports = async () => {
 
 		database = database ? `--dbname ${database}` : '';
 		host = host ? `--host ${host}` : '';
-		password = password ? `export PGPASSWORD="${password}" && ` : '';
+		password = password ? `export PGPASSWORD='${password}' && ` : '';
 		port = port ? `--port ${port}` : '';
 		user_name = user_name ? `--username ${user_name}` : '';
 
@@ -63,9 +63,9 @@ module.exports = exports = async () => {
 		let dump_schema;
 
 		if (uri) {
-			dump_data = `${BACKUP.program} ${uri} ${data_flags} ${tables} --file ${data_dump_file}`;
+			dump_data = `${BACKUP.program} '${uri}' ${data_flags} ${tables} --file ${data_dump_file}`;
 
-			dump_schema = `${BACKUP.program} ${uri} ${schema_flags} --file ${schema_dump_file}`;
+			dump_schema = `${BACKUP.program} '${uri}' ${schema_flags} --file ${schema_dump_file}`;
 		}
 		else {
 			dump_data = `${password} ${BACKUP.program} ${database} ${host} ${port} ${user_name} ${schema_flags} --file ${schema_dump_file}`;

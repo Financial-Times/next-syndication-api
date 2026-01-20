@@ -23,7 +23,9 @@ const RE_REMOVE_TAGS = /<\/?[^>]*>/gm;
 module.exports = exports = class DocumentBuilder {
 	constructor(content) {
 		this.content = content;
-		const standfirst = content.standfirst ? `<h3>${content.standfirst}</h3>` : null;
+		const standfirst = content.standfirst
+			? `<h3>${content.standfirst}</h3>`
+			: null;
 		this.contentDocument = new DOMParser().parseFromString(
 			`<body>${standfirst}${content.bodyHTML}</body>`,
 			FORMAT_ARTICLE_CONTENT_TYPE
@@ -86,7 +88,6 @@ module.exports = exports = class DocumentBuilder {
 	}
 
 	removeNonSyndicatableImages() {
-
 		const embedsMap = arrayToMap(this.content.embeds);
 
 		Array.from(this.contentDocument.getElementsByTagName('img')).forEach(
@@ -102,45 +103,53 @@ module.exports = exports = class DocumentBuilder {
 
 				const imageDetails = embedsMap[imageId];
 
-				if (imageType !== 'graphic' || !imageDetails || imageDetails.canBeSyndicated !== 'yes') {
+				if (
+					imageType !== 'graphic' ||
+					!imageDetails ||
+					imageDetails.canBeSyndicated !== 'yes'
+				) {
 					/*
-						Checks if figure tags is in this format and removes them (images embeded in article)
+            Checks if figure tags is in this format and removes them (images embeded in article)
 
-						<figure>
-							<picture>
-								<img />
-							<picture>
-						</figure>
+            <figure>
+              <picture>
+                <img />
+              <picture>
+            </figure>
 
-					*/
-					if(el.parentNode.tagName === 'picture' && el.parentNode.parentNode.tagName === 'figure'){
-						el.parentNode.parentNode.parentNode.removeChild(el.parentNode.parentNode);
+          */
+					if (
+						el.parentNode.tagName === 'picture' &&
+						el.parentNode.parentNode.tagName === 'figure'
+					) {
+						el.parentNode.parentNode.parentNode.removeChild(
+							el.parentNode.parentNode
+						);
 
-					/*
-
-						Checks if figure tags is in this format and removes them (mainImage)
-
-						<figure>
-							<img />
-						</figure>
-
-					*/
-					} else if(el.parentNode.tagName === 'figure'){
+						/*
+  
+              Checks if figure tags is in this format and removes them (mainImage)
+  
+              <figure>
+                <img />
+              </figure>
+  
+            */
+					} else if (el.parentNode.tagName === 'figure') {
 						el.parentNode.parentNode.removeChild(el.parentNode);
 
-					// Removes image tag.
+						// Removes image tag.
 					} else {
 						el.parentNode.removeChild(el);
 					}
 				}
-
 			}
 		);
 
 		return this;
 	}
 
-	decorateArticle(graphicsAllowed = false, graphicSyndicationFlag = false) {
+	decorateArticle(graphicsAllowed = false) {
 		const {
 			byline,
 			publishedDate,
@@ -187,15 +196,14 @@ module.exports = exports = class DocumentBuilder {
 			webUrl: url || webUrl,
 			wordCount,
 			syndicatableGraphicsAvaliableMsg:
-				graphicSyndicationFlag && !graphicsAllowed && canAtLeastOneGraphicBeSyndicated,
+				!graphicsAllowed && canAtLeastOneGraphicBeSyndicated,
 			notAllGraphicsCanBeSyndicatedMsg:
-				graphicSyndicationFlag && graphicsAllowed && hasGraphics && !canAllGraphicsBeSyndicated,
+				graphicsAllowed && hasGraphics && !canAllGraphicsBeSyndicated,
 		};
 
 		if (lang && lang === 'es') {
-			dict.translatedDate = moment(translated_date).format(
-				'DD MMMM YYYY'
-			);
+			dict.translatedDate =
+				moment(translated_date).format('DD MMMM YYYY');
 			dict.translationUrl = `https://www.ft.com/republishing/spanish/${content_id}`;
 			dict.translationLanguage = 'Spanish';
 		}

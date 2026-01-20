@@ -66,7 +66,7 @@ You WILL need:
 - to be [set up on a syndication contract](#Setting-yourself-up-on-a-contract)
 - [next-syndication-db-schema](https://github.com/Financial-Times/next-syndication-db-schema) - database schema (see Database dependency below)
 - [pandoc](https://pandoc.org/installing.html) installed on your machine for `/download` to work locally
-  - [What is Pandoc?](https://financialtimes.atlassian.net/wiki/spaces/Accounts/pages/8121221233/Syndication+API+DL+Pandoc+and+pandoc+dpkg)
+  - [What is Pandoc?](https://financialtimes.atlassian.net/wiki/spaces/Retention/pages/8121221233/Syndication+API+DL+Pandoc+and+pandoc+dpkg)
 
 You MIGHT need:
 
