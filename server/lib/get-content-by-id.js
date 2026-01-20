@@ -2,20 +2,16 @@
 
 const esClient = require('@financial-times/n-es-client');
 
-const {
-	DOWNLOAD_ARTICLE_FORMATS,
-} = require('config');
+const { DOWNLOAD_ARTICLE_FORMATS } = require('config');
 
 const { Logger } = require('./logger');
-const log = new Logger({source: 'lib/get-content-by-id'});
+const log = new Logger({ source: 'lib/get-content-by-id' });
 
 const pg = require('../../db/pg');
 
 const enrich = require('./enrich');
 
-
-module.exports = exports = async (contentId, format, lang, contract, graphicSyndicationFlag = false) => {
-
+module.exports = exports = async (contentId, format, lang, contract) => {
 	let content;
 
 	try {
@@ -27,43 +23,43 @@ module.exports = exports = async (contentId, format, lang, contract, graphicSynd
 			const contentEN = await esClient.get(contentId);
 
 			[
-				'id', 'canBeSyndicated',
-				'firstPublishedDate', 'publishedDate',
-				'url', 'webUrl'
-			].forEach(prop => content[prop] = contentEN[prop]);
+				'id',
+				'canBeSyndicated',
+				'firstPublishedDate',
+				'publishedDate',
+				'url',
+				'webUrl',
+			].forEach((prop) => (content[prop] = contentEN[prop]));
 
 			content.lang = lang;
-		}
-		else {
+		} else {
 			content = await esClient.get(contentId);
 		}
 
 		content.extension = DOWNLOAD_ARTICLE_FORMATS[format] || 'docx';
-	}
-	catch (error) {
+	} catch (error) {
 		log.error('GET_CONTENT_FAILED', {
 			event: 'GET_CONTENT_FAILED',
 			contentId,
 			lang,
-			error
+			error,
 		});
 		content = null;
 	}
 
 	if (content) {
 		try {
-			content = enrich(content, contract, graphicSyndicationFlag);
+			content = enrich(content, contract);
 
 			log.info('GET_CONTENT_SUCCESS', {
 				event: 'GET_CONTENT_SUCCESS',
-				contentId
-			})
-		}
-		catch (error) {
+				contentId,
+			});
+		} catch (error) {
 			log.error('ENRICHING_CONTENT_FAILED', {
 				event: 'ENRICHING_CONTENT_FAILED',
 				contentId,
-				error
+				error,
 			});
 
 			content = null;
