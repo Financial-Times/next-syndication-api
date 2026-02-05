@@ -336,15 +336,19 @@ See the Customer Products [key management and troubleshooting wiki page](https:/
 
 ### Self-service via API Gateway Portal
 
-There are currently no keys in this app that are self-serve via the API Gateway Portal.
+Self-serve keys that use [Tyk (API management platform) policies](https://apigateway.in.ft.com/check-policies) and are rotated via the [FT API Gateway Portal](https://apigateway.in.ft.com/account#systems) (contact [#api-gateway-support](https://financialtimes.slack.com/archives/C06GDS7UJ) on Slack for more help).
+
+- `ACCESS_LICENCE_API_KEY`
+  - **Key policy:** Access Licence Service
+  - **Policy name:** N/A
+  - **For querying:** [Access Licence Service](https://biz-ops.in.ft.com/System/acc-licence-svc)
+
+- `USER_PROFILE_API_KEY`
+  - **Key policy:** Other
+  - **Policy name:** User Profile Service
+  - **For querying:** [User Profile Service](https://biz-ops.in.ft.com/System/user-profile-svc)
 
 ### Custom rotation process
-
-- `ALS_API_KEY`
-
-  - **For querying:** This queries the AIM /licenses and /users/{uuid}/profile/basic endpoint.
-  - **Usage:** Used for getting licences and profile information.
-  - **How to rotate:** Currently this key uses a deprecated policy `AIM APIs - Master Policy`, to rotate this key must become two keys: one for the `Access Licence Service` policy and another for the `User Profie` policy and the code in next-syndication-api must be updated to reflect this.
 
 - `DATABASE_PASSWORD`
 

@@ -6,7 +6,7 @@ const { Logger } = require('../lib/logger');
 const fetch = require('n-eager-fetch');
 
 const {
-	ALS_API_KEY,
+	USER_PROFILE_API_KEY,
 	BASE_URI_FT_API
 } = require('config');
 
@@ -34,7 +34,7 @@ module.exports = exports = async (req, res, next) => {
 		'authorization': `Bearer ${ACCESS_TOKEN_USER || ACCESS_TOKEN_LICENCE}`,
 		'cookie': req.headers.cookie,
 		'content-type': 'application/json',
-		'X-Api-Key': ALS_API_KEY
+		'X-Api-Key': USER_PROFILE_API_KEY
 	};
 
 	try {
