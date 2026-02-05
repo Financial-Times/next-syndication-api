@@ -350,12 +350,6 @@ Self-serve keys that use [Tyk (API management platform) policies](https://apigat
 
 ### Custom rotation process
 
-- `ALS_API_KEY`
-
-  - **For querying:** This queries the AIM /licenses and /users/{uuid}/profile/basic endpoint.
-  - **Usage:** Used for getting licences and profile information.
-  - **How to rotate:** Currently this key uses a deprecated policy `AIM APIs - Master Policy`, to rotate this key must become two keys: one for the `Access Licence Service` policy and another for the `User Profie` policy and the code in next-syndication-api must be updated to reflect this.
-
 - `DATABASE_PASSWORD`
 
   - **For querying:** Syndication Postgres AWS RDS Database

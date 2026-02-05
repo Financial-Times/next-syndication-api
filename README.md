@@ -159,7 +159,7 @@ To run this, you will need to:
 - import the JSON into your Postman app to create the collection
 - set up an Environment in Postman with the following variables
   - `syndication-api-key`, set to the value of the `SYNDICATION_API_KEY` (see Doppler) to run the troubleshooting and workers endpoints
-  - `als-api-key`, set to the value of `ALS_API_KEY` (see Doppler) to run the membership API licence details endpoint
+  - `als-api-key`, set to the value of `ACCESS_LICENCE_API_KEY` (see Doppler) to run the membership API licence details endpoint
   - `user-id`, set to the value of a user ID already in the users table (recommend your own or another FT staff member's) to run the `db-persist` worker testing endpoint
 - set up `cookie` in Postman request headers for domain `local.ft.com` and get the values for `FTSession` and `FTSession_s` from your ft.com cookie in your browser to pass authentication
 
