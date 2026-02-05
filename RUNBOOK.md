@@ -340,7 +340,7 @@ Self-serve keys that use [Tyk (API management platform) policies](https://apigat
 
 - `ACCESS_LICENCE_API_KEY`
   - **Key policy:** Access Licence Service
-  - **Policy name:** Access Licence Service
+  - **Policy name:** N/A
   - **For querying:** [Access Licence Service](https://biz-ops.in.ft.com/System/acc-licence-svc)
 
 - `USER_PROFILE_API_KEY`
