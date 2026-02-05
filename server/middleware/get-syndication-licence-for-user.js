@@ -5,7 +5,7 @@ const { Logger } = require('../lib/logger');
 const fetch = require('n-eager-fetch');
 
 const {
-	ALS_API_KEY,
+	ACCESS_LICENCE_API_KEY,
 	BASE_URI_FT_API,
 	SYNDICATION_PRODUCT_CODE,
 	TEST: { SKIP_LICENCE_ID, SKIP_SYNDICATION_CONTRACT_ID },
@@ -19,7 +19,7 @@ module.exports = exports = async (req, res, next) => {
 	});
 	const URI = `${BASE_URI_FT_API}/licences?userid=${res.locals.userUuid}`;
 	const headers = {
-		'X-Api-Key': ALS_API_KEY,
+		'X-Api-Key': ACCESS_LICENCE_API_KEY,
 	};
 
 	try {
