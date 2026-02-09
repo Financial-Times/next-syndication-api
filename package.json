@@ -109,7 +109,6 @@
   },
   "scripts": {
     "commit": "commit-wizard",
-    "heroku-postbuild": "dotcom-tool-kit build:remote release:remote cleanup:remote",
     "build": "dotcom-tool-kit build:local",
     "test": "export IGNORE_A11Y=true; export NEW_SYNDICATION_USERS=testUserUuid1,testUserUuid2;  export NEW_SYNDICATION_USERS_AWAITING=testUserUuid3,testUserUuid4; export NODE_ENV=test; dotcom-tool-kit test:local",
     "start": "dotcom-tool-kit run:local",
