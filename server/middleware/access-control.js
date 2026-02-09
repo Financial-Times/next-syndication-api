@@ -3,11 +3,7 @@
 const { Logger } = require('../lib/logger');
 
 const inSafeList = requestersOrigin => {
-	if (/^https:\/\/ft-next-syndication-(?:api|downloads).herokuapp\.com$/.test(requestersOrigin)) {
-		return true;
-	}
-
-	// Only allow ft subdomains
+	// Only allow ft.com subdomains
 	const subdomainRegex = /^(https?:\/\/)?((([^.]+)\.)*)ft\.com(:[0-9]{1,4})?$/;
 
 	return subdomainRegex.test(requestersOrigin);
