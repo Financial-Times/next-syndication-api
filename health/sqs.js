@@ -132,9 +132,9 @@ module.exports = exports = new (class SQSCheck extends nHealthCheck {
 	id: 'next-syndication-api-sqs',
 /*eslint-disable*/
 	panicGuide: `1. check SQS Queue (next-syndication-downloads-prod) on Infra Prod to see if there are messages outstanding on the queue (Monitoring --> Approximate Number Of Messages Visible chart, or, Send and Recieve Messages --> Poll for Messages --> inspect the message id for message details).
-2. If there is a message in the queue, check/tail the server/worker logs on Heroku:
+2. If there is a message in the queue, check the logs in Splunk:
 	\`\`\`
-		~$ heroku logs --app ft-next-syndication-api --tail --num 100
+		index=hako source=next-syndication-api
 	\`\`\`
 
 	— the queue is processed by the \`sync\` worker: \`app[sync.\${N}]\` — see if there are any errors and/or if a specific queue message is failing/erroring repeatedly.
