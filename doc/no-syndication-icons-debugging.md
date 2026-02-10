@@ -11,8 +11,8 @@ This document contains instructions for a number of steps you may need to take t
 [When there’s a complaint that a specific asset isn’t available](#when-theres-a-complaint-that-a-specific-asset-isnt-available)
 
 ## Figure out contract from the licence id
-Use heroku dataclip https://data.heroku.com/dataclips/fltxbwayytlwphksmxpoypterezu
-Or query
+
+Query the database:
 
 ```sql
 SELECT *
@@ -23,8 +23,8 @@ WHERE licence_id = 'licence-id-here'
 to get a list of contracts associated with a given licence. Many licences will have multiple contract IDs as a new contract is issued every year. If the query is about something happening “now”, look at the Start_date and End_date columns to find the current contract. 
 
 ## Figure out user from contract ID (this will allow you to find someone to masquerade as if you need to)
-Use dataclip https://data.heroku.com/dataclips/qwxpmxpfivhqraccnfxxtlekxvdh
-Or query
+
+Query the database:
 
 ```sql
 SELECT *
@@ -37,9 +37,10 @@ Generally each contract will have one person with Owner `true` - this is the FT 
 If there is only one person on the contract (and they turn out to be the FT representative), make sure to contact them - in at least one instance when the client was complaining about not having Syndication icons, it turned out that their contract only had the FT representative as a user - everyone else has been taken off - because the company didn’t pay their Syndication bill! It is not our responsibility to mediate this, but we should put the FT representative in touch with the person who is reporting the problem to us. 
 
 ## When there’s a complaint that a specific asset isn’t available 
-(eg they are paying for videos but can’t syndicate them) you can run dataclip https://data.heroku.com/dataclips/fzvtaufwdnqvrfbkvgsilyjyfvgy
 
-Query
+(for example: they are paying for videos but can’t syndicate them)
+
+Query the database:
 
 ```sql
 SELECT *
@@ -51,7 +52,7 @@ to get a high level overview of the contract - the columns you’re interested i
 
 ## To get more specific information about each asset 
 
-Use dataclip https://data.heroku.com/dataclips/gnkoyftmwdkhbjkdgoijfvvbjjbl
+Query the database:
 
 ```sql
 SELECT * FROM syndication.contract_assets WHERE contract_id='FTS-xxxxxxx'
@@ -59,6 +60,6 @@ SELECT * FROM syndication.contract_assets WHERE contract_id='FTS-xxxxxxx'
 
 If the asset isn’t present in this dataclip, this means that either it hasn’t been correctly set up in Salesforce and needs to be ingested, ALS refresh needs to be, or for some reason Salesforce API is not giving us the correct information. Use the syndication API /contracts  endpoint to see what we’re getting from Salesforce. 
 
-We had an incident where users couldn’t see the icons at all because the code wasn’t defensive enough - note, if this is the case nobody from that contract can see the icons. If you’ve gone through the above dataclips and everything looks as it should, open heroku’s syndication logs https://dashboard.heroku.com/apps/ft-next-syndication-api/logs , masquerade as one of the affected users and trail the logs to get the error (there’s a chance the error ends up in Splunk, but I find trailing the logs to be more cause-effect).
+We had an incident where users couldn’t see the icons at all because the code wasn’t defensive enough - note, if this is the case nobody from that contract can see the icons. If you've checked the production database and it looks correct then check the logs for an identifier, masquerade as one of the affected users and search the logs to get the error.
 
 We had several cases where only one user (from several that are on the contract) couldn’t see the icons. This is an example of this happening https://financialtimes.slack.com/archives/C3LRB6JCE/p1676469538264649?thread_ts=1674487536.107369&cid=C3LRB6JCE. The root of the problem is a conflict between uuids and email addresses and can be fixed by following inscrutions in the [runbook's "Conflict of uuids and email addresses section"](../runbook.md#conflict-of-uuids-and-email-addresses)

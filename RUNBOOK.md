@@ -13,7 +13,7 @@ next-syndication-api
 
 ## Primary URL
 
-http://ft-next-syndication-api.herokuapp.com
+https://next-syndication-api.eu-west-1.syndication-prod.ftweb.tech/
 
 ## Service Tier
 
@@ -47,7 +47,7 @@ Choose Yes or No
 
 ## Host Platform
 
-Heroku
+AWS ECS
 
 ## Architecture
 
@@ -107,7 +107,7 @@ The app connects to Salesforce to get contract details for the user, and updates
 
 - User: `next-syndication`
 - URLs: Logs in and uses an SDK, retrieves details from `/SCRMContract/[someContractID]`
-- Splunk: [index="heroku" source=\*syndication-api\* salesforce error](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3D%22heroku%22%20source%3D*syndication-api*%20salesforce%20error&display.page.search.mode=smart&dispatch.sample_ratio=1&workload_pool=standard_perf&earliest=-1h&latest=now&sid=1661952146.1430281), `NullApexResponse` is in the error message specifically for the call to Salesforce
+- Splunk: [index=hako source=next-syndication-api salesforce error](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3Dhako%20source%3Dnext-syndication-api%20salesforce%20error&display.page.search.mode=smart&dispatch.sample_ratio=1&workload_pool=standard_perf&earliest=-1h&latest=now), `NullApexResponse` is in the error message specifically for the call to Salesforce
 
 #### A user is seeing incorrect data in their Syndication / Republishing platform
 
@@ -153,7 +153,7 @@ If this is a problem for all Syndication users it could be:
 - A problem with Salesforce (all contracts live in Salesforce)
 - A problem with [next-syn-list](https://github.com/Financial-Times/next-syn-list)
 
-We can check the details of a specific contract and the user status page to begin to debug the issue. It is useful to tail the heroku logs for next-syndication-api while doing this so you can also see database activity with `heroku logs --app ft-next-syndication-api --tail --num 0 `
+We can check the details of a specific contract and the user status page to begin to debug the issue. Search Splunk for `index=hako source=next-syndication-api`.
 
 #### Conflict of uuids and email addresses
 
@@ -205,7 +205,7 @@ Tail the logs and try saving/downloading an item.
 
 #### Downloads not working
 
-Downloads (served on host dl.syndication.ft.com) are run from the `ft-next-syndication-dl` app so that downloads don't run through router, preflight, etc. Check the `ft-next-syndication-dl` heroku app, make sure it's running, tail its logs and try downloading.
+Downloads (served on host dl.syndication.ft.com) are run from the `ft-next-syndication-dl` app so that downloads don't run through router, preflight, etc. Check the `ft-next-syndication-dl` application, make sure it's running, view its logs and try downloading.
 
 ### Spanish Translations not available
 
@@ -252,10 +252,6 @@ Then you can't connect to the mail server.
 
 Try turning wifi off on your phone to tether your computer to your phone's 4G connection and you should find it now works.
 
-### Dealing with `no pg_hba.conf entry` - `Syndication database data integrity` errors
-
-Turns out that our Database Integrity healthcheck (db-sync-state) runs against review branches, as well as production. The `DATABASE_URL` secret is not stored in Doppler; it automatically added by the Postgres add-on. However, this secret is only added to the `prod` app's secrets. If you encounter this error, this is most likely the database secrets were updated. To fix this, you need to get the `DATABASE_URL` secret from the `prod` app, and add it to the review apps' secrets. To do this, go to Heroku's next-syndication-api main pipeline page, click "Configure" in the `Review Apps` column, then select `More settings`. In the `Settings` page, scroll down to `Reveal Config Vars`, reveal the vars and add the `DATABASE_URL` secret
-
 ### General tips for troubleshooting Customer Products Systems
 
 - [Out of hours runbook for FT.com (wiki)](https://customer-products.in.ft.com/wiki/Out-of-hours-troubleshooting-guide)
@@ -284,8 +280,8 @@ Turns out that our Database Integrity healthcheck (db-sync-state) runs against r
 
 ### Splunk searches
 
-- [index="heroku" source="next-syndication-api" sourcetype="heroku:app"](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3D%22heroku%22%20source%3D%22next-syndication-api%22%20sourcetype%3D%22heroku%3Aapp%22&display.page.search.mode=smart&dispatch.sample_ratio=1&earliest=-1h&latest=now&workload_pool=standard_perf&sid=1667810937.23521460)
-- Salesforce failures can be found as [index="heroku" source="next-syndication-api" sourcetype="heroku:app" salesforce error](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3D%22heroku%22%20source%3D%22next-syndication-api%22%20sourcetype%3D%22heroku%3Aapp%22%20salesforce%20error&display.page.search.mode=smart&dispatch.sample_ratio=1&workload_pool=standard_perf&earliest=-1h&latest=now&sid=1667810888.23521046), `NullApexResponse` is in the error message specifically for the call to Salesforce
+- [index=hako source=next-syndication-api](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3Dhako%20source%3Dnext-syndication-api&display.page.search.mode=smart&dispatch.sample_ratio=1&earliest=-1h&latest=now)
+- Salesforce failures can be found as [index=hako source=next-syndication-api salesforce error](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3Dhako%20source%3Dnext-syndication-api%20salesforce%20error&display.page.search.mode=smart&dispatch.sample_ratio=1&earliest=-1h&latest=now), `NullApexResponse` is in the error message specifically for the call to Salesforce
 
 ## Failover Architecture Type
 
@@ -322,8 +318,9 @@ Manual
 
 ## Release Details
 
-This app is hosted on Heroku and released using Circle CI.
-Rollback is done manually on Heroku or Github. See [the guide on the wiki](https://customer-products.in.ft.com/wiki/How-does-deploying-our-Heroku-apps-work%3F) for instructions on how to deploy or roll back changes on Heroku.
+This app is hosted on AWS ECS and released using Hako on Circle CI.
+
+Rollback is done manually in AWS or on GitHub. See [the guide on the wiki](https://financialtimes.atlassian.net/wiki/spaces/CP/pages/8340865040/How+does+deploying+our+Heroku+apps+work) for instructions on how to deploy or roll back changes.
 
 ## Key Management Process Type
 
