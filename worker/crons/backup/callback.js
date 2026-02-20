@@ -105,14 +105,14 @@ module.exports = exports = async () => {
 		const res = await upload(file);
 
 		log.info(`${MODULE_ID} | backup uploaded to s3`, res);
-
-		return file;
 	}
 	catch (e) {
 		log.error(`${MODULE_ID} => `, e);
 	}
 
 	rm('-rf', directory);
+
+	log.info(`${MODULE_ID} | removed tmp database dump files in ${directory}`);
 };
 
 function upload({ archive, file_name }) {
