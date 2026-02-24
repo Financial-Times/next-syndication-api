@@ -9,7 +9,7 @@
     "@dotcom-reliability-kit/middleware-log-errors": "^5.0.0",
     "@financial-times/n-es-client": "^6.0.1",
     "@financial-times/n-express": "^31.9.4",
-    "ajv": "^6.0.0",
+    "ajv": "^6.14.0",
     "archiver": "^6.0.0",
     "aws-sdk": "^2.85.0",
     "config": "^1.26.1",
