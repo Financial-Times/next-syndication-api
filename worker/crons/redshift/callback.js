@@ -82,6 +82,8 @@ module.exports = exports = async () => {
 	log.info(`${MODULE_ID} complete in => ${Date.now() - START}ms`);
 
 	rm('-rf', directory);
+
+	log.info(`${MODULE_ID} | removed tmp redshift backup files in ${directory}`);
 };
 
 function safe(value) {
