@@ -280,30 +280,37 @@ describe(MODULE_ID, function () {
 					req,
 					user: USER
 				});
+				sinon.spy(dl._queue, 'push');
 
 				await dl.appendCaptions();
 
 				await sleep(100);
 			});
 
-			it('#captionsAppended', async function() {
+			it('#captionsAppended', function() {
 				expect(dl.captionsAppended).to.be.true;
 			});
 
-			it('should have one entry', async function() {
-				expect(dl._entries.length).to.equal(1)
+			it('should have one entry', function() {
+				expect(dl._entriesCount).to.equal(1)
 			});
 
-			it(`caption entry's name should be: ${path.basename(url.parse(content.captions[0].url).pathname)}`, async function() {
-				const [captions] = dl._entries;
+			it(`caption entry's name should be: ${path.basename(url.parse(content.captions[0].url).pathname)}`, function() {
+				const [captions] = dl.captionFiles;
 
 				expect(captions.name).to.equals(`${path.basename(url.parse(content.captions[0].url).pathname)}`);
 			});
 
-			it('caption entry\'s source should be a buffer', async function() {
-				const [captions] = dl._entries;
+			it('caption entry\'s file content should match the file content', async function() {
+				const [captions] = dl.captionFiles;
+				const expectedFile = await fetch(content.captions[0].url);
+				const expectedFileText = await expectedFile.text();
 
-				expect(captions.sourceType).to.equal('buffer');
+				expect(captions.file).to.equal(expectedFileText);
+			});
+
+			it('caption entry\'s source should be a buffer', function() {
+				expect(dl._queue.push.firstCall.args[0].data.sourceType).to.equal('buffer');
 			});
 		});
 

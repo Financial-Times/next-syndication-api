@@ -1,18 +1,13 @@
 'use strict';
 
-const { exec } = require('child_process');
 const path = require('path');
 const { PassThrough } = require('stream');
-const util = require('util');
 const url = require('url');
 
 const { Logger } = require('../logger');
-const log = new Logger({source: 'lib/download/video'});
-const fetch = require('n-eager-fetch');
+const log = new Logger({ source: 'lib/download/video' });
 
 const ArticleDownload = require('./article');
-
-const execAsync = util.promisify(exec);
 
 module.exports = exports = class VideoDownload extends ArticleDownload {
 
@@ -64,7 +59,8 @@ module.exports = exports = class VideoDownload extends ArticleDownload {
 		if (Array.isArray(captions) && captions.length) {
 			try {
 				const captionFiles = await Promise.all(captions.map(async ({ url: uri }) => {
-					const { stdout: file } = await execAsync(`curl ${uri}`);
+					const response = await fetch(uri);
+					const file = await response.text();
 					const name = path.basename(url.parse(uri).pathname);
 
 					return { file, name };
