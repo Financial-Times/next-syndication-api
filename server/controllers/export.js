@@ -5,6 +5,8 @@ const { Logger } = require('../lib/logger');
 const { EXPORT } = require('config');
 
 const RE_QUOTES = /"/gm;
+const DOWNLOADS_EXPORT_SQL = 'SELECT * FROM syndication.get_downloads_by_contract_id($1::text)';
+const SAVED_ITEMS_EXPORT_SQL = 'SELECT * FROM syndication.get_saved_items_by_contract_id($1::text)';
 
 module.exports = exports = async (req, res, next) => {
 	const log = new Logger({req, res, source: 'controllers/export'});
@@ -19,14 +21,22 @@ module.exports = exports = async (req, res, next) => {
 		let type = req.query.type || 'downloads';
 
 		const EXPORT_HEADERS = EXPORT[type];
+		let sqlQuery;
 
-		if (!EXPORT_HEADERS) {
+		if (type === 'downloads') {
+			sqlQuery = DOWNLOADS_EXPORT_SQL;
+		}
+		else if (type === 'saved_items') {
+			sqlQuery = SAVED_ITEMS_EXPORT_SQL;
+		}
+
+		if (!EXPORT_HEADERS || !sqlQuery) {
 			throw new TypeError(`Invalid Export Type: '${type}'`);
 		}
 
 		res.attachment(`export_republishing_${type}_${(new Date()).toJSON()}.csv`);
 
-		const items = await db.query(`SELECT * FROM syndication.get_${type}_by_contract_id($text$${CONTRACT.contract_id}$text$)`);
+		const items = await db.query(sqlQuery, [CONTRACT.contract_id]);
 
 		const CSV = [];
 
