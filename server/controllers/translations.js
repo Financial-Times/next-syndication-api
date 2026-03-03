@@ -11,6 +11,33 @@ const {
 	DB: { DATE_FORMAT: DB_DATE_FORMAT }
 } = require('config');
 
+/**
+ * Add a parameterized query clause to the provided clauses and params arrays
+ * to prevent SQL injection vulnerabilities.
+ * @param {Object} options - The options for the query clause.
+ * @param {Array<string>} options.clauses - The array of parameterized query clauses.
+ * @param {Array<*>} options.params - The array of query parameters.
+ * @param {string} options.columnName - The name of the column.
+ * @param {*} options.value - The value of the query parameter.
+ * @param {string} options.type - The type of the value.
+ */
+const addQueryClause = ({ clauses, params, columnName, value, type }) => {
+	params.push(value);
+	clauses.push(`${columnName} => $${params.length}::${type}`);
+};
+
+/**
+ * Parse an integer from the provided value, returning a fallback value if parsing fails.
+ * @param {*} value - The value to parse.
+ * @param {*} fallbackValue - The fallback value to return if parsing fails.
+ * @returns {number} - The parsed integer or the fallback value.
+ */
+const parseIntegerWithFallback = (value, fallbackValue) => {
+	const parsedValue = parseInt(value, 10);
+
+	return Number.isNaN(parsedValue) ? fallbackValue : parsedValue;
+};
+
 module.exports = exports = async (req, res, next) => {
 	let { query: {
 		area,
@@ -49,27 +76,6 @@ module.exports = exports = async (req, res, next) => {
 				const getTotalQueryClauses = [];
 				const getQueryParams = [];
 				const getTotalQueryParams = [];
-
-				/**
-				 * Add a parameterized query clause to the provided clauses and params arrays
-				 * to prevent SQL injection vulnerabilities.
-				 * @param {Object} options - The options for the query clause.
-				 * @param {Array<string>} options.clauses - The array of parameterized query clauses.
-				 * @param {Array<*>} options.params - The array of query parameters.
-				 * @param {string} options.columnName - The name of the column.
-				 * @param {*} options.value - The value of the query parameter.
-				 * @param {string} options.type - The type of the value.
-				 */
-				const addQueryClause = ({ clauses, params, columnName, value, type }) => {
-					params.push(value);
-					clauses.push(`${columnName} => $${params.length}::${type}`);
-				};
-
-				const parseIntegerWithFallback = (value, fallbackValue) => {
-					const parsedValue = parseInt(value, 10);
-
-					return Number.isNaN(parsedValue) ? fallbackValue : parsedValue;
-				};
 
 				const normalizedOffset = parseIntegerWithFallback(offset, 0);
 				const normalizedLimit = parseIntegerWithFallback(limit, 50);
@@ -113,6 +119,7 @@ module.exports = exports = async (req, res, next) => {
 					addQueryClause({ clauses: getTotalQueryClauses, params: getTotalQueryParams, columnName: 'areas', value: areas, type: 'syndication.enum_content_area_es[]' });
 				}
 
+				// Sort, Order, Offset and Limit are added only to the items query, not the total query, as they are not relevant for the total count
 				if (typeof sort === 'string') {
 					sort = sort.trim().toLowerCase();
 
@@ -147,6 +154,7 @@ module.exports = exports = async (req, res, next) => {
 				const getQuery = getQueryClauses.join(', ');
 				const getTotalQuery = getTotalQueryClauses.join(', ');
 
+				// Get the items and total count from the database using parameterized queries to prevent SQL injection
 				const items = await db.query(`SELECT * FROM syndication.search_content_es(${getQuery})`, getQueryParams);
 
 				const totalSql = getTotalQuery.length
