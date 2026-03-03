@@ -11,6 +11,33 @@ const {
 	DB: { DATE_FORMAT: DB_DATE_FORMAT }
 } = require('config');
 
+/**
+ * Add a parameterized query clause to the provided clauses and params arrays
+ * to prevent SQL injection vulnerabilities.
+ * @param {Object} options - The options for the query clause.
+ * @param {Array<string>} options.clauses - The array of parameterized query clauses.
+ * @param {Array<*>} options.params - The array of query parameters.
+ * @param {string} options.columnName - The name of the column.
+ * @param {*} options.value - The value of the query parameter.
+ * @param {string} options.type - The type of the value.
+ */
+const addQueryClause = ({ clauses, params, columnName, value, type }) => {
+	params.push(value);
+	clauses.push(`${columnName} => $${params.length}::${type}`);
+};
+
+/**
+ * Parse an integer from the provided value, returning a fallback value if parsing fails.
+ * @param {*} value - The value to parse.
+ * @param {*} fallbackValue - The fallback value to return if parsing fails.
+ * @returns {number} - The parsed integer or the fallback value.
+ */
+const parseIntegerWithFallback = (value, fallbackValue) => {
+	const parsedValue = parseInt(value, 10);
+
+	return Number.isNaN(parsedValue) ? fallbackValue : parsedValue;
+};
+
 module.exports = exports = async (req, res, next) => {
 	let { query: {
 		area,
@@ -45,17 +72,31 @@ module.exports = exports = async (req, res, next) => {
 					}
 				}
 
-				let getQuery = '';
-				let getTotalQuery = '';
+				const getQueryClauses = [];
+				const getTotalQueryClauses = [];
+				const getQueryParams = [];
+				const getTotalQueryParams = [];
+
+				const normalizedOffset = parseIntegerWithFallback(offset, 0);
+				const normalizedLimit = parseIntegerWithFallback(limit, 50);
 
 				if (typeof query === 'string' && query.trim().length) {
-					getQuery += `query => $text$${query.trim()}$text$`;
+					const normalizedQuery = query.trim();
+
+					addQueryClause({ clauses: getQueryClauses, params: getQueryParams, columnName: 'query', value: normalizedQuery, type: 'text' });
+					addQueryClause({ clauses: getTotalQueryClauses, params: getTotalQueryParams, columnName: 'query', value: normalizedQuery, type: 'text' });
 				}
 				if (typeof date_from === 'string' && date_from.length) {
-					getQuery += `${getQuery.length ? ', ' : ''}date_from => $ttz$${moment(date_from.trim()).format(DB_DATE_FORMAT)}$ttz$::timestamp with time zone`;
+					const normalizedDateFrom = moment(date_from.trim()).format(DB_DATE_FORMAT);
+
+					addQueryClause({ clauses: getQueryClauses, params: getQueryParams, columnName: 'date_from', value: normalizedDateFrom, type: 'timestamp with time zone' });
+					addQueryClause({ clauses: getTotalQueryClauses, params: getTotalQueryParams, columnName: 'date_from', value: normalizedDateFrom, type: 'timestamp with time zone' });
 				}
 				if (typeof date_to === 'string' && date_to.length) {
-					getQuery += `${getQuery.length ? ', ' : ''}date_to => $ttz$${moment(date_to.trim()).format(DB_DATE_FORMAT)}$ttz$::timestamp with time zone`;
+					const normalizedDateTo = moment(date_to.trim()).format(DB_DATE_FORMAT);
+
+					addQueryClause({ clauses: getQueryClauses, params: getQueryParams, columnName: 'date_to', value: normalizedDateTo, type: 'timestamp with time zone' });
+					addQueryClause({ clauses: getTotalQueryClauses, params: getTotalQueryParams, columnName: 'date_to', value: normalizedDateTo, type: 'timestamp with time zone' });
 				}
 				if (typeof field === 'string') {
 					field = field.trim().toLowerCase();
@@ -67,17 +108,18 @@ module.exports = exports = async (req, res, next) => {
 						field = 'translated_date';
 					}
 
-					getQuery += `${getQuery.length ? ', ' : ''}date_col => $text$${field}$text$`;
+					addQueryClause({ clauses: getQueryClauses, params: getQueryParams, columnName: 'date_col', value: field, type: 'text' });
+					addQueryClause({ clauses: getTotalQueryClauses, params: getTotalQueryParams, columnName: 'date_col', value: field, type: 'text' });
 				}
 
 				const areas = Object.keys(content_areas);
 
 				if (areas.length) {
-					getQuery += `${getQuery.length ? ', ' : ''}areas => ARRAY[$text$${areas.join('$text$::syndication.enum_content_area_es, $text$')}$text$::syndication.enum_content_area_es]`;
+					addQueryClause({ clauses: getQueryClauses, params: getQueryParams, columnName: 'areas', value: areas, type: 'syndication.enum_content_area_es[]' });
+					addQueryClause({ clauses: getTotalQueryClauses, params: getTotalQueryParams, columnName: 'areas', value: areas, type: 'syndication.enum_content_area_es[]' });
 				}
 
-				getTotalQuery = `${getQuery}`;
-
+				// Sort, Order, Offset and Limit are added only to the items query, not the total query, as they are not relevant for the total count
 				if (typeof sort === 'string') {
 					sort = sort.trim().toLowerCase();
 
@@ -91,7 +133,7 @@ module.exports = exports = async (req, res, next) => {
 						sort = 'relevance';
 					}
 
-					getQuery += `${getQuery.length ? ', ' : ''}sort_col => $text$${sort.trim()}$text$`;
+					addQueryClause({ clauses: getQueryClauses, params: getQueryParams, columnName: 'sort_col', value: sort.trim(), type: 'text' });
 				}
 				if (typeof order === 'string') {
 					order = order.trim().toLowerCase();
@@ -103,16 +145,23 @@ module.exports = exports = async (req, res, next) => {
 						order = 'DESC';
 					}
 
-					getQuery += `${getQuery.length ? ', ' : ''}sort_dir => $text$${order.trim()}$text$`;
+					addQueryClause({ clauses: getQueryClauses, params: getQueryParams, columnName: 'sort_dir', value: order.trim(), type: 'text' });
 				}
 
-				getQuery = `${getQuery}${getQuery.length ? ',' : ''}
-_offset => ${offset}::integer,
-_limit => ${limit}::integer`;
+				addQueryClause({ clauses: getQueryClauses, params: getQueryParams, columnName: '_offset', value: normalizedOffset, type: 'integer' });
+				addQueryClause({ clauses: getQueryClauses, params: getQueryParams, columnName: '_limit', value: normalizedLimit, type: 'integer' });
 
-				const items = await db.query(`SELECT * FROM syndication.search_content_es(${getQuery})`);
+				const getQuery = getQueryClauses.join(', ');
+				const getTotalQuery = getTotalQueryClauses.join(', ');
 
-				const [{ search_content_total_es }] = await db.query(`SELECT * FROM syndication.search_content_total_es(${getTotalQuery})`);
+				// Get the items and total count from the database using parameterized queries to prevent SQL injection
+				const items = await db.query(`SELECT * FROM syndication.search_content_es(${getQuery})`, getQueryParams);
+
+				const totalSql = getTotalQuery.length
+					? `SELECT * FROM syndication.search_content_total_es(${getTotalQuery})`
+					: 'SELECT * FROM syndication.search_content_total_es()';
+
+				const [{ search_content_total_es }] = await db.query(totalSql, getTotalQueryParams);
 				const total = parseInt(search_content_total_es, 10);
 
 				items.forEach(item => {
