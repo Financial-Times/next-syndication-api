@@ -1,6 +1,6 @@
 'use strict';
 
-const { exec } = require('child_process');
+const { execFile } = require('child_process');
 const { createReadStream/*, stat*/ } = require('fs');
 const path = require('path');
 const util = require('util');
@@ -29,7 +29,7 @@ const S3 = new AWS.S3({
 	secretAccessKey: AWS_SECRET_ACCESS_KEY
 });
 
-const execAsync = util.promisify(exec);
+const execFileAsync = util.promisify(execFile);
 //const statAsync = util.promisify(stat);
 
 const MODULE_ID = path.relative(process.cwd(), module.id) || require(path.resolve('./package.json')).name;
@@ -47,35 +47,48 @@ module.exports = exports = async () => {
 
 		let { BACKUP, database, host, password, port, uri, user_name } = DB;
 
-		database = database ? `--dbname ${database}` : '';
-		host = host ? `--host ${host}` : '';
-		password = password ? `export PGPASSWORD='${password}' && ` : '';
-		port = port ? `--port ${port}` : '';
-		user_name = user_name ? `--username ${user_name}` : '';
-
-		const data_flags = `--schema ${BACKUP.schema} --data-only`;
-		const schema_flags = '--clean --create --schema-only';
 		const schema_dump_file = `${directory}/schema.syndication.${time}.sql`;
 		const data_dump_file = `${directory}/data.syndication.${time}.sql`;
-		const tables = BACKUP.tables.map(item => `--table ${BACKUP.schema}.${item}`).join(' ');
 
-		let dump_data;
-		let dump_schema;
+		const schema_args = ['--clean', '--create', '--schema-only', '--file', schema_dump_file];
+		const data_args = ['--schema', BACKUP.schema, '--data-only', '--file', data_dump_file];
+
+		// Add table arguments
+		BACKUP.tables.forEach(table => {
+			data_args.push('--table', `${BACKUP.schema}.${table}`);
+		});
 
 		if (uri) {
-			dump_data = `${BACKUP.program} '${uri}' ${data_flags} ${tables} --file ${data_dump_file}`;
-
-			dump_schema = `${BACKUP.program} '${uri}' ${schema_flags} --file ${schema_dump_file}`;
+			schema_args.unshift(uri);
+			data_args.unshift(uri);
+		} else {
+			if (database) {
+				schema_args.unshift('--dbname', database);
+				data_args.unshift('--dbname', database);
+			}
+			if (host) {
+				schema_args.unshift('--host', host);
+				data_args.unshift('--host', host);
+			}
+			if (port) {
+				schema_args.unshift('--port', port);
+				data_args.unshift('--port', port);
+			}
+			if (user_name) {
+				schema_args.unshift('--username', user_name);
+				data_args.unshift('--username', user_name);
+			}
 		}
-		else {
-			dump_data = `${password} ${BACKUP.program} ${database} ${host} ${port} ${user_name} ${schema_flags} --file ${schema_dump_file}`;
 
-			dump_schema = `${password} ${BACKUP.program} ${database} ${host} ${port} ${user_name} ${data_flags} ${tables} --file ${data_dump_file}`;
-		}
+		const execOptions = password ? { env: { ...process.env, PGPASSWORD: password } } : {};
 
-		await execAsync(`${dump_schema}`);
+		// Using execFileAsync instead of execAsync to avoid shell injection vulnerabilities and the need to escape arguments, 
+		// as execFile does not execute a shell and treats arguments as literal values
+		// Ref: https://nodejs.org/api/child_process.html#child_processexecfilefile-args-options-callback
 
-		await execAsync(`${dump_data}`);
+		await execFileAsync(BACKUP.program, schema_args, execOptions);
+
+		await execFileAsync(BACKUP.program, data_args, execOptions);
 
 		const archive = archiver(DOWNLOAD_ARCHIVE_EXTENSION);
 
