@@ -26,6 +26,8 @@ options:
     Mocha:
       configPath: "./.mocharc.json"
   plugins:
+    dotcom-tool-kit:
+      allowNativeFetch: true
     "@dotcom-tool-kit/cloudsmith":
       serviceAccount: cp-lifecycle-read-write
     "@dotcom-tool-kit/containerised-app":

@@ -68,8 +68,7 @@ describe(MODULE_ID, function () {
 			};
 
 			underTest = proxyquire('../../../server/middleware/get-user-profile', {
-				'../lib/logger': stubs.logger/*,
-				'n-eager-fetch': stubs.fetch*/
+				'../lib/logger': stubs.logger
 			});
 		});
 
@@ -147,8 +146,7 @@ describe(MODULE_ID, function () {
 			};
 
 			underTest = proxyquire('../../../server/middleware/get-user-profile', {
-				'../lib/logger': stubs.logger/*,
-				'n-eager-fetch': stubs.fetch*/
+				'../lib/logger': stubs.logger
 			});
 		});
 
