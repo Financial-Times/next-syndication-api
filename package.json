@@ -9,7 +9,7 @@
     "@dotcom-reliability-kit/middleware-log-errors": "^5.0.0",
     "@dotcom-reliability-kit/opentelemetry": "^3.2.5",
     "@financial-times/n-es-client": "^6.0.1",
-    "@financial-times/n-express": "^31.9.4",
+    "@financial-times/n-express": "^32.0.0",
     "ajv": "^6.14.0",
     "archiver": "^6.0.0",
     "aws-sdk": "^2.85.0",

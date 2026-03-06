@@ -72,20 +72,20 @@ module.exports = exports = async (req, res, next) => {
 
 	let articleOrArchive = dl.downloadAsArchive ? 'Archive' : 'Article';
 
-	log.count(`${articleOrArchive.toLowerCase()}-download-start`);
+	log.info(`${articleOrArchive.toLowerCase()}-download-start`);
 
 	dl.on('error', (err) => {
 		log.error(`DOWNLOAD_${articleOrArchive.toUpperCase()}_ERROR`, {
 			event: `DOWNLOAD_${articleOrArchive.toUpperCase()}_ERROR`,
 			error: err.stack || err,
 		});
-		log.count(`${articleOrArchive.toLowerCase()}-download-error`);
+		log.info(`${articleOrArchive.toLowerCase()}-download-error`);
 		res.status(500).end();
 	});
 
 	dl.on('complete', (state, status) => {
 		if (state === 'complete') {
-			log.count(`${articleOrArchive.toLowerCase()}-download-complete`);
+			log.info(`${articleOrArchive.toLowerCase()}-download-complete`);
 		}
 		res.status(status);
 	});
