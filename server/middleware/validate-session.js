@@ -1,7 +1,6 @@
 'use strict';
 
 const { Logger } = require('../lib/logger');
-const fetch = require('n-eager-fetch');
 
 const sessionAPI = 'https://session-next.ft.com/sessions/s/';
 

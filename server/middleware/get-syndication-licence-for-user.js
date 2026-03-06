@@ -2,8 +2,6 @@
 
 const { Logger } = require('../lib/logger');
 
-const fetch = require('n-eager-fetch');
-
 const {
 	ACCESS_LICENCE_API_KEY,
 	BASE_URI_FT_API,
