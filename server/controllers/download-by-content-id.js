@@ -79,7 +79,6 @@ module.exports = exports = async (req, res, next) => {
 			event: `DOWNLOAD_${articleOrArchive.toUpperCase()}_ERROR`,
 			error: err.stack || err,
 		});
-		log.info(`${articleOrArchive.toLowerCase()}-download-error`);
 		res.status(500).end();
 	});
 
