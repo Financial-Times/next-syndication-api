@@ -5,6 +5,10 @@ const path = require('path');
 const sinon = require('sinon');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+/* Tests are currently broken and not being used, once revisited and fixed, to mock requests 
+you'll need to use the undici dependency for fetching, and use its MockAgent class instead of nock.
+See an implementation here: https://github.com/Financial-Times/next-appetite/pull/520
+*/
 const nock = require('nock');
 const proxyquire = require('proxyquire');
 
