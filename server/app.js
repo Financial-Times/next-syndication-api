@@ -1,4 +1,5 @@
 'use strict';
+require('@dotcom-reliability-kit/opentelemetry/setup');
 
 process.env.TZ = 'UTC';
 
