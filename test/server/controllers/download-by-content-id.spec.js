@@ -6,6 +6,10 @@ const path = require('path');
 const { Writable: WritableStream } = require('stream');
 
 const { expect } = require('chai');
+/* Tests are currently broken and not being used, once revisited and fixed, if decided to continue mocking 
+requests you'll need to use the undici dependency for fetching and use its MockAgent class instead of nock,
+see an implementation: https://github.com/Financial-Times/next-appetite/pull/520
+*/
 const nock = require('nock');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');

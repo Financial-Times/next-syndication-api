@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const flags = require('./lib/flags');
 
 const createErrorLogger = require('@dotcom-reliability-kit/middleware-log-errors');
 
@@ -25,9 +26,14 @@ process.on('uncaughtException', err => {
 
 app.use(createErrorLogger());
 
-app.listen(PORT, () => {
-	log.info(`${MODULE_ID} Listening on => ${PORT}`);
-});
+async function initApp() {
+	await flags.init();
+	app.listen(PORT, () => {
+		log.info(`${MODULE_ID} Listening on => ${PORT}`);
+	});
+}
+
+initApp();
 
 module.exports = app;
 

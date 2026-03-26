@@ -3,7 +3,6 @@
 const path = require('path');
 
 const { Logger } = require('../lib/logger');
-const fetch = require('n-eager-fetch');
 
 const {
 	USER_PROFILE_API_KEY,
