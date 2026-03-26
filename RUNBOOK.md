@@ -266,6 +266,8 @@ Try turning wifi off on your phone to tether your computer to your phone's 4G co
 
 - Home > Dashboards > Hako > Hako Apps Metrics (metrics sourced from AWS CloudWatch)
   - [EU](https://grafana.ft.com/d/aaaay6jn3l91cf/hako-apps-metrics?orgId=1&from=now-24h&to=now&timezone=browser&var-job=next-syndication-api&var-task_family=next-syndication-api-syndication-prod-eu-web&var-alb=app%2Fsyndication-prod-eu-pub%2Ffbbfcfe0c3e8ac9c&var-tg=targetgroup%2Fnext-s-Servi-BCPCLYNRMQIH%2Faca096ba517cee0b&var-account_id=699535799529&var-cloudwatch=cejv1y0jqb11cc&var-region=eu-west-1&var-app=)
+- Home > Dashboards > OpenTelemetry > Node.js (metrics sourced from OpenTelemetry)
+  - [EU and US](https://grafana.ft.com/d/HzGduSwIz/node-js?orgId=1&var-workspace=I7o8Aa1Sz&var-job=next-syndication-api&from=now-24h&to=now&timezone=browser&var-environment=production&var-cloud_provider=aws&var-cloud_region=$__all&var-http_method=$__all&var-http_route=$__all&var-http_errors=$__all)
 
 ### Pingdom
 
