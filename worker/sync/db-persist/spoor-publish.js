@@ -3,7 +3,6 @@
 const path = require('path');
 
 const { Logger } = require('../../../server/lib/logger');
-const fetch = require('n-eager-fetch');
 
 const {
 	DOWNLOAD_STATE_MAP

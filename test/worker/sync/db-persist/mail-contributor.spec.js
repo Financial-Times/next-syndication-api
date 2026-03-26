@@ -84,8 +84,7 @@ describe(MODULE_ID, function () {
 			message = { data: event };
 
 			underTest = proxyquire('../../../../worker/sync/db-persist/mail-contributor', {
-				'../../../db/pg': sinon.stub().resolves(db),
-				'node-fetch': fetchMock
+				'../../../db/pg': sinon.stub().resolves(db)
 			});
 		});
 
