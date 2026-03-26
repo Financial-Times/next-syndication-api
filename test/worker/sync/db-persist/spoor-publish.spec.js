@@ -46,7 +46,6 @@ describe(MODULE_ID, function () {
 		});
 
 		underTest = proxyquire('../../../../worker/sync/db-persist/spoor-publish', {
-			'n-eager-fetch': fetchStub,
 			'../../../db/pg': sinon.stub().resolves(db)
 		});
 	});

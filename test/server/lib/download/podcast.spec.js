@@ -8,6 +8,10 @@ const url = require('url');
 const unzipper = require('unzipper');
 
 const { expect } = require('chai');
+/* Tests are currently broken and not being used, once revisited and fixed, to mock requests 
+you'll need to use the undici dependency for fetching, and use its MockAgent class instead of nock.
+See an implementation here: https://github.com/Financial-Times/next-appetite/pull/520
+*/
 const nock = require('nock');
 const sinon = require('sinon');
 

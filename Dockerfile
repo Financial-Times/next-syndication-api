@@ -15,4 +15,4 @@ RUN npm ci --ignore-scripts
 
 COPY --chown=node:node . ./
 
-CMD ["node", "--no-experimental-fetch", "--max-http-header-size=80000", "/app/server/init.js"]
+CMD ["node", "--max-http-header-size=80000", "/app/server/init.js"]

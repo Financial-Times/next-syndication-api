@@ -49,8 +49,7 @@ describe(MODULE_ID, function () {
 			})
 		};
 		validateSessionMiddleware = proxyquire('../../../server/middleware/validate-session', {
-			'../lib/logger': stubs.logger,
-			'n-eager-fetch': stubs.fetch
+			'../lib/logger': stubs.logger
 		});
 	});
 

@@ -1,4 +1,5 @@
 'use strict';
+require('@dotcom-reliability-kit/opentelemetry/setup');
 
 process.env.TZ = 'UTC';
 
@@ -22,13 +23,13 @@ const isSyndicationUser = require('./middleware/is-syndication-user');
 const masquerade = require('./middleware/masquerade');
 const routeMaintenanceMode = require('./middleware/route-maintenance-mode');
 const registerCrashHandler = require('@dotcom-reliability-kit/crash-handler');
+const flags = require('./lib/flags');
 
 registerCrashHandler();
 
 const app = module.exports = express({
 	systemCode: 'next-syndication-api',
 	graphiteName: 'syndication-api',
-	withFlags: true,
 	healthChecks: [
 		require('../health/db-backups'),
 		require('../health/db-sync-state'),
@@ -38,6 +39,8 @@ const app = module.exports = express({
 		severity: 2
 	}
 });
+
+app.use(flags.middleware);
 
 const middleware = [
 	cookieParser(),

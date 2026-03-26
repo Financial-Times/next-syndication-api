@@ -28,6 +28,8 @@ options:
     HakoDelete:
       appName: next-syndication-api
   plugins:
+    dotcom-tool-kit:
+      allowNativeFetch: true
     "@dotcom-tool-kit/cloudsmith":
       serviceAccount: cp-lifecycle-read-write
     "@dotcom-tool-kit/containerised-app":

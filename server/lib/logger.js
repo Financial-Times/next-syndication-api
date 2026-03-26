@@ -1,5 +1,4 @@
 const { Logger: ReliabilityKitLogger, transforms } = require('@dotcom-reliability-kit/logger');
-const  { metrics } = require('@financial-times/n-express');
 
 const _logger = new ReliabilityKitLogger({
 	transforms: [
@@ -54,14 +53,6 @@ class Logger {
 	}
 
 	/**
-	 * "Private" function to add count metrics in a consistent style.
-	 * @param {string} path
-	 */
-	count (path) {
-		metrics.count(`${this.metricEnvironment}.${this.baseLogData.source}.${path}`);
-	}
-
-	/**
 	 * "Private" Remove underscores, fullstops and spaces from a path string
 	 * @param {string} path Un-sanitized string
 	 */
@@ -76,7 +67,6 @@ class Logger {
 	 */
 	error (message, error) {
 		this._log('error', message, error);
-		this.count(`${this._sanitizePath(message)}.error`);
 	}
 
 	/**
@@ -86,7 +76,6 @@ class Logger {
 	 */
 	info (message, data) {
 		this._log('info', message, data);
-		this.count(`${this._sanitizePath(message)}.info`);
 	}
 
 	/**
@@ -96,7 +85,6 @@ class Logger {
 	 */
 	warn (message, data) {
 		this._log('warn', message, data);
-		this.count(`${this._sanitizePath(message)}.warn`);
 	}
 
 	/**
@@ -106,7 +94,6 @@ class Logger {
 	 */
 	debug (message, data) {
 		this._log('debug', message, data);
-		this.count(`${this._sanitizePath(message)}.debug`);
 	}
 
 	/**
@@ -116,7 +103,6 @@ class Logger {
 	 */
 	success (message, data) {
 		this._log('info', message, data);
-		this.count(`${this._sanitizePath(message)}.success`);
 	}
 }
 
