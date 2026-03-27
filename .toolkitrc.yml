@@ -25,6 +25,8 @@ options:
         - "**/*.{js,jsx}"
     Mocha:
       configPath: "./.mocharc.json"
+    HakoDelete:
+      appName: next-syndication-api
   plugins:
     dotcom-tool-kit:
       allowNativeFetch: true
