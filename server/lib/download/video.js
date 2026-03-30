@@ -3,6 +3,7 @@
 const path = require('path');
 const { PassThrough } = require('stream');
 const url = require('url');
+const { fetch } = require('undici');
 
 const { Logger } = require('../logger');
 const log = new Logger({ source: 'lib/download/video' });

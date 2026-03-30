@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const { fetch } = require('undici');
 
 const { Logger } = require('../../../server/lib/logger');
 

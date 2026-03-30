@@ -1,6 +1,7 @@
 'use strict';
 
 const { Logger } = require('../lib/logger');
+const { fetch } = require('undici');
 
 const sessionAPI = 'https://session-next.ft.com/sessions/s/';
 
