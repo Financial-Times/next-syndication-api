@@ -3,7 +3,7 @@
 const path = require('path');
 const { PassThrough } = require('stream');
 const url = require('url');
-const { fetch } = require('undici');
+const { fetch, request } = require('undici');
 
 const { Logger } = require('../logger');
 const log = new Logger({ source: 'lib/download/video' });
@@ -122,7 +122,7 @@ module.exports = exports = class VideoDownload extends ArticleDownload {
 
 		this.append(this.ptStream, { name: `${fileName}.${download.extension}` });
 
-		fetch(download.url, { headers: headers }).then(mediaRes => {
+		request(download.url, { headers: headers }).then(mediaRes => {
 			mediaRes.body.pipe(this.ptStream);
 
 			this.mediaStream = mediaRes.body;
