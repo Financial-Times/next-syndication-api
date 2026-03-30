@@ -7,6 +7,7 @@ const handlebars = require('../../../server/lib/handlebars');
 const { Logger } = require('../../../server/lib/logger');
 
 const moment = require('moment-timezone');
+const { fetch } = require('undici');
 
 const {
 	CONTRIBUTOR_EMAIL,

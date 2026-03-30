@@ -1,6 +1,7 @@
 'use strict';
 
 const qs = require('querystring');
+const { fetch } = require('undici');
 const { Logger } = require('../lib/logger');
 const createAuthorizationQueryString = require('../helpers/create-authorization-query-string');
 

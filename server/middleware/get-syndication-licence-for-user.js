@@ -1,6 +1,7 @@
 'use strict';
 
 const { Logger } = require('../lib/logger');
+const { fetch } = require('undici');
 
 const {
 	ACCESS_LICENCE_API_KEY,
