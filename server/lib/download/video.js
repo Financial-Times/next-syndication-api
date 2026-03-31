@@ -154,10 +154,20 @@ module.exports = exports = class VideoDownload extends ArticleDownload {
 
 		let headers = JSON.parse(JSON.stringify(req.headers));
 
-		['accept', 'host'].forEach(name => delete headers[name]);
-
-		Object.keys(headers).forEach(name => headers[name] !== '-' || delete headers[name]);
-
+		const blockedHeaders = new Set([
+			'cookie',
+			'authorization',
+			'x-ft-session-token',
+			'x-forwarded-for',
+			'host',
+			'accept',
+		]);
+		for (const name of Object.keys(headers)) {
+			const headerName = name.toLowerCase();
+			if (blockedHeaders.has(headerName) || headerName === '-') {
+				delete headers[name];
+			}
+		}
 		return headers;
 	}
 
