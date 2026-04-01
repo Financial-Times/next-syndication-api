@@ -50,7 +50,7 @@
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "fetch-mock": "^9.11.0",
+    "fetch-mock": "^12.6.0",
     "lintspaces-cli": "^0.6.0",
     "mocha": "^6.1.4",
     "nock": "^9.0.13",
