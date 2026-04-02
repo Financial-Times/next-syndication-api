@@ -34,13 +34,15 @@ module.exports = exports = async (req, res) => {
 	}
 
 	try {
-		// TODO: Remove user data from the database
-		// probably a set of functions in db schema
-
-		log.info('ERASURE_REQUEST_PROCESSED', { userUuid });
+		const [result] = await db.syndication.delete_user_subject_data([userData.user_id]);
+		log.info('ERASURE_REQUEST_PROCESSED', {
+			userUuid,
+			result,
+		});
 		return res.sendStatus(204);
 	} catch (error) {
 		log.error('ERASURE_REQUEST_FAILED_TO_ERASE_USER_DATA', {
+			userUuid,
 			error,
 		});
 		return res.status(500).json({
