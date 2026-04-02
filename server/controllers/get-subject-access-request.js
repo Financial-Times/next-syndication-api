@@ -2,7 +2,7 @@
 
 const { Logger } = require('../lib/logger');
 
-module.exports = exports = async (req, res, next) => {
+module.exports = exports = async (req, res) => {
 	const log = new Logger({req, res, source: 'controllers/get-subject-access-request'});
 
     try {
@@ -10,24 +10,32 @@ module.exports = exports = async (req, res, next) => {
             locals: { $DB: db },
         } = res;
         const { uuid, email } = req.body;
-        const userUuid = uuid || email;
+        const userIdentifier = uuid || email;
 
-        const [dbUser] = await db.syndication.get_user([userUuid]);
+        if (!userIdentifier) {
+            return res.status(400).json({
+                code: 'SUBJECT_ACCESS_REQUEST_MISSING_USER_IDENTIFIER',
+                error: 'Missing user identifier. Either uuid or email must be provided in the request\'s body.',
+            });
+	    }
 
-        // TODO: get all the data for user and return it
+        const [result] = await db.syndication.get_user_subject_access_data([userIdentifier]);
 
-        if (dbUser) {
-            res.status(200);
-            res.json(dbUser);
-            next();
+        if (result?.get_user_subject_access_data?.data?.syndicationUserData?.user) {
+            log.info('SUBJECT_ACCESS_REQUEST_PROCESSED', { userIdentifier });
+            return res.status(200).json(result.get_user_subject_access_data);
         } else {
-            res.sendStatus(404);
+            log.info('SUBJECT_ACCESS_REQUEST_USER_NOT_FOUND', { userIdentifier });
+            return res.sendStatus(404);
         }
     } catch (error) {
-        // TODO: make this more descriptive
-        log.error('FAILED_TO_GET_USER', {
-            event: 'FAILED_TO_GET_USER',
+        log.error('SUBJECT_ACCESS_REQUEST_FAILED_TO_GET_USER_DATA', {
+            event: 'SUBJECT_ACCESS_REQUEST_FAILED_TO_GET_USER_DATA',
             error,
         });
+        return res.status(500).json({
+			code: 'SUBJECT_ACCESS_REQUEST_FAILED_TO_GET_USER_DATA',
+			error: 'Failed to retrieve user data from the database.',
+		});
     }
 };
