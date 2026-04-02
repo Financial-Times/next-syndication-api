@@ -121,8 +121,11 @@ const contractsMiddleware = [
 	express.json(),
 	accessControl,
 	cache,
-	apiKey
+	apiKey,
+	db,
 ];
 
 app.post('/syndication/contracts/:contract_id/resolve', contractsMiddleware, getContractByIdFromParam, require('./controllers/resolve'));
 app.get('/syndication/contracts/:contract_id', contractsMiddleware, require('./controllers/get-contract-by-id'));
+
+app.post('/syndication/gdpr/subject-access-request', contractsMiddleware, require('./controllers/get-subject-access-request'))
