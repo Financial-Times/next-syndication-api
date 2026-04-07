@@ -13,6 +13,7 @@ module.exports = exports = async (req, res) => {
 
 	if (!userIdentifier) {
 		return res.status(400).json({
+			code: 'ERASURE_REQUEST_MISSING_USER_IDENTIFIER',
 			error: 'Missing user identifier. Either uuid or email must be provided.',
 		});
 	}
