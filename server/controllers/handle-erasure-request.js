@@ -9,9 +9,9 @@ module.exports = exports = async (req, res) => {
 		locals: { $DB: db },
 	} = res;
 	const { uuid, email } = req.body;
-	const userUuid = uuid || email;
+	const userIdentifier = uuid || email;
 
-	if (!userUuid) {
+	if (!userIdentifier) {
 		return res.status(400).json({
 			error: 'Missing user identifier. Either uuid or email must be provided.',
 		});
@@ -19,7 +19,7 @@ module.exports = exports = async (req, res) => {
 
 	let userData;
 	try {
-		[userData] = await db.syndication.get_user([userUuid]);
+		[userData] = await db.syndication.get_user([userIdentifier]);
 		if (!userData.user_id) {
 			return res.sendStatus(404);
 		}
@@ -36,13 +36,13 @@ module.exports = exports = async (req, res) => {
 	try {
 		const [result] = await db.syndication.delete_user_subject_data([userData.user_id]);
 		log.info('ERASURE_REQUEST_PROCESSED', {
-			userUuid,
-			result,
+			userUuid: userIdentifier,
+			data: result?.delete_user_subject_data?.data,
 		});
-		return res.sendStatus(204);
+		return res.status(200).json(result?.delete_user_subject_data?.data || {});
 	} catch (error) {
 		log.error('ERASURE_REQUEST_FAILED_TO_ERASE_USER_DATA', {
-			userUuid,
+			userUuid: userIdentifier,
 			error,
 		});
 		return res.status(500).json({
