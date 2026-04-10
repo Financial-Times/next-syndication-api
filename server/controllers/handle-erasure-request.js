@@ -34,12 +34,12 @@ module.exports = exports = async (req, res) => {
 	}
 
 	try {
-		const [result] = await db.syndication.delete_user_subject_data([userData.user_id]);
+		const [result] = await db.syndication.anonymise_user_subject_data([userData.user_id]);
 		log.info('ERASURE_REQUEST_PROCESSED', {
 			userUuid: userIdentifier,
-			data: result?.delete_user_subject_data?.data,
+			data: result?.anonymise_user_subject_data?.data,
 		});
-		return res.status(200).json(result?.delete_user_subject_data?.data || {});
+		return res.status(200).json(result?.anonymise_user_subject_data?.data || {});
 	} catch (error) {
 		log.error('ERASURE_REQUEST_FAILED_TO_ERASE_USER_DATA', {
 			userUuid: userIdentifier,
