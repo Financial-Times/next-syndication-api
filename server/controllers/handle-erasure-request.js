@@ -34,21 +34,42 @@ module.exports = exports = async (req, res) => {
 		});
 	}
 
+	const uuidToAnonymise = userData.user_id;
 	try {
-		const [result] = await db.syndication.anonymise_user_subject_data([userData.user_id]);
-		log.info('ERASURE_REQUEST_PROCESSED', {
-			userUuid: userIdentifier,
-			data: result?.anonymise_user_subject_data?.data,
-		});
-		return res.status(200).json(result?.anonymise_user_subject_data?.data || {});
+		const [result] = await db.syndication.anonymise_user_subject_data([uuidToAnonymise]);
+		if (result?.anonymise_user_subject_data?.data?.anonymised) {
+			const { counts, anonymised_user_id } = result.anonymise_user_subject_data.data;
+			log.info('ERASURE_REQUEST_PROCESSED', {
+				counts,
+				anonymised_user_id,
+			});
+			return res.status(200).json({
+				counts,
+				anonymised_user_id,
+			});
+		} else {
+			const { counts, original_user_id, reason } = result.anonymise_user_subject_data.data;
+			log.warn('ERASURE_REQUEST_FAILED_TO_ANONYMISE_USER_DATA', {
+				code: 'ERASURE_REQUEST_FAILED_TO_ANONYMISE_USER_DATA',
+				error: reason || 'Failed to anonymise user data from the database.',
+				counts,
+				original_user_id,
+			});
+			return res.status(500).json({
+				code: 'ERASURE_REQUEST_FAILED_TO_ANONYMISE_USER_DATA',
+				error: reason || 'Failed to anonymise user data from the database.',
+				counts,
+				original_user_id,
+			});
+		}
 	} catch (error) {
-		log.error('ERASURE_REQUEST_FAILED_TO_ERASE_USER_DATA', {
-			userUuid: userIdentifier,
+		log.error('ERASURE_REQUEST_FAILED_TO_ANONYMISE_USER_DATA', {
+			userUuid: uuidToAnonymise,
 			error,
 		});
 		return res.status(500).json({
-			code: 'ERASURE_REQUEST_FAILED_TO_ERASE_USER_DATA',
-			error: 'Failed to erase user data from the database.',
+			code: 'ERASURE_REQUEST_FAILED_TO_ANONYMISE_USER_DATA',
+			error: 'Failed to anonymise user data from the database.',
 		});
 	}
 };
