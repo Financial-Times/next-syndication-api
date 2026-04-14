@@ -139,7 +139,7 @@ describe('handle-erasure-requests.spec.js', () => {
 
 				expect(res.status).to.have.been.calledOnceWithExactly(400);
 				expect(res.json).to.have.been.calledOnceWithExactly({
-					code: 'ERASURE_REQUEST_MISSING_USER_IDENTIFIER',
+					code: 'GDPR_ERASURE_REQUEST_MISSING_USER_IDENTIFIER',
 					error: 'Missing user identifier. Either uuid or email must be provided.',
 				});
 			});
@@ -161,7 +161,7 @@ describe('handle-erasure-requests.spec.js', () => {
 
 				expect(res.status).to.have.been.calledOnceWithExactly(500);
 				expect(res.json).to.have.been.calledOnceWithExactly({
-					code: 'ERASURE_REQUEST_FAILED_TO_GET_USER_DATA',
+					code: 'GDPR_ERASURE_REQUEST_FAILED_TO_GET_USER_DATA',
 					error: 'Failed to retrieve user data from the database.',
 				});
 			});
@@ -174,7 +174,7 @@ describe('handle-erasure-requests.spec.js', () => {
 
 				expect(res.status).to.have.been.calledOnceWithExactly(500);
 				expect(res.json).to.have.been.calledOnceWithExactly({
-					code: 'ERASURE_REQUEST_FAILED_TO_ANONYMISE_USER_DATA',
+					code: 'GDPR_ERASURE_REQUEST_FAILED_TO_ANONYMISE_USER_DATA',
 					error: 'Failed to anonymise user data from the database.',
 				});
 			});
@@ -188,7 +188,7 @@ describe('handle-erasure-requests.spec.js', () => {
 				expect(res.status).to.have.been.calledOnceWithExactly(500);
 				const { counts, original_user_id, reason } = mockAnonymiseUserSubjectDataFailure.anonymise_user_subject_data.data;
 				expect(res.json).to.have.been.calledOnceWithExactly({
-					code: 'ERASURE_REQUEST_FAILED_TO_ANONYMISE_USER_DATA',
+					code: 'GDPR_ERASURE_REQUEST_FAILED_TO_ANONYMISE_USER_DATA',
 					error: reason,
 					counts,
 					original_user_id,
