@@ -178,7 +178,7 @@ describe('get-subject-access-request.spec.js', () => {
 
 				expect(res.status).to.have.been.calledWith(400);
 				expect(res.json).to.have.been.calledOnceWithExactly({
-					code: 'SUBJECT_ACCESS_REQUEST_MISSING_USER_IDENTIFIER',
+					code: 'GDPR_SUBJECT_ACCESS_REQUEST_MISSING_USER_IDENTIFIER',
 					error: 'Missing user identifier. Either uuid or email must be provided in the request\'s body.',
 				});
 			});
@@ -200,7 +200,7 @@ describe('get-subject-access-request.spec.js', () => {
 
 				expect(res.status).to.have.been.calledWith(500);
 				expect(res.json).to.have.been.calledOnceWithExactly({
-					code: 'SUBJECT_ACCESS_REQUEST_FAILED_TO_GET_USER_DATA',
+					code: 'GDPR_SUBJECT_ACCESS_REQUEST_FAILED_TO_GET_USER_DATA',
 					error: 'Failed to retrieve user data from the database.',
 				});
 			});

@@ -18,7 +18,7 @@ module.exports = exports = async (req, res) => {
 
 		if (!userIdentifier) {
 			return res.status(400).json({
-				code: 'SUBJECT_ACCESS_REQUEST_MISSING_USER_IDENTIFIER',
+				code: 'GDPR_SUBJECT_ACCESS_REQUEST_MISSING_USER_IDENTIFIER',
 				error: 'Missing user identifier. Either uuid or email must be provided in the request\'s body.',
 			});
 		}
@@ -31,21 +31,21 @@ module.exports = exports = async (req, res) => {
 			result?.get_user_subject_access_data?.data?.syndicationUserData
 				?.user
 		) {
-			log.info('SUBJECT_ACCESS_REQUEST_PROCESSED', { userIdentifier });
+			log.info('GDPR_SUBJECT_ACCESS_REQUEST_PROCESSED', { userIdentifier });
 			return res.status(200).json(result.get_user_subject_access_data);
 		} else {
-			log.info('SUBJECT_ACCESS_REQUEST_USER_NOT_FOUND', {
+			log.info('GDPR_SUBJECT_ACCESS_REQUEST_USER_NOT_FOUND', {
 				userIdentifier,
 			});
 			return res.sendStatus(404);
 		}
 	} catch (error) {
-		log.error('SUBJECT_ACCESS_REQUEST_FAILED_TO_GET_USER_DATA', {
-			event: 'SUBJECT_ACCESS_REQUEST_FAILED_TO_GET_USER_DATA',
+		log.error('GDPR_SUBJECT_ACCESS_REQUEST_FAILED_TO_GET_USER_DATA', {
+			event: 'GDPR_SUBJECT_ACCESS_REQUEST_FAILED_TO_GET_USER_DATA',
 			error,
 		});
 		return res.status(500).json({
-			code: 'SUBJECT_ACCESS_REQUEST_FAILED_TO_GET_USER_DATA',
+			code: 'GDPR_SUBJECT_ACCESS_REQUEST_FAILED_TO_GET_USER_DATA',
 			error: 'Failed to retrieve user data from the database.',
 		});
 	}
