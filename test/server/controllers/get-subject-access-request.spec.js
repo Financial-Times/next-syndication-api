@@ -106,12 +106,14 @@ const mockGetUserSubjectAccessDataNoResult = {
 };
 
 describe('get-subject-access-request.spec.js', () => {
+	let validateUserIdentifier;
 	let getUserSubjectAccessRequest;
 	let req;
 	let res;
 	let getSubjectAccessRequest;
 
 	beforeEach(() => {
+		validateUserIdentifier = sinon.stub().returns(true);
 		getUserSubjectAccessRequest = sinon.stub().resolves([mockGetUserSubjectAccessDataSuccess]);
 		getSubjectAccessRequest = proxyquire('../../../server/controllers/get-subject-access-request', {
 			'../lib/logger': {
@@ -121,6 +123,7 @@ describe('get-subject-access-request.spec.js', () => {
 					error() {}
 				}
 			},
+			'../helpers/validate-user-identifier': validateUserIdentifier,
 		});
 
 		req = {
@@ -180,6 +183,20 @@ describe('get-subject-access-request.spec.js', () => {
 				expect(res.json).to.have.been.calledOnceWithExactly({
 					code: 'GDPR_SUBJECT_ACCESS_REQUEST_MISSING_USER_IDENTIFIER',
 					error: 'Missing user identifier. Either uuid or email must be provided in the request\'s body.',
+				});
+			});
+		});
+
+		describe('when invalid identifier is provided', () => {
+			it('returns 400 with error message', async () => {
+				validateUserIdentifier.returns(false);
+				req.body = { uuid: 'invalid-uuid' };
+				await getSubjectAccessRequest(req, res);
+
+				expect(res.status).to.have.been.calledWith(400);
+				expect(res.json).to.have.been.calledOnceWithExactly({
+					code: 'GDPR_SUBJECT_ACCESS_REQUEST_INVALID_USER_IDENTIFIER',
+					error: 'Invalid user identifier. The provided uuid or email is not in a valid format.',
 				});
 			});
 		});

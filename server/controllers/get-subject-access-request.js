@@ -1,6 +1,7 @@
 'use strict';
 
 const { Logger } = require('../lib/logger');
+const validateUserIdentifier = require('../helpers/validate-user-identifier');
 
 module.exports = exports = async (req, res) => {
 	const log = new Logger({
@@ -20,6 +21,11 @@ module.exports = exports = async (req, res) => {
 			return res.status(400).json({
 				code: 'GDPR_SUBJECT_ACCESS_REQUEST_MISSING_USER_IDENTIFIER',
 				error: 'Missing user identifier. Either uuid or email must be provided in the request\'s body.',
+			});
+		} else if (!validateUserIdentifier(userIdentifier)) {
+			return res.status(400).json({
+				code: 'GDPR_SUBJECT_ACCESS_REQUEST_INVALID_USER_IDENTIFIER',
+				error: 'Invalid user identifier. The provided uuid or email is not in a valid format.',
 			});
 		}
 
