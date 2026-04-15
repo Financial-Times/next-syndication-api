@@ -51,6 +51,7 @@ const mockAnonymiseUserSubjectDataFailure = {
 
 describe('handle-erasure-requests.spec.js', () => {
 
+	let validateUserIdentifier;
 	let anonymiseUserSubjectData;
 	let getUser;
 	let req;
@@ -58,6 +59,7 @@ describe('handle-erasure-requests.spec.js', () => {
 	let handleErasureRequest;
 
 	beforeEach(() => {
+		validateUserIdentifier = sinon.stub().returns(true);
 		getUser = sinon.stub().resolves([{ user_id: 'mock-user-id' }]);
 		anonymiseUserSubjectData = sinon.stub().resolves([mockAnonymiseUserSubjectDataSuccess]);
 
@@ -69,6 +71,7 @@ describe('handle-erasure-requests.spec.js', () => {
 					error () {}
 				},
 			},
+			'../helpers/validate-user-identifier': validateUserIdentifier,
 		});
 
 		req = {
@@ -141,6 +144,20 @@ describe('handle-erasure-requests.spec.js', () => {
 				expect(res.json).to.have.been.calledOnceWithExactly({
 					code: 'GDPR_ERASURE_REQUEST_MISSING_USER_IDENTIFIER',
 					error: 'Missing user identifier. Either uuid or email must be provided.',
+				});
+			});
+		});
+
+		describe('when an invalid identifier is provided', () => {
+			it('returns a 400 response with error message', async () => {
+				validateUserIdentifier.returns(false);
+				req.body = { uuid: 'invalid-uuid' };
+				await handleErasureRequest(req, res);
+
+				expect(res.status).to.have.been.calledOnceWithExactly(400);
+				expect(res.json).to.have.been.calledOnceWithExactly({
+					code: 'GDPR_ERASURE_REQUEST_INVALID_USER_IDENTIFIER',
+					error: 'Invalid user identifier. Must be a valid UUID or email address.',
 				});
 			});
 		});

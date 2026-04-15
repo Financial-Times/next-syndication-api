@@ -1,6 +1,7 @@
 'use strict';
 
 const { Logger } = require('../lib/logger');
+const validateUserIdentifier = require('../helpers/validate-user-identifier');
 
 module.exports = exports = async (req, res) => {
 	const log = new Logger({req, res, source: 'controllers/handle-erasure-request'});
@@ -15,6 +16,11 @@ module.exports = exports = async (req, res) => {
 		return res.status(400).json({
 			code: 'GDPR_ERASURE_REQUEST_MISSING_USER_IDENTIFIER',
 			error: 'Missing user identifier. Either uuid or email must be provided.',
+		});
+	} else if (!validateUserIdentifier(userIdentifier)) {
+		return res.status(400).json({
+			code: 'GDPR_ERASURE_REQUEST_INVALID_USER_IDENTIFIER',
+			error: 'Invalid user identifier. Must be a valid UUID or email address.',
 		});
 	}
 
