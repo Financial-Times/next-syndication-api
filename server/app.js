@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 
 const accessControl = require('./middleware/access-control');
 const apiKey = require('./middleware/api-key');
+const gdprApiKey = require('./middleware/gdpr-api-key');
 const cache = require('./middleware/cache');
 const checkIfNewSyndicationUser = require('./middleware/check-if-new-syndication-user');
 const db = require('./middleware/db');
@@ -128,4 +129,12 @@ const contractsMiddleware = [
 app.post('/syndication/contracts/:contract_id/resolve', contractsMiddleware, getContractByIdFromParam, require('./controllers/resolve'));
 app.get('/syndication/contracts/:contract_id', contractsMiddleware, require('./controllers/get-contract-by-id'));
 
-app.post('/syndication/gdpr/erasure-request', contractsMiddleware, require('./controllers/handle-erasure-request'));
+const gdprMiddleware = [
+	cookieParser(),
+	express.text(),
+	express.json(),
+	gdprApiKey,
+	db,
+];
+
+app.post('/syndication/gdpr/erasure-request', gdprMiddleware, require('./controllers/handle-erasure-request'));
