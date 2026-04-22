@@ -60,7 +60,7 @@ module.exports = exports = async ({ contract_id, limit, offset, type, user_id })
 		const allExisting = await getAllExistingItemsForContract(contract_id);
 
 		await items.filter(item => item.iso_lang_code === 'es').forEach(async item => {
-			const query = 'SELECT * FROM syndication.get_content_es_by_id($1::text)';
+			const query = 'SELECT * FROM syndication.get_content_es_by_id($1::uuid)';
 			const [content] = await db.query(query, [item.content_id]);
 			item.content_area = content.content_area;
 		});
