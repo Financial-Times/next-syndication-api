@@ -138,3 +138,4 @@ const gdprMiddleware = [
 ];
 
 app.post('/syndication/gdpr/erasure-request', gdprMiddleware, require('./controllers/handle-erasure-request'));
+app.post('/syndication/gdpr/subject-access-request', gdprMiddleware, require('./controllers/get-subject-access-request'));

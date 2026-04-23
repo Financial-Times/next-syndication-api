@@ -45,8 +45,7 @@ module.exports = exports = async (req, res, next) => {
 					headers,
 					user: res.locals.userUuid,
 				});
-				res.sendStatus(404);
-				next(error);
+				return res.sendStatus(404);
 			}
 
 			syndicationLicences.push({
@@ -79,8 +78,7 @@ module.exports = exports = async (req, res, next) => {
 				headers,
 				user: res.locals.userUuid,
 			});
-			res.sendStatus(404);
-			next(error);
+			return res.sendStatus(404);
 		}
 
 		res.locals.licence = syndicationLicence;
@@ -103,8 +101,6 @@ module.exports = exports = async (req, res, next) => {
 			user: res.locals.userUuid,
 		});
 
-		res.sendStatus(401);
-
-		next(error);
+		return res.sendStatus(401);
 	}
 };
