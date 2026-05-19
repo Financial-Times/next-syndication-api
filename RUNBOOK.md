@@ -252,6 +252,26 @@ Then you can't connect to the mail server.
 
 Try turning wifi off on your phone to tether your computer to your phone's 4G connection and you should find it now works.
 
+### Erasure request failed to process
+
+We have an API endpoint `/syndication/gdpr/erasure-request` to handle the GDPR Erasure requests, which is to erase any Personally Identifiable Information (PII) and anonymise the user's save and download history in the Syndication database.
+
+In case of [an alert](https://financialtimes.splunkcloud.com/en-GB/app/search/alert?s=%2FservicesNS%2Fnobody%2Fsearch%2Fsaved%2Fsearches%2FErasure%2520request%2520failed%2520to%2520process), it means the API failed to process the request.
+
+1. check the Splunk logs in the alert to identify the cause of error.
+2. check the user identifier (which is either the uuid or the email) and the corresponding uuid in the Syndication database. If the uuid is already anonymised (which starts with `gdpr-erased-`), it indicates that the user's data has been anonymised before. Report the findings to the [IP Martech Team](https://biz-ops.in.ft.com/Team/ip-martech).
+3. If the uuid has not been anonymised yet, try to rerun the Erasure request with the uuid.
+4. If the Erasure request still failed, you need to check the follow tables in the Syndication database for the uuid of the user.
+
+	- download_history
+	- save_history
+	- downloads
+	- saved_items
+	- contract_unique_downloads
+	- contract_users
+
+5. After identifying the uuid, you need to manually run the database function `syndication.anonymise_user_subject_data` to anonymise the data related to the user.
+
 ### General tips for troubleshooting Customer Products Systems
 
 - [Out of hours runbook for FT.com (wiki)](https://customer-products.in.ft.com/wiki/Out-of-hours-troubleshooting-guide)
