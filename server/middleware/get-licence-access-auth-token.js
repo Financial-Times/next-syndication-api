@@ -39,8 +39,6 @@ module.exports = exports = async (req, res, next) => {
 			URI
 		});
 
-		res.sendStatus(401);
-
-		next(error);
+		return res.sendStatus(401);
 	}
 };

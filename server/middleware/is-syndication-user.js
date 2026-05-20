@@ -90,8 +90,6 @@ module.exports = exports = async (req, res, next) => {
 			error
 		});
 
-		res.sendStatus(503);
-
-		next(error);
+		return res.sendStatus(503);
 	}
 };

@@ -23,11 +23,18 @@ module.exports = exports = new (class DBSyncStateCheck extends nHealthCheck {
 		let ok = check(checkOutput);
 
 		if (!ok) {
-			// attempt to auto fix
-			await db.syndication.reload_all();
+			try {
+				// attempt to auto fix
+				await db.syndication.reload_all();
 
-			checkOutput = await getHealthStatus(db);
-			ok = check(checkOutput);
+				checkOutput = await getHealthStatus(db);
+				ok = check(checkOutput);
+			} catch (err) {
+				log.error(
+					`${MODULE_ID} in ${Date.now() - START}ms => reload_all failed: ${err.message}`,
+				);
+				ok = false;
+			}
 		}
 
 		this.checkOutput = JSON.stringify(checkOutput);

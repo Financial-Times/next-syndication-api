@@ -81,8 +81,6 @@ module.exports = exports = async (req, res, next) => {
 			user: userUuid
 		});
 
-		res.sendStatus(401);
-
-		next(error);
+		return res.sendStatus(401);
 	}
 };
