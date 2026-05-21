@@ -555,6 +555,57 @@ Then you can't connect to the mail server.
 
 Try turning wifi off on your phone to tether your computer to your phone's 4G connection and you should find it now works.
 
+### GDPR Subject Access Request / Erasure Request Alerts
+
+There are two API endpoints used to automate GDPR hub operations.
+
+- `/syndication/gdpr/subject-access-request`: returns a summary of the personally identifiable information (PII) for a user in the Syndication database.
+- `/syndication/gdpr/erasure-request`: erases personally identifiable information (PII) and anonymises the user's save and download history in the Syndication database.
+
+There are three Splunk alerts scheduled to run **hourly**. A message is sent to the [#cp-customer-lifecycle-alerts](https://financialtimes.enterprise.slack.com/archives/C083L9SS58A) channel when an alert is triggered:
+
+- [SAR request failed to process](https://financialtimes.splunkcloud.com/en-GB/app/search/alert?s=%2FservicesNS%2Fnobody%2Fsearch%2Fsaved%2Fsearches%2FSAR%2520request%2520failed%2520to%2520process%2520Clone): triggered when any SAR request fails to be processed via the Syndication API
+- [Erasure request failed to process](https://financialtimes.splunkcloud.com/en-GB/app/search/alert?s=%2FservicesNS%2Fnobody%2Fsearch%2Fsaved%2Fsearches%2FErasure%2520request%2520failed%2520to%2520process): triggered when any Erasure request fails to be processed via the Syndication API
+- [Erasure request processed](https://financialtimes.splunkcloud.com/en-GB/app/search/alert?s=%2FservicesNS%2Fnobody%2Fsearch%2Fsaved%2Fsearches%2FErasure%2520request%2520processed): triggered when any Erasure request is successfully processed via the Syndication API
+
+When the "SAR request failed to process" alert is triggered:
+
+1. Check the Splunk logs in the alert to identify the cause of the error.
+2. Identify any PII data in the Syndication database associated with the request's user identifier (either UUID or email). The tables that may include PII are:
+
+  - download_history
+  - save_history
+  - downloads
+  - saved_items
+  - contract_unique_downloads
+  - contract_users
+
+3. Manually update the Subject Access Request in the [GDPR hub](https://gdpr-hub.in.ft.com/).
+
+When the "Erasure request failed to process" alert is triggered:
+
+1. Check the Splunk logs in the alert to identify the cause of the error.
+2. Check the user identifier (either UUID or email) and the corresponding UUID in the Syndication database. If the UUID is already anonymised (starts with `gdpr-erased-`), this indicates that the user's data has already been anonymised. Report the findings to the [IP Martech Team](https://biz-ops.in.ft.com/Team/ip-martech).
+3. If the UUID has not been anonymised yet, rerun the Erasure request using the UUID.
+4. If the Erasure request still fails, check the following tables in the Syndication database for the user's UUID:
+
+  - download_history
+  - save_history
+  - downloads
+  - saved_items
+  - contract_unique_downloads
+  - contract_users
+
+5. After confirming the UUID, manually run the `syndication.anonymise_user_subject_data` database function to anonymise user-related data.
+
+The "Erasure request processed" alert does not indicate that anything in the Syndication API has gone wrong. It is a notification that one or more Erasure requests were processed successfully. It exists because there have been _zero_ Erasure requests processed within Syndication over the past few years.
+
+In the (rare) case that the "Erasure request processed" alert is triggered:
+
+1. Check the Splunk logs in the alert to identify the user identifier.
+2. Check the [GDPR hub](https://gdpr-hub.in.ft.com/) to verify whether there was an Erasure request for that user.
+3. If not, contact the [IP Martech Team](https://biz-ops.in.ft.com/Team/ip-martech) to identify the source of the Erasure request.
+
 ### General tips for troubleshooting Customer Products Systems
 
 - [Out of hours runbook for FT.com (wiki)](https://customer-products.in.ft.com/wiki/Out-of-hours-troubleshooting-guide)
