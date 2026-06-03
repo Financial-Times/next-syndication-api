@@ -732,3 +732,14 @@ Self-serve keys that use [Tyk (API management platform) policies](https://apigat
   - **For querying:** Not applicable.
   - **Usage:** Used to validate api requests made to next-syndication-api by next-syndication-dl.
   - **How to rotate:** next-syndication-dl has the same value saved as `SYNDICATION_API_KEY`. Keys would need to be generated and changed for both the -api and -dl at the same time.
+
+### Shared Customer Products keys
+
+These should not change but contact [#ft-next-support](https://financialtimes.slack.com/archives/C042NBBTM) on Slack or look for evidence they were recently rotated if there are problems:
+
+- `FT_NEXT_BACKEND_KEY`
+- `OPENTELEMETRY_API_GATEWAY_KEY`
+- `OPENTELEMETRY_AUTHORIZATION_HEADER`
+- `OPENTELEMETRY_METRICS_ENDPOINT`
+- `OPENTELEMETRY_TRACING_ENDPOINT`
+- `SPLUNK_HEC_TOKEN`
