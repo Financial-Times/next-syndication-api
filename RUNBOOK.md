@@ -370,15 +370,16 @@ Restart the next-syndication-api-worker-service-crons ECS task in the Syndicatio
 
 ### Steps
 
-1. Go to **ECS** in the AWS console
-2. Select the **syndication-prod-eu** cluster
-3. Under **Services**, search for `next-syndication-api-worker-service-crons`
-4. Click the service name
-5. Click **Update service**
-6. Change **Desired tasks** from **1** to **0**, then click **Update**
-7. Wait a few seconds
-8. Change **Desired tasks** from **0** back to **1**, then click **Update**
-9. ECS will automatically start a new task
+1. Log in to `FT Tech Syndication Prod`
+2. Go to **ECS** in the AWS console
+3. Select the **syndication-prod-eu** cluster
+4. Under **Services**, search for `next-syndication-api-worker-service-crons`
+5. Click the service name
+6. Click **Update service**
+7. Change **Desired tasks** from **1** to **0**, then click **Update**
+8. Wait a few seconds
+9. Change **Desired tasks** from **0** back to **1**, then click **Update**
+10. ECS will automatically start a new task
 
 ### After action
 
